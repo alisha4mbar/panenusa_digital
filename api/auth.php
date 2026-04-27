@@ -1,38 +1,53 @@
 <?php
+// File: auth.php
 session_start();
-include 'config.php';
+require_once 'config.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 // REGISTER
 if ($action == 'register') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $nama = mysqli_real_escape_string($conn, $_POST['nama']);
-        $email = mysqli_real_escape_string($conn, $_POST['email']);
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $nama = trim($conn->real_escape_string($_POST['nama']));
+        $email = trim($conn->real_escape_string($_POST['email']));
+        $password = $_POST['password'];
         
-        // Cek email duplikat
-        $check = mysqli_query($conn, "SELECT email FROM users WHERE email = '$email'");
-        if (mysqli_num_rows($check) > 0) {
-            echo "<script>alert('Email sudah terdaftar! Silakan login.'); window.location.href='login.php';</script>";
+        if (empty($nama) || empty($email) || empty($password)) {
+            $_SESSION['error'] = "Semua field harus diisi!";
+            header("Location: register.php");
             exit();
         }
         
-        // Cek apakah user pertama (jadi admin)
-        $countResult = mysqli_query($conn, "SELECT COUNT(*) as total FROM users");
-        $count = mysqli_fetch_assoc($countResult)['total'];
+        if (strlen($password) < 6) {
+            $_SESSION['error'] = "Password minimal 6 karakter!";
+            header("Location: register.php");
+            exit();
+        }
+        
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        
+        // Cek email
+        $check = $conn->query("SELECT email FROM users WHERE email = '$email'");
+        if ($check->num_rows > 0) {
+            $_SESSION['error'] = "Email sudah terdaftar!";
+            header("Location: register.php");
+            exit();
+        }
+        
+        // Tentukan role
+        $countResult = $conn->query("SELECT COUNT(*) as total FROM users");
+        $count = $countResult->fetch_assoc()['total'];
         $role = ($count == 0) ? 'admin' : 'user';
         
-        $query = "INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password', '$role')";
-        
-        if (mysqli_query($conn, $query)) {
-            $user_id = mysqli_insert_id($conn);
-            $_SESSION['user_id'] = $user_id;
-            $_SESSION['nama'] = $nama;
-            $_SESSION['role'] = $role;
-            echo "<script>alert('Registrasi berhasil! Selamat datang, $nama!'); window.location.href='dashboard.php';</script>";
+        // Simpan
+        if ($conn->query("INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$hashedPassword', '$role')")) {
+            $_SESSION['success'] = "Registrasi berhasil! Silakan login.";
+            header("Location: login.php");
+            exit();
         } else {
-            echo "<script>alert('Registrasi gagal: " . mysqli_error($conn) . "'); window.history.back();</script>";
+            $_SESSION['error'] = "Registrasi gagal: " . $conn->error;
+            header("Location: register.php");
+            exit();
         }
     }
 }
@@ -40,33 +55,37 @@ if ($action == 'register') {
 // LOGIN
 if ($action == 'login') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $email = trim($conn->real_escape_string($_POST['email']));
         $password = $_POST['password'];
         
-        $query = "SELECT * FROM users WHERE email = '$email'";
-        $result = mysqli_query($conn, $query);
+        $result = $conn->query("SELECT * FROM users WHERE email = '$email'");
         
-        if ($result && mysqli_num_rows($result) > 0) {
-            $user = mysqli_fetch_assoc($result);
+        if ($result->num_rows > 0) {
+            $user = $result->fetch_assoc();
             
             if (password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['nama'] = $user['nama'];
                 $_SESSION['role'] = $user['role'];
+                $_SESSION['logged_in'] = true;
+                
                 header("Location: dashboard.php");
                 exit();
             } else {
-                echo "<script>alert('Password salah!'); window.location.href='login.php';</script>";
+                $_SESSION['error'] = "Password salah!";
+                header("Location: login.php");
+                exit();
             }
         } else {
-            echo "<script>alert('Email tidak terdaftar! Silakan daftar terlebih dahulu.'); window.location.href='register.php';</script>";
+            $_SESSION['error'] = "Email tidak terdaftar!";
+            header("Location: login.php");
+            exit();
         }
     }
 }
 
 // LOGOUT
 if ($action == 'logout') {
-    session_unset();
     session_destroy();
     header("Location: login.php");
     exit();
