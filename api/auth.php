@@ -1,23 +1,34 @@
 <?php
-session_start();
+// api/auth.php
 require_once 'config.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
+// Fungsi Helper untuk set cookie
+function setAuthCookie($user) {
+    // Simpan data dalam JSON dan di-encode (Idealnya di-enkripsi)
+    $userData = json_encode([
+        'id' => $user['id'],
+        'nama' => $user['nama'],
+        'role' => $user['role']
+    ]);
+    // Cookie berlaku selama 30 hari
+    setcookie('panenusa_auth', $userData, time() + (86400 * 30), "/", "", true, true);
+}
+
 // --- REGISTER ---
 if ($action == 'register') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // ... kode hash password ...
+        $nama = $conn->real_escape_string($_POST['nama']);
+        $email = $conn->real_escape_string($_POST['email']);
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        
+        $sql = "INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password', 'user')";
         
         if ($conn->query($sql)) {
-            $_SESSION['user_id'] = $conn->insert_id;
-            $_SESSION['nama'] = $nama;
-            $_SESSION['role'] = $role;
-            header("Location: /dashboard"); // BENAR: Menggunakan route bersih
-            exit();
-        } else {
-            $_SESSION['error'] = "Registrasi gagal.";
-            header("Location: /register"); // BENAR
+            $userId = $conn->insert_id;
+            setAuthCookie(['id' => $userId, 'nama' => $nama, 'role' => 'user']);
+            header("Location: /dashboard");
             exit();
         }
     }
@@ -26,18 +37,26 @@ if ($action == 'register') {
 // --- LOGIN ---
 if ($action == 'login') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // ... kode verifikasi ...
-        if (password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['nama'] = $user['nama'];
-            $_SESSION['role'] = $user['role'];
-            header("Location: /dashboard"); // BENAR
-            exit();
-        } else {
-            $_SESSION['error'] = "Password salah!";
-            header("Location: /login"); // BENAR
-            exit();
+        $email = $conn->real_escape_string($_POST['email']);
+        $password = $_POST['password'];
+        
+        $result = $conn->query("SELECT * FROM users WHERE email='$email'");
+        if ($user = $result->fetch_assoc()) {
+            if (password_verify($password, $user['password'])) {
+                setAuthCookie($user);
+                header("Location: /dashboard");
+                exit();
+            }
         }
+        header("Location: /login?error=1");
+        exit();
     }
 }
-?>
+
+// --- LOGOUT ---
+if ($action == 'logout') {
+    // Hapus cookie dengan set waktu ke masa lalu
+    setcookie('panenusa_auth', '', time() - 3600, "/");
+    header("Location: /login");
+    exit();
+}
