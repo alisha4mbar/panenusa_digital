@@ -22,6 +22,18 @@
       "dest": "/api/dashboard.php"
     },
     {
+      "src": "/logout",
+      "dest": "/api/logout.php"
+    },
+    {
+      "src": "/forum",
+      "dest": "/api/forum.php"
+    },
+    {
+      "src": "/data-lahan",
+      "dest": "/api/data_lahan.php"
+    },
+    {
       "src": "/(.*)",
       "dest": "/$1"
     }
