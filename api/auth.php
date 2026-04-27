@@ -31,24 +31,36 @@ if ($action == 'login' && $_SERVER['REQUEST_METHOD'] == 'POST') {
     exit();
 }
 
-// LOGIKA REGISTER
-if ($action == 'register' && $_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nama = $conn->real_escape_string($_POST['nama']);
-    $email = $conn->real_escape_string($_POST['email']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+// --- LOGIKA REGISTER ---
+if ($action == 'register') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $nama = mysqli_real_escape_string($conn, $_POST['nama']);
+        $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        
+        // Tetap gunakan pengecekan awal ini sebagai filter pertama
+        $checkEmail = mysqli_query($conn, "SELECT email FROM users WHERE email = '$email'");
+        if (mysqli_num_rows($checkEmail) > 0) {
+            echo "<script>alert('Email sudah terdaftar!'); window.history.back();</script>";
+            exit();
+        }
 
-    $sql = "INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password', 'user')";
-    if ($conn->query($sql)) {
-        $userId = $conn->insert_id;
-        buatAuthCookie(['id' => $userId, 'nama' => $nama, 'role' => 'user']);
-        header("Location: /dashboard");
-        exit();
+        // Query simpan
+        $query = "INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password', 'user')";
+
+        // --- TARUH KODE TRY-CATCH DI SINI ---
+        try {
+            if (mysqli_query($conn, $query)) {
+                echo "<script>alert('Registrasi Berhasil! Silakan Login.'); window.location.href='login.php';</script>";
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) { // 1062 adalah kode MySQL untuk Duplicate Entry
+                echo "<script>alert('Maaf, email ini sudah digunakan.'); window.history.back();</script>";
+            } else {
+                echo "Error lainnya: " . $e->getMessage();
+            }
+            exit();
+        }
+    
     }
-}
-
-// LOGIKA LOGOUT
-if ($action == 'logout') {
-    setcookie('panenusa_auth', '', time() - 3600, "/");
-    header("Location: /login");
-    exit();
 }
