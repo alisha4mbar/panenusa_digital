@@ -19,7 +19,14 @@ if ($action == 'register') {
         $email = mysqli_real_escape_string($conn, $_POST['email']);
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
         
-        // Query menggunakan 'nama' (sesuai perintah ALTER TABLE sebelumnya)
+        // Cek apakah email sudah terdaftar untuk menghindari Fatal Error Duplicate Entry
+        $checkEmail = mysqli_query($conn, "SELECT email FROM users WHERE email = '$email'");
+        if (mysqli_num_rows($checkEmail) > 0) {
+            echo "<script>alert('Email sudah terdaftar! Gunakan email lain.'); window.history.back();</script>";
+            exit();
+        }
+
+        // Simpan ke database (menggunakan kolom 'nama' sesuai struktur TiDB terbaru)
         $query = "INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password', 'user')";
 
         if (mysqli_query($conn, $query)) {
@@ -40,14 +47,14 @@ if ($action == 'login') {
         $result = mysqli_query($conn, $query);
 
         if ($result && mysqli_num_rows($result) > 0) {
-            $user = mysqli_fetch_assoc($result);
+            // PENTING: Mengambil data user dari hasil query
+            $user = mysqli_fetch_assoc($result); 
 
             if (password_verify($password, $user['password'])) {
-                // Pastikan variabel session terisi dengan benar
+                // Menyimpan data ke Session agar dashboard mengenali user
                 $_SESSION['user_id'] = $user['id'];
-                // Jika kolom 'nama' kosong, otomatis pakai 'username'
-                $_SESSION['nama'] = !empty($user['nama']) ? $user['nama'] : (!empty($user['username']) ? $user['username'] : 'Pengguna');
-                $_SESSION['role'] = $user['role']; 
+                $_SESSION['nama']    = $user['nama']; 
+                $_SESSION['role']    = $user['role']; 
                 
                 header("Location: dashboard.php");
                 exit();
