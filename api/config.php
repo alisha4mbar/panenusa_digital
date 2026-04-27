@@ -6,11 +6,14 @@ $user = '3woL5zdDuZqqmHS.root';
 $pass = 'IwNMm3ddVFwKzDrf';
 $dbname = 'db_panenusa';
 
-// Gunakan SSL jika diperlukan oleh TiDB Cloud
 $conn = mysqli_init();
-// mysqli_ssl_set($conn, NULL, NULL, "/path/to/isrgrootx1.pem", NULL, NULL); // Aktifkan jika butuh SSL
 
-if (!$conn->real_connect($host, $user, $pass, $dbname, $port)) {
+// PENTING: Mengaktifkan koneksi aman menggunakan sertifikat SSL
+// Path sertifikat diarahkan ke file isrgrootx1.pem yang ada di root proyek Anda
+mysqli_ssl_set($conn, NULL, NULL, __DIR__ . "/../isrgrootx1.pem", NULL, NULL);
+
+// Melakukan koneksi dengan flag SSL aktif
+if (!$conn->real_connect($host, $user, $pass, $dbname, $port, NULL, MYSQLI_CLIENT_SSL)) {
     die("Koneksi gagal: " . mysqli_connect_error());
 }
 
