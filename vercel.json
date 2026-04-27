@@ -6,12 +6,20 @@
   },
   "routes": [
     {
-      "src": "/(login|register|dashboard|forum|data_lahan|edit_profil|moderasi_forum|peta_panen)",
-      "dest": "/api/$1.php"
-    },
-    {
       "src": "/auth/(.*)",
       "dest": "/api/auth.php?action=$1"
+    },
+    {
+      "src": "/login",
+      "dest": "/api/login.php"
+    },
+    {
+      "src": "/register",
+      "dest": "/api/register.php"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/api/dashboard.php"
     },
     {
       "src": "/(.*)",
