@@ -1,24 +1,22 @@
-<?php
+<<?php
 session_start();
 include 'config.php';
 
-// 1. PROTEKSI HALAMAN
+// Proteksi: Jika tidak ada session, lempar ke login
 if (!isset($_SESSION['user_id'])) {
     header("Location: /login");
     exit();
 }
 
+// Ambil data dari session (Pastikan di auth.php datanya sudah dimasukkan ke session)
 $user_id = $_SESSION['user_id'];
-$nama_user = $_SESSION['nama'];
-$role_user = $_SESSION['role'];
+$nama_user = $_SESSION['nama'] ?? 'Pengguna';
+$role_user = $_SESSION['role'] ?? 'User';
 
-// 2. AMBIL DATA DARI DATABASE (Contoh: Menghitung total luas lahan user)
+// Ambil data statistik lahan dari database
 $query_lahan = $conn->query("SELECT SUM(luas) as total_luas FROM data_lahan WHERE user_id = '$user_id'");
-$data_lahan = $query_lahan->fetch_assoc();
-$total_luas = $data_lahan['total_luas'] ?? 0;
-
-// Ambil data terbaru untuk tabel
-$recent_data = $conn->query("SELECT * FROM data_lahan WHERE user_id = '$user_id' ORDER BY created_at DESC LIMIT 5");
+$row_lahan = $query_lahan->fetch_assoc();
+$total_luas = $row_lahan['total_luas'] ?? 0;
 ?>
 
 <!DOCTYPE html>

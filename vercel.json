@@ -7,6 +7,7 @@
     { "src": "/login", "dest": "/API/login.php" },
     { "src": "/dashboard", "dest": "/API/dashboard.php" },
     { "src": "/auth/(.*)", "dest": "/API/auth.php?action=$1" },
-    { "src": "/logout", "dest": "/API/logout.php" }
+    { "src": "/logout", "dest": "/API/logout.php" },
+    { "src": "/data_lahan", "dest": "/API/data_lahan.php" }
   ]
 }
