@@ -1,4 +1,5 @@
-<<?php
+<?php
+ob_start(); // Memulai buffer agar tidak ada header yang bocor
 session_start();
 include 'config.php';
 
@@ -8,12 +9,11 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Ambil data dari session (Pastikan di auth.php datanya sudah dimasukkan ke session)
 $user_id = $_SESSION['user_id'];
 $nama_user = $_SESSION['nama'] ?? 'Pengguna';
 $role_user = $_SESSION['role'] ?? 'User';
 
-// Ambil data statistik lahan dari database
+// Ambil data statistik dari database
 $query_lahan = $conn->query("SELECT SUM(luas) as total_luas FROM data_lahan WHERE user_id = '$user_id'");
 $row_lahan = $query_lahan->fetch_assoc();
 $total_luas = $row_lahan['total_luas'] ?? 0;
