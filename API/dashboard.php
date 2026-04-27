@@ -40,8 +40,7 @@ $total_luas = $row_lahan['total_luas'] ?? 0;
                     <p class="text-slate-400 mt-2">Anda masuk sebagai: <span class="text-emerald-400 font-bold"><?= strtoupper($role_user) ?></span></p>
                 </div>
                 <a href="/logout" class="bg-red-500/10 text-red-500 px-4 py-2 rounded-xl border border-red-500/20 hover:bg-red-500 hover:text-white transition-all font-semibold">
-                    <i class="fas fa-power-off mr-2"></i> Keluar
-                </a>
+                <a href="/API/auth.php?action=logout">Keluar</a>                </a> 
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
