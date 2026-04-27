@@ -8,12 +8,11 @@ $dbname = 'db_panenusa';
 
 $conn = mysqli_init();
 
-// Perbaikan Path: Menggunakan __DIR__ untuk memastikan lokasi file .pem benar di Vercel
+// Path absolut untuk Vercel agar file .pem ditemukan
 $ssl_cert = __DIR__ . "/../isrgrootx1.pem";
 
-// Pastikan sertifikat ada sebelum mencoba koneksi
 if (!file_exists($ssl_cert)) {
-    die("Sertifikat SSL tidak ditemukan di: " . $ssl_cert);
+    die("Error: Sertifikat SSL tidak ditemukan di path: " . $ssl_cert);
 }
 
 mysqli_ssl_set($conn, NULL, NULL, $ssl_cert, NULL, NULL);
@@ -22,4 +21,4 @@ mysqli_ssl_set($conn, NULL, NULL, $ssl_cert, NULL, NULL);
 if (!$conn->real_connect($host, $user, $pass, $dbname, $port, NULL, MYSQLI_CLIENT_SSL)) {
     die("Koneksi gagal: " . mysqli_connect_error());
 }
-?>
+?>g
