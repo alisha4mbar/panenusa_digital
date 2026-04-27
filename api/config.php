@@ -6,15 +6,15 @@ $user = '3woL5zdDuZqqmHS.root';
 $pass = 'IwNMm3ddVFwKzDrf';
 $dbname = 'db_panenusa';
 
+// Gunakan SSL jika diperlukan oleh TiDB Cloud
 $conn = mysqli_init();
-// Jika menggunakan SSL, pastikan path file .pem benar
-// mysqli_ssl_set($conn, NULL, NULL, __DIR__ . '/../isrgrootx1.pem', NULL, NULL);
+// mysqli_ssl_set($conn, NULL, NULL, "/path/to/isrgrootx1.pem", NULL, NULL); // Aktifkan jika butuh SSL
 
 if (!$conn->real_connect($host, $user, $pass, $dbname, $port)) {
-    die("Koneksi database gagal.");
+    die("Koneksi gagal: " . mysqli_connect_error());
 }
 
-// Pastikan tabel users tersedia
+// Pastikan tabel tersedia
 $conn->query("CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nama VARCHAR(100) NOT NULL,
