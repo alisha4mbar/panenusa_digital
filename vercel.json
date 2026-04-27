@@ -5,69 +5,11 @@
     }
   },
   "routes": [
-    {
-      "src": "/API/auth.php",
-      "dest": "/API/auth.php"
-    },
-    {
-      "src": "/API/login.php",
-      "dest": "/API/login.php"
-    },
-    {
-      "src": "/API/register.php",
-      "dest": "/API/register.php"
-    },
-    {
-      "src": "/API/dashboard.php",
-      "dest": "/API/dashboard.php"
-    },
-    {
-      "src": "/API/logout.php",
-      "dest": "/API/logout.php"
-    },
-    {
-      "src": "/API/forum.php",
-      "dest": "/API/forum.php"
-    },
-    {
-      "src": "/API/data_lahan.php",
-      "dest": "/API/data_lahan.php"
-    },
-    {
-      "src": "/API/peta_panen.php",
-      "dest": "/API/peta_panen.php"
-    },
-    {
-      "src": "/API/edit_profil.php",
-      "dest": "/API/edit_profil.php"
-    },
-    {
-      "src": "/API/moderasi_forum.php",
-      "dest": "/API/moderasi_forum.php"
-    },
-    {
-      "src": "/API/kelola_user.php",
-      "dest": "/API/kelola_user.php"
-    },
-    {
-      "src": "/API/monitoring_transaksi.php",
-      "dest": "/API/monitoring_transaksi.php"
-    },
-    {
-      "src": "/API/konten_edukasi.php",
-      "dest": "/API/konten_edukasi.php"
-    },
-    {
-      "src": "/API/laporan.php",
-      "dest": "/API/laporan.php"
-    },
-    {
-      "src": "/API/log_api.php",
-      "dest": "/API/log_api.php"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "API/$1.php"
-    }
+    { "src": "/auth/login", "dest": "/API/auth.php?action=login" },
+    { "src": "/auth/register", "dest": "/API/auth.php?action=register" },
+    { "src": "/auth/logout", "dest": "/API/auth.php?action=logout" },
+    { "src": "/login", "dest": "/API/login.php" },
+    { "src": "/dashboard", "dest": "/API/dashboard.php" },
+    { "src": "/(.*)", "dest": "/API/$1.php" }
   ]
 }
