@@ -19,7 +19,7 @@ if ($action == 'register') {
         $email = mysqli_real_escape_string($conn, $_POST['email']);
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
         
-        // Menggunakan kolom 'nama' sesuai dengan perubahan di database TiDB
+        // Query menggunakan 'nama' (sesuai perintah ALTER TABLE sebelumnya)
         $query = "INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password', 'user')";
 
         if (mysqli_query($conn, $query)) {
@@ -40,13 +40,14 @@ if ($action == 'login') {
         $result = mysqli_query($conn, $query);
 
         if ($result && mysqli_num_rows($result) > 0) {
-            $user = mysqli_fetch_assoc($result); // Mengambil data user dari database
+            $user = mysqli_fetch_assoc($result);
 
             if (password_verify($password, $user['password'])) {
-                // Menyimpan data ke Session agar tidak terlempar dari dashboard
+                // Pastikan variabel session terisi dengan benar
                 $_SESSION['user_id'] = $user['id'];
-                $_SESSION['nama']    = $user['nama']; 
-                $_SESSION['role']    = $user['role']; 
+                // Jika kolom 'nama' kosong, otomatis pakai 'username'
+                $_SESSION['nama'] = !empty($user['nama']) ? $user['nama'] : (!empty($user['username']) ? $user['username'] : 'Pengguna');
+                $_SESSION['role'] = $user['role']; 
                 
                 header("Location: dashboard.php");
                 exit();
