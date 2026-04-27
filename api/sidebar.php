@@ -1,7 +1,8 @@
 <?php
-// Ambil data dari cookie panenusa_auth
+// Ambil data dari cookie yang dibuat oleh auth.php
 $userData = isset($_COOKIE['panenusa_auth']) ? json_decode($_COOKIE['panenusa_auth'], true) : null;
 
+// Jika cookie tidak ada, arahkan ke login (opsional, tergantung proteksi halaman utama)
 $role = $userData['role'] ?? 'User';
 $nama = $userData['nama'] ?? 'Pengguna';
 
