@@ -6,17 +6,15 @@ $user = '3woL5zdDuZqqmHS.root';
 $pass = 'IwNMm3ddVFwKzDrf';
 $dbname = 'db_panenusa';
 
-// 1. Inisialisasi mysqli
 $conn = mysqli_init();
 
-// 2. Konfigurasi SSL
-// Pastikan file isrgrootx1.pem ada di folder utama proyek (root)
-// Karena file ini di folder api, kita naik satu tingkat (..) untuk menemukan sertifikat
+// Menentukan path sertifikat SSL (isrgrootx1.pem harus ada di root folder)
 $ssl_cert = __DIR__ . "/../isrgrootx1.pem";
 
+// Mengaktifkan konfigurasi SSL
 mysqli_ssl_set($conn, NULL, NULL, $ssl_cert, NULL, NULL);
 
-// 3. Lakukan koneksi dengan flag MYSQLI_CLIENT_SSL
+// Melakukan koneksi dengan flag MYSQLI_CLIENT_SSL agar transport menjadi aman
 $success = $conn->real_connect(
     $host, 
     $user, 
@@ -31,7 +29,7 @@ if (!$success) {
     die("Koneksi aman gagal: " . mysqli_connect_error());
 }
 
-// Opsional: Pastikan tabel users sudah ada
+// Opsional: Memastikan tabel users sudah tersedia
 $conn->query("CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nama VARCHAR(100) NOT NULL,
