@@ -29,7 +29,7 @@ $conn->query("CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )");
 
-// Insert default admin jika belum ada
+// Insert default admin
 $result = $conn->query("SELECT id FROM users WHERE email = 'admin@panenusa.com'");
 if ($result->num_rows == 0) {
     $adminPass = password_hash('admin123', PASSWORD_DEFAULT);
@@ -44,4 +44,23 @@ if ($result->num_rows == 0) {
     $conn->query("INSERT INTO users (nama, email, password, role) VALUES 
                   ('Petani Sample', 'user@panenusa.com', '$userPass', 'user')");
 }
+
+// Buat tabel data_lahan jika belum ada
+$conn->query("CREATE TABLE IF NOT EXISTS data_lahan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    lokasi VARCHAR(200) NOT NULL,
+    luas DECIMAL(10,2) NOT NULL,
+    status_lahan VARCHAR(50) DEFAULT 'Aktif',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)");
+
+// Buat tabel forum_posts
+$conn->query("CREATE TABLE IF NOT EXISTS forum_posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    konten TEXT NOT NULL,
+    status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)");
 ?>

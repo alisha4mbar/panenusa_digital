@@ -1,14 +1,24 @@
 {
   "functions": {
-    "api/*.php": {
-      "runtime": "vercel-php@0.7.2"
+    "*.php": {
+      "runtime": "vercel-php@0.6.0"
     }
   },
   "routes": [
-    { "src": "/", "dest": "/api/index.php" },
-    { "src": "/login", "dest": "/api/login.php" },
-    { "src": "/register", "dest": "/api/register.php" },
-    { "src": "/dashboard", "dest": "/api/dashboard.php" },
-    { "src": "/(.*)", "dest": "/api/$1" }
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    }
   ]
 }

@@ -1,7 +1,8 @@
 <?php
+// File: dashboard.php
 session_start();
 
-// Proteksi halaman - cek login
+// Proteksi halaman
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in'])) {
     header("Location: login.php");
     exit();
@@ -66,6 +67,9 @@ $accent = ($role == 'admin') ? '#6366f1' : '#10b981';
                 <a href="moderasi_forum.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
                     <i class="fas fa-shield-alt w-5"></i> Moderasi Forum
                 </a>
+                <a href="log_api.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
+                    <i class="fas fa-terminal w-5"></i> API Logs
+                </a>
             <?php else: ?>
                 <a href="data_lahan.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
                     <i class="fas fa-map-marker-alt w-5"></i> Data Lahan
@@ -73,8 +77,14 @@ $accent = ($role == 'admin') ? '#6366f1' : '#10b981';
                 <a href="forum.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
                     <i class="fas fa-comments w-5"></i> Forum Diskusi
                 </a>
+                <a href="peta_panen.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
+                    <i class="fas fa-map w-5"></i> Peta Panen
+                </a>
                 <a href="konten_edukasi.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
                     <i class="fas fa-graduation-cap w-5"></i> Edukasi
+                </a>
+                <a href="monitoring_transaksi.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
+                    <i class="fas fa-receipt w-5"></i> Transaksi
                 </a>
             <?php endif; ?>
         </div>
@@ -89,6 +99,9 @@ $accent = ($role == 'admin') ? '#6366f1' : '#10b981';
                     <p class="text-white/40 text-xs"><?= ucfirst($role) ?></p>
                 </div>
             </div>
+            <a href="edit_profil.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
+                <i class="fas fa-user-edit w-5"></i> Edit Profil
+            </a>
             <a href="auth.php?action=logout" class="flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-xl transition-all">
                 <i class="fas fa-sign-out-alt w-5"></i> Logout
             </a>
@@ -99,6 +112,21 @@ $accent = ($role == 'admin') ? '#6366f1' : '#10b981';
     <main class="flex-1 overflow-auto p-8">
         <h1 class="text-4xl font-bold text-white mb-4">Selamat Datang, <?= htmlspecialchars($nama) ?>!</h1>
         <p class="text-white/50 mb-8">Anda login sebagai <span style="color: <?= $accent ?>"><?= ucfirst($role) ?></span></p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="card-glass rounded-2xl p-6">
+                <p class="text-white/50 text-sm">Total Pengguna</p>
+                <p class="text-3xl font-bold text-white">1,234</p>
+            </div>
+            <div class="card-glass rounded-2xl p-6">
+                <p class="text-white/50 text-sm">Total Lahan</p>
+                <p class="text-3xl font-bold text-white">567</p>
+            </div>
+            <div class="card-glass rounded-2xl p-6">
+                <p class="text-white/50 text-sm">Forum Posts</p>
+                <p class="text-3xl font-bold text-white">89</p>
+            </div>
+        </div>
         
         <div class="card-glass rounded-3xl p-8 text-center">
             <i class="fas fa-check-circle text-6xl text-emerald-500 mb-4"></i>

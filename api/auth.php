@@ -34,15 +34,19 @@ if ($action == 'register') {
             exit();
         }
         
-        // Tentukan role
+        // Tentukan role (admin jika user pertama)
         $countResult = $conn->query("SELECT COUNT(*) as total FROM users");
         $count = $countResult->fetch_assoc()['total'];
         $role = ($count == 0) ? 'admin' : 'user';
         
         // Simpan
         if ($conn->query("INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$hashedPassword', '$role')")) {
-            $_SESSION['success'] = "Registrasi berhasil! Silakan login.";
-            header("Location: login.php");
+            $user_id = $conn->insert_id;
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['nama'] = $nama;
+            $_SESSION['role'] = $role;
+            $_SESSION['logged_in'] = true;
+            header("Location: dashboard.php");
             exit();
         } else {
             $_SESSION['error'] = "Registrasi gagal: " . $conn->error;
@@ -78,7 +82,7 @@ if ($action == 'login') {
             }
         } else {
             $_SESSION['error'] = "Email tidak terdaftar!";
-            header("Location: login.php");
+            header("Location: register.php");
             exit();
         }
     }
