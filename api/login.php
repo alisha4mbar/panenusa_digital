@@ -3,7 +3,7 @@ session_start();
 
 // Jika sudah login, langsung ke dashboard
 if (isset($_SESSION['user_id'])) {
-    header("Location: dashboard.php");
+    header("Location: /dashboard"); // Ubah dari dashboard.php
     exit();
 }
 ?>
@@ -40,7 +40,7 @@ if (isset($_SESSION['user_id'])) {
         </form>
         
         <p class="text-center text-gray-400 mt-4">
-            Belum punya akun? <a href="register.php" class="text-green-400">Daftar</a>
+            Belum punya akun? <a href="/register" class="text-green-400">Daftar</a>
         </p>
         
         <div class="mt-6 p-3 bg-gray-700 rounded text-center text-sm text-gray-400">
