@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Proteksi Halaman: Wajib Login
+// Proteksi Halaman: Cek apakah session user_id sudah ada (diset dari auth.php)
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -17,7 +17,7 @@ $gradient = (strtolower($role) == 'admin') ? 'linear-gradient(135deg, #6366f1 0%
 
 include 'config.php';
 
-// Data BPS dummy jika fungsi belum ada
+// Data untuk Grafik
 $top8Data = [
     ['name' => 'Jawa Timur', 'value' => 9.5],
     ['name' => 'Jawa Tengah', 'value' => 9.2],
@@ -72,7 +72,7 @@ $top8Data = [
         </header>
         
         <div class="card-glass p-10 rounded-[3rem]">
-            <h3 class="font-bold text-xl text-white mb-8">Statistik Produksi</h3>
+            <h3 class="font-bold text-xl text-white mb-8">Statistik Produksi Nasional</h3>
             <div class="h-[350px]"><canvas id="bpsChart"></canvas></div>
         </div>
     </main>
