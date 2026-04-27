@@ -7,14 +7,18 @@ function fetchBpsData() {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     
-    // SOLUSI ERROR 403: Tambahkan User-Agent agar dianggap akses manusia/browser
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124 Safari/537.36');
+    // SOLUSI UTAMA FORBIDDEN BPS:
+    // Menambahkan User-Agent agar API BPS menganggap permintaan ini dari Browser
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36');
 
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    if ($httpCode !== 200) return [];
+    // Jika server BPS tetap menolak (bukan 200 OK)
+    if ($httpCode !== 200) {
+        return [];
+    }
 
     $json = json_decode($response, true);
     $results = [];
@@ -26,9 +30,11 @@ function fetchBpsData() {
                 'produksi' => (float)$item['value']
             ];
         }
-        usort($results, function($a, $b) { return $b['produksi'] <=> $a['produksi']; });
+        // Urutkan dari hasil terbesar
+        usort($results, function($a, $b) {
+            return $b['produksi'] <=> $a['produksi'];
+        });
         return array_slice($results, 0, 8);
     }
     return [];
 }
-?>
