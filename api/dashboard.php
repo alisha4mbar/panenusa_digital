@@ -1,5 +1,5 @@
 <?php
-ob_start(); // Memulai buffer agar tidak ada header yang bocor
+ob_start();
 session_start();
 include 'config.php';
 
