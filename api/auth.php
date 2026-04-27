@@ -12,15 +12,15 @@ if ($action == 'logout') {
     exit();
 }
 
-// --- LOGIKA REGISTER (User Baru Otomatis Jadi 'User') ---
+// --- LOGIKA REGISTER ---
 if ($action == 'register') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $nama = mysqli_real_escape_string($conn, $_POST['nama']);
         $email = mysqli_real_escape_string($conn, $_POST['email']);
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
         
-        // Secara default role diatur sebagai 'User'
-        $query = "INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password', 'User')";
+        // Menggunakan kolom 'nama' sesuai dengan perubahan di database TiDB
+        $query = "INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password', 'user')";
 
         if (mysqli_query($conn, $query)) {
             echo "<script>alert('Registrasi Berhasil! Silakan Login.'); window.location.href='login.php';</script>";
@@ -30,7 +30,7 @@ if ($action == 'register') {
     }
 }
 
-// --- LOGIKA LOGIN (Membaca Role dari Database) ---
+// --- LOGIKA LOGIN ---
 if ($action == 'login') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -39,12 +39,14 @@ if ($action == 'login') {
         $query = "SELECT * FROM users WHERE email = '$email'";
         $result = mysqli_query($conn, $query);
 
-        if (mysqli_num_rows($result) > 0) {
-            $user = mysqli_fetch_assoc($result);
+        if ($result && mysqli_num_rows($result) > 0) {
+            $user = mysqli_fetch_assoc($result); // Mengambil data user dari database
+
             if (password_verify($password, $user['password'])) {
+                // Menyimpan data ke Session agar tidak terlempar dari dashboard
                 $_SESSION['user_id'] = $user['id'];
-                $_SESSION['nama'] = $user['nama'];
-                $_SESSION['role'] = $user['role']; // Simpan role: Admin atau User
+                $_SESSION['nama']    = $user['nama']; 
+                $_SESSION['role']    = $user['role']; 
                 
                 header("Location: dashboard.php");
                 exit();
