@@ -1,24 +1,17 @@
 {
-  "functions": {
-    "*.php": {
-      "runtime": "vercel-php@0.6.0"
-    }
-  },
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
+    "functions": {
+        "api/**/*.php": {
+            "runtime": "vercel-php@0.8.0"
         }
-      ]
-    }
-  ]
+    },
+    "routes": [
+        {
+            "src": "/api/(.*).php",
+            "dest": "/api/$1.php"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/$1"
+        }
+    ]
 }
