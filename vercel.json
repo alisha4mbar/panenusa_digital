@@ -3,11 +3,13 @@
     "API/*.php": { "runtime": "vercel-php@0.7.5" }
   },
   "routes": [
-    { "src": "/register", "dest": "/API/register.php" },
-    { "src": "/login", "dest": "/API/login.php" },
-    { "src": "/dashboard", "dest": "/API/dashboard.php" },
-    { "src": "/auth/(.*)", "dest": "/API/auth.php?action=$1" },
-    { "src": "/logout", "dest": "/API/logout.php" },
-    { "src": "/data_lahan", "dest": "/API/data_lahan.php" }
+    {"src": "/index", "dest": "/index.html"},
+    {"src": "/login", "dest": "/API/login.php"},
+    {"src": "/register", "dest": "/API/register.php"},
+    {"src": "/dashboard", "dest": "/API/dashboard.php"},
+    {"src": "/logout", "dest": "/API/logout.php"},
+    {"src": "/data_lahan", "dest": "/API/data_lahan.php"},
+    {"src": "/API/(.*)\\.php", "dest": "/API/$1.php"},
+    {"src": "/(.*)", "dest": "/API/$1.php"}
   ]
 }
