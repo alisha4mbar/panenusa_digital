@@ -1,79 +1,110 @@
 <?php
-// File: dashboard.php
-require_once 'config.php';
-require_once 'session_handler.php';
+session_start();
 
-// Inisialisasi session
-initDatabaseSession($conn);
-
-// Proteksi halaman
-if (!isset($_SESSION['user_id'])) {
+// Proteksi halaman - cek login
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in'])) {
     header("Location: login.php");
     exit();
 }
 
 $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'user';
 $nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : 'Pengguna';
-
 $accent = ($role == 'admin') ? '#6366f1' : '#10b981';
-$gradient = ($role == 'admin') ? 'linear-gradient(135deg, #6366f1 0%, #4338ca 100%)' : 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-
-// Data untuk chart
-$top8Data = [
-    ['name' => 'Jawa Timur', 'value' => 9.5],
-    ['name' => 'Jawa Tengah', 'value' => 9.2],
-    ['name' => 'Jawa Barat', 'value' => 9.0],
-    ['name' => 'Sulawesi Selatan', 'value' => 5.2]
-];
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Panenusa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Panenusa Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { 
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        .card-glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sidebar-item {
+            transition: all 0.3s;
+            border-radius: 0.75rem;
+        }
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+    </style>
 </head>
-<body class="bg-gray-900">
-    <div class="flex h-screen">
-        <!-- Sidebar sederhana -->
-        <div class="w-64 bg-gray-800 p-5">
-            <h2 class="text-white text-xl mb-5">Panenusa</h2>
-            <nav>
-                <a href="dashboard.php" class="block text-gray-300 py-2">Dashboard</a>
-                <?php if($role == 'admin'): ?>
-                    <a href="kelola_pengguna.php" class="block text-gray-300 py-2">Kelola User</a>
-                    <a href="moderasi_forum.php" class="block text-gray-300 py-2">Moderasi</a>
-                <?php else: ?>
-                    <a href="data_lahan.php" class="block text-gray-300 py-2">Data Lahan</a>
-                    <a href="forum.php" class="block text-gray-300 py-2">Forum</a>
-                <?php endif; ?>
-                <a href="edit_profil.php" class="block text-gray-300 py-2">Edit Profil</a>
-                <a href="auth.php?action=logout" class="block text-red-400 py-2 mt-5">Logout</a>
-            </nav>
-        </div>
-        
-        <!-- Main content -->
-        <div class="flex-1 p-8 overflow-auto">
-            <h1 class="text-3xl font-bold text-white mb-2">Halo, <?= htmlspecialchars($nama) ?>!</h1>
-            <p class="text-gray-400 mb-8">Role: <span class="text-<?= $role == 'admin' ? 'indigo' : 'green' ?>-400"><?= ucfirst($role) ?></span></p>
-            
-            <div class="bg-gray-800 p-6 rounded-xl">
-                <h3 class="text-white text-xl mb-4">Produksi Padi Nasional (Juta Ton)</h3>
-                <canvas id="chart" height="100"></canvas>
+<body class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-80 bg-slate-900/50 backdrop-blur p-6 flex flex-col border-r border-white/10">
+        <div class="mb-10">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: <?= $accent ?>">
+                    <i class="fas fa-leaf text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-white">Panenusa</h1>
+                    <p class="text-xs text-white/50">v2.0</p>
+                </div>
             </div>
         </div>
-    </div>
+        
+        <div class="flex-1">
+            <a href="dashboard.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white" style="background: <?= $accent ?>">
+                <i class="fas fa-chart-line w-5"></i> Dashboard
+            </a>
+            
+            <?php if($role == 'admin'): ?>
+                <a href="kelola_pengguna.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
+                    <i class="fas fa-users w-5"></i> Kelola Pengguna
+                </a>
+                <a href="moderasi_forum.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
+                    <i class="fas fa-shield-alt w-5"></i> Moderasi Forum
+                </a>
+            <?php else: ?>
+                <a href="data_lahan.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
+                    <i class="fas fa-map-marker-alt w-5"></i> Data Lahan
+                </a>
+                <a href="forum.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
+                    <i class="fas fa-comments w-5"></i> Forum Diskusi
+                </a>
+                <a href="konten_edukasi.php" class="sidebar-item flex items-center gap-3 px-4 py-3 mb-2 text-white/70 hover:text-white">
+                    <i class="fas fa-graduation-cap w-5"></i> Edukasi
+                </a>
+            <?php endif; ?>
+        </div>
+        
+        <div class="pt-6 border-t border-white/10">
+            <div class="flex items-center gap-3 mb-4 px-3">
+                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                    <i class="fas fa-user text-white/70"></i>
+                </div>
+                <div>
+                    <p class="text-white font-semibold text-sm"><?= htmlspecialchars($nama) ?></p>
+                    <p class="text-white/40 text-xs"><?= ucfirst($role) ?></p>
+                </div>
+            </div>
+            <a href="auth.php?action=logout" class="flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-xl transition-all">
+                <i class="fas fa-sign-out-alt w-5"></i> Logout
+            </a>
+        </div>
+    </aside>
     
-    <script>
-        new Chart(document.getElementById('chart'), {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode(array_column($top8Data, 'name')) ?>,
-                datasets: [{ label: 'Produksi', data: <?= json_encode(array_column($top8Data, 'value')) ?>, backgroundColor: '<?= $accent ?>' }]
-            }
-        });
-    </script>
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto p-8">
+        <h1 class="text-4xl font-bold text-white mb-4">Selamat Datang, <?= htmlspecialchars($nama) ?>!</h1>
+        <p class="text-white/50 mb-8">Anda login sebagai <span style="color: <?= $accent ?>"><?= ucfirst($role) ?></span></p>
+        
+        <div class="card-glass rounded-3xl p-8 text-center">
+            <i class="fas fa-check-circle text-6xl text-emerald-500 mb-4"></i>
+            <h3 class="text-2xl font-bold text-white mb-2">Login Berhasil!</h3>
+            <p class="text-white/50">Anda sekarang berada di dashboard Panenusa.</p>
+        </div>
+    </main>
 </body>
 </html>
