@@ -1,10 +1,6 @@
 <?php
-// File: auth.php
-require_once 'config.php';
-require_once 'session_handler.php';
-
-// Inisialisasi session handler
-initDatabaseSession($conn);
+session_start();
+include 'config.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
@@ -15,28 +11,28 @@ if ($action == 'register') {
         $email = mysqli_real_escape_string($conn, $_POST['email']);
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
         
-        // Cek email sudah terdaftar
+        // Cek email duplikat
         $check = mysqli_query($conn, "SELECT email FROM users WHERE email = '$email'");
         if (mysqli_num_rows($check) > 0) {
-            echo "<script>alert('Email sudah terdaftar!'); window.history.back();</script>";
+            echo "<script>alert('Email sudah terdaftar! Silakan login.'); window.location.href='login.php';</script>";
             exit();
         }
         
-        // Tentukan role (admin jika user pertama)
+        // Cek apakah user pertama (jadi admin)
         $countResult = mysqli_query($conn, "SELECT COUNT(*) as total FROM users");
         $count = mysqli_fetch_assoc($countResult)['total'];
         $role = ($count == 0) ? 'admin' : 'user';
         
-        // Simpan user
         $query = "INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password', '$role')";
+        
         if (mysqli_query($conn, $query)) {
             $user_id = mysqli_insert_id($conn);
             $_SESSION['user_id'] = $user_id;
             $_SESSION['nama'] = $nama;
             $_SESSION['role'] = $role;
-            echo "<script>alert('Registrasi Berhasil!'); window.location.href='dashboard.php';</script>";
+            echo "<script>alert('Registrasi berhasil! Selamat datang, $nama!'); window.location.href='dashboard.php';</script>";
         } else {
-            echo "Error: " . mysqli_error($conn);
+            echo "<script>alert('Registrasi gagal: " . mysqli_error($conn) . "'); window.history.back();</script>";
         }
     }
 }
@@ -52,6 +48,7 @@ if ($action == 'login') {
         
         if ($result && mysqli_num_rows($result) > 0) {
             $user = mysqli_fetch_assoc($result);
+            
             if (password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['nama'] = $user['nama'];
@@ -62,25 +59,15 @@ if ($action == 'login') {
                 echo "<script>alert('Password salah!'); window.location.href='login.php';</script>";
             }
         } else {
-            echo "<script>alert('Email tidak terdaftar!'); window.location.href='login.php';</script>";
+            echo "<script>alert('Email tidak terdaftar! Silakan daftar terlebih dahulu.'); window.location.href='register.php';</script>";
         }
     }
 }
 
 // LOGOUT
 if ($action == 'logout') {
-    // Destroy session
-    if (session_id()) {
-        session_destroy();
-    }
-    // Hapus cookie
-    if (ini_get("session.use_cookies")) {
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000,
-            $params["path"], $params["domain"],
-            $params["secure"], $params["httponly"]
-        );
-    }
+    session_unset();
+    session_destroy();
     header("Location: login.php");
     exit();
 }
