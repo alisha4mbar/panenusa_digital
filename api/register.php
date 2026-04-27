@@ -1,50 +1,91 @@
 <?php
+// api/auth.php
 session_start();
+require_once 'config.php';
 
-if (isset($_SESSION['user_id'])) {
-    header("Location: dashboard.php");
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+
+// --- LOGIKA REGISTER ---
+if ($action == 'register') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $nama = $conn->real_escape_string($_POST['nama']);
+        $email = $conn->real_escape_string($_POST['email']);
+        $password = $_POST['password'];
+        
+        // Hash password untuk keamanan
+        $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+        
+        // Cek apakah email sudah terdaftar
+        $cek = $conn->query("SELECT id FROM users WHERE email='$email'");
+        if ($cek->num_rows > 0) {
+            $_SESSION['error'] = "Email sudah terdaftar!";
+            header("Location: /register"); // Menggunakan route bersih sesuai vercel.json
+            exit();
+        }
+        
+        // Tentukan role: Admin jika user pertama, sisanya user
+        $count = $conn->query("SELECT COUNT(*) as total FROM users");
+        $total = $count->fetch_assoc()['total'];
+        $role = ($total == 0) ? 'admin' : 'user';
+        
+        // Simpan data user baru
+        $sql = "INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password_hashed', '$role')";
+        
+        if ($conn->query($sql)) {
+            $_SESSION['user_id'] = $conn->insert_id;
+            $_SESSION['nama'] = $nama;
+            $_SESSION['role'] = $role;
+            
+            header("Location: /dashboard"); // Redirect ke route dashboard bersih
+            exit();
+        } else {
+            $_SESSION['error'] = "Registrasi gagal, silakan coba lagi.";
+            header("Location: /register");
+            exit();
+        }
+    }
+}
+
+// --- LOGIKA LOGIN ---
+if ($action == 'login') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $email = $conn->real_escape_string($_POST['email']);
+        $password = $_POST['password'];
+        
+        $result = $conn->query("SELECT * FROM users WHERE email='$email'");
+        
+        if ($result->num_rows > 0) {
+            $user = $result->fetch_assoc();
+            
+            // Verifikasi password hash
+            if (password_verify($password, $user['password'])) {
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['nama'] = $user['nama'];
+                $_SESSION['role'] = $user['role'];
+                
+                header("Location: /dashboard"); // Redirect ke route dashboard bersih
+                exit();
+            } else {
+                $_SESSION['error'] = "Password salah!";
+                header("Location: /login"); // Kembali ke route login bersih
+                exit();
+            }
+        } else {
+            $_SESSION['error'] = "Email tidak terdaftar!";
+            header("Location: /login");
+            exit();
+        }
+    }
+}
+
+// --- LOGIKA LOGOUT ---
+if ($action == 'logout') {
+    session_destroy();
+    header("Location: /login"); // Redirect ke route login bersih
     exit();
 }
+
+// Jika akses langsung tanpa action yang valid
+header("Location: /login");
+exit();
 ?>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Register | Panenusa</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-900 flex items-center justify-center min-h-screen">
-    <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md">
-        <h1 class="text-2xl font-bold text-white text-center mb-6">Daftar Akun</h1>
-        
-        <?php if(isset($_SESSION['error'])): ?>
-            <div class="bg-red-500/20 border border-red-500 text-red-400 p-3 rounded mb-4">
-                <?= $_SESSION['error']; unset($_SESSION['error']); ?>
-            </div>
-        <?php endif; ?>
-        
-        <form action="/auth/register" method="POST">
-            <div class="mb-4">
-                <label class="text-gray-400 block mb-2">Nama Lengkap</label>
-                <input type="text" name="nama" required class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600">
-            </div>
-            <div class="mb-4">
-                <label class="text-gray-400 block mb-2">Email</label>
-                <input type="email" name="email" required class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600">
-            </div>
-            <div class="mb-6">
-                <label class="text-gray-400 block mb-2">Password</label>
-                <input type="password" name="password" required class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600">
-            </div>
-            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded font-bold">
-                Daftar
-            </button>
-        </form>
-        
-        <p class="text-center text-gray-400 mt-4">
-            Sudah punya akun? <a href="login.php" class="text-green-400">Login</a>
-        </p>
-    </div>
-</body>
-</html
