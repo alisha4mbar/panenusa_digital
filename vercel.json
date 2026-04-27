@@ -5,21 +5,69 @@
     }
   },
   "routes": [
-    { "src": "/auth/(.*)", "dest": "/api/auth.php?action=$1" },
-    { "src": "/login", "dest": "/api/login.php" },
-    { "src": "/register", "dest": "/api/register.php" },
-    { "src": "/dashboard", "dest": "/api/dashboard.php" },
-    { "src": "/logout", "dest": "/api/logout.php" },
-    { "src": "/forum", "dest": "/api/forum.php" },
-    { "src": "/data-lahan", "dest": "/api/data_lahan.php" },
-    { "src": "/peta-panen", "dest": "/api/peta_panen.php" },
-    { "src": "/edit-profil", "dest": "/api/edit_profil.php" },
-    { "src": "/edukasi", "dest": "/api/konten_edukasi.php" },
-    { "src": "/transaksi", "dest": "/api/monitoring_transaksi.php" },
-    { "src": "/moderasi-forum", "dest": "/api/moderasi_forum.php" },
-    { "src": "/kelola-user", "dest": "/api/kelola_user.php" },
-    { "src": "/api-logs", "dest": "/api/log_api.php" },
-    { "src": "/laporan", "dest": "/api/laporan.php" },
-    { "src": "/(.*)", "dest": "/$1" }
+    {
+      "src": "/auth/(.*)",
+      "dest": "/api/auth.php?action=$1"
+    },
+    {
+      "src": "/login",
+      "dest": "/api/login.php"
+    },
+    {
+      "src": "/register",
+      "dest": "/api/register.php"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/api/dashboard.php"
+    },
+    {
+      "src": "/logout",
+      "dest": "/api/logout.php"
+    },
+    {
+      "src": "/forum",
+      "dest": "/api/forum.php"
+    },
+    {
+      "src": "/data-lahan",
+      "dest": "/api/data_lahan.php"
+    },
+    {
+      "src": "/peta-panen",
+      "dest": "/api/peta_panen.php"
+    },
+    {
+      "src": "/edit-profil",
+      "dest": "/api/edit_profil.php"
+    },
+    {
+      "src": "/moderasi-forum",
+      "dest": "/api/moderasi_forum.php"
+    },
+    {
+      "src": "/kelola-user",
+      "dest": "/api/kelola_user.php"
+    },
+    {
+      "src": "/monitoring-transaksi",
+      "dest": "/api/monitoring_transaksi.php"
+    },
+    {
+      "src": "/edukasi",
+      "dest": "/api/konten_edukasi.php"
+    },
+    {
+      "src": "/laporan",
+      "dest": "/api/laporan.php"
+    },
+    {
+      "src": "/api-logs",
+      "dest": "/api/log_api.php"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
   ]
 }
