@@ -1,10 +1,14 @@
 <?php
-session_start();
-include 'config.php';
+require_once 'config.php';
 
-// Proteksi: Hanya Admin yang boleh masuk
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: dashboard.php");
+if (!isset($_COOKIE['panenusa_auth'])) {
+    header("Location: /login");
+    exit();
+}
+
+$auth = json_decode($_COOKIE['panenusa_auth'], true);
+if ($auth['role'] !== 'admin') {
+    header("Location: /dashboard");
     exit();
 }
 
