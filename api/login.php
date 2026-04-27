@@ -25,6 +25,7 @@
             padding: 1rem 1.5rem;
             color: white;
             transition: all 0.3s ease;
+            width: 100%;
         }
         .input-field:focus {
             outline: none;
@@ -34,6 +35,13 @@
         .btn-login {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             transition: all 0.3s ease;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 1rem;
+            font-weight: bold;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
         .btn-login:hover {
             transform: translateY(-2px);
@@ -62,7 +70,7 @@
                     <input type="email" 
                            name="email" 
                            required 
-                           class="input-field w-full"
+                           class="input-field"
                            placeholder="contoh@email.com">
                 </div>
                 
@@ -71,11 +79,11 @@
                     <input type="password" 
                            name="password" 
                            required 
-                           class="input-field w-full"
+                           class="input-field"
                            placeholder="••••••••">
                 </div>
                 
-                <button type="submit" class="btn-login w-full py-4 rounded-xl font-bold text-white text-lg">
+                <button type="submit" class="btn-login">
                     <i class="fas fa-sign-in-alt mr-2"></i> Masuk
                 </button>
             </form>
@@ -97,15 +105,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        // Auto redirect jika sudah login
-        <?php
-        session_start();
-        if (isset($_SESSION['user_id'])) {
-            echo "window.location.href='dashboard.php';";
-        }
-        ?>
-    </script>
 </body>
 </html>
