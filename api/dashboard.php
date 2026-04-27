@@ -1,7 +1,7 @@
 <?php
 // File: dashboard.php
 session_start();
-require __DIR__ . '/config.php';
+require_once 'config.php';
 
 // Cek login
 if (!isset($_SESSION['user_id'])) {

@@ -25,7 +25,7 @@ if (isset($_SESSION['user_id'])) {
             </div>
         <?php endif; ?>
         
-        <form action="auth.php?action=login" method="POST">
+        <form action="/auth/login" method="POST">
             <div class="mb-4">
                 <label class="text-gray-400 block mb-2">Email</label>
                 <input type="email" name="email" required class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600">

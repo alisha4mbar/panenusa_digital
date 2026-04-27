@@ -24,7 +24,7 @@ if (isset($_SESSION['user_id'])) {
             </div>
         <?php endif; ?>
         
-        <form action="auth.php?action=register" method="POST">
+        <form action="/auth/register" method="POST">
             <div class="mb-4">
                 <label class="text-gray-400 block mb-2">Nama Lengkap</label>
                 <input type="text" name="nama" required class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600">

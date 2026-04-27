@@ -1,7 +1,7 @@
 <?php
 // File: auth.php
 session_start();
-require __DIR__ . '/config.php';
+require_once 'config.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
@@ -56,7 +56,7 @@ if ($action == 'login') {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['nama'] = $user['nama'];
                 $_SESSION['role'] = $user['role'];
-                header("Location: /dashboard.php");
+                header("Location: dashboard.php");
                 exit();
             } else {
                 $_SESSION['error'] = "Password salah!";
