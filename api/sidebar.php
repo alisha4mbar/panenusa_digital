@@ -1,7 +1,9 @@
 <?php
-// Ambil data dari session yang sudah login
-$role = $_SESSION['role'] ?? 'User';
-$nama = $_SESSION['nama'] ?? 'Pengguna';
+// Ambil data dari cookie panenusa_auth
+$userData = isset($_COOKIE['panenusa_auth']) ? json_decode($_COOKIE['panenusa_auth'], true) : null;
+
+$role = $userData['role'] ?? 'User';
+$nama = $userData['nama'] ?? 'Pengguna';
 
 // Warna identitas (Admin: Ungu, User: Hijau)
 $accent = ($role == 'Admin') ? '#6366f1' : '#10b981';
