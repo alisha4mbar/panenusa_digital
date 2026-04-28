@@ -1,9 +1,26 @@
-<?php
-// Jika sudah login, langsung ke dashboard
-if (isset($_COOKIE['panenusa_auth'])) {
+<?<?php
+session_start();
+
+// 1. Jika Session tidak ada, coba cek apakah ada Cookie
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['panenusa_auth'])) {
+    $data = json_decode($_COOKIE['panenusa_auth'], true);
+    
+    // Jika isi cookie valid, masukkan kembali ke Session
+    if (isset($data['user_id'])) {
+        $_SESSION['user_id'] = $data['user_id'];
+        $_SESSION['nama'] = $data['nama'];
+        $_SESSION['role'] = $data['role'];
+    }
+}
+
+// 2. Sekarang cek, jika user SUDAH login (baik via session atau hasil baca cookie tadi)
+// Langsung lempar ke dashboard, jangan kasih akses ke halaman login
+if (isset($_SESSION['user_id'])) {
     header("Location: /dashboard");
     exit();
 }
+
+// Tampilkan form login di bawah ini...
 ?>
 <!DOCTYPE html>
 <html lang="id">

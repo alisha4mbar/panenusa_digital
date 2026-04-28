@@ -3,19 +3,25 @@ ob_start();
 session_start();
 include 'config.php';
 
-/** * LOGIKA PEMBACAAN COOKIE 
- * Mengambil data dari cookie 'panenusa_auth' jika session hilang
- */
-if (!isset($_SESSION['user_id']) && isset($_COOKIE['panenusa_auth'])) {
+// Cek apakah ada session ATAU cookie
+$user_id = $_SESSION['user_id'] ?? null;
+
+if (!$user_id && isset($_COOKIE['panenusa_auth'])) {
     $data = json_decode($_COOKIE['panenusa_auth'], true);
-    
-    // Pastikan data user_id ada dalam cookie sebelum dimasukkan ke session
     if (isset($data['user_id'])) {
         $_SESSION['user_id'] = $data['user_id'];
-        $_SESSION['nama'] = $data['nama'] ?? 'User';
-        $_SESSION['role'] = $data['role'] ?? 'User';
+        $_SESSION['nama'] = $data['nama'];
+        $_SESSION['role'] = $data['role'];
+        $user_id = $_SESSION['user_id'];
     }
 }
+
+// HANYA redirect ke login jika BENAR-BENAR tidak ada session & cookie
+if (!$user_id) {
+    header("Location: /login");
+    exit();
+}
+// Jika ada $user_id, biarkan halaman dashboard tampil (jangan di-redirect lagi)
 
 /** * PROTEKSI HALAMAN
  * Jika session dan cookie tidak ada, paksa kembali ke login
