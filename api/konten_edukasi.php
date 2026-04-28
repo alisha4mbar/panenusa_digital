@@ -3,7 +3,7 @@ session_start();
 include 'config.php';
 
 if(!isset($_SESSION['user_id'])) {
-    header("Location: login");
+    header("Location: /login");
     exit;
 }
 
@@ -44,8 +44,8 @@ $gradient = ($role == 'Admin') ? 'linear-gradient(135deg, #6366f1 0%, #4338ca 10
             </div>
         </div>
         <nav class="flex-1 overflow-y-auto pr-2">
-            <a href="dashboard.php" class="sidebar-item flex items-center gap-4 p-3.5"><div class="w-5 text-center"><i class="fas fa-chart-pie"></i></div> Dashboard</a>
-            <a href="konten_edukasi.php" class="sidebar-item sidebar-active flex items-center gap-4 p-3.5"><div class="w-5 text-center"><i class="fas fa-book-open"></i></div> Konten Edukasi</a>
+            <a href="dashboard" class="sidebar-item flex items-center gap-4 p-3.5"><div class="w-5 text-center"><i class="fas fa-chart-pie"></i></div> Dashboard</a>
+            <a href="konten_edukasi" class="sidebar-item sidebar-active flex items-center gap-4 p-3.5"><div class="w-5 text-center"><i class="fas fa-book-open"></i></div> Konten Edukasi</a>
         </nav>
     </aside>
 

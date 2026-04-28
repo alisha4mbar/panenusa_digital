@@ -3,7 +3,7 @@ session_start();
 include 'config.php';
 
 if(!isset($_SESSION['user_id'])) {
-    header("Location: login");
+    header("Location: /login");
     exit;
 }
 
@@ -54,11 +54,11 @@ $transactions = [
         </div>
 
         <nav class="flex-1 overflow-y-auto">
-            <a href="dashboard.php" class="sidebar-item flex items-center gap-4 p-3.5">
+            <a href="dashboard" class="sidebar-item flex items-center gap-4 p-3.5">
                 <div class="w-5 text-center"><i class="fas fa-chart-pie"></i></div>
                 <span class="text-sm">Dashboard</span>
             </a>
-            <a href="monitoring_transaksi.php" class="sidebar-item sidebar-active flex items-center gap-4 p-3.5">
+            <a href="monitoring_transaksi" class="sidebar-item sidebar-active flex items-center gap-4 p-3.5">
                 <div class="w-5 text-center"><i class="fas fa-receipt"></i></div>
                 <span class="text-sm">Transaksi</span>
             </a>

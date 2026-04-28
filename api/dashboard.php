@@ -63,29 +63,29 @@ if ($query_lahan) {
         <nav class="flex-1 px-4 space-y-1">
             <p class="text-[10px] font-bold text-slate-500 px-4 mb-2 uppercase tracking-widest">Menu Utama</p>
             
-            <a href="dashboard.php" class="flex items-center gap-3 p-3 text-emerald-400 bg-emerald-400/5 rounded-xl border border-emerald-400/10">
+            <a href="dashboard" class="flex items-center gap-3 p-3 text-emerald-400 bg-emerald-400/5 rounded-xl border border-emerald-400/10">
                 <i class="fas fa-grid-2 w-5"></i> <span>Dashboard</span>
             </a>
             
-            <a href="data_lahan.php" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
+            <a href="data_lahan" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
                 <i class="fas fa-map-location-dot w-5"></i> <span>Data Lahan</span>
             </a>
 
-            <a href="forum.php" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
+            <a href="forum" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
                 <i class="fas fa-comments w-5"></i> <span>Forum Diskusi</span>
             </a>
 
-            <a href="konten_edukasi.php" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
+            <a href="konten_edukasi" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
                 <i class="fas fa-graduation-cap w-5"></i> <span>Edukasi</span>
             </a>
 
             <?php if ($role_user === 'Admin'): ?>
                 <div class="pt-4 mt-4 border-t border-slate-800">
                     <p class="text-[10px] font-bold text-slate-500 px-4 mb-2 uppercase tracking-widest">Administrator</p>
-                    <a href="kelola_user.php" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
+                    <a href="kelola_user" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
                         <i class="fas fa-users-gear w-5"></i> <span>Kelola Pengguna</span>
                     </a>
-                    <a href="laporan.php" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
+                    <a href="laporan" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
                         <i class="fas fa-file-contract w-5"></i> <span>Laporan Nasional</span>
                     </a>
                 </div>
@@ -107,7 +107,7 @@ if ($query_lahan) {
                     <p class="text-sm font-bold text-white"><?= htmlspecialchars($nama_user) ?></p>
                     <p class="text-[10px] text-emerald-500 font-bold uppercase tracking-tighter"><?= $role_user ?></p>
                 </div>
-                <a href="edit_profil.php" class="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center border border-slate-600 hover:border-emerald-500 transition-all">
+                <a href="edit_profil" class="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center border border-slate-600 hover:border-emerald-500 transition-all">
                     <i class="fas fa-user text-slate-300"></i>
                 </a>
             </div>
@@ -152,7 +152,7 @@ if ($query_lahan) {
                 <div class="bg-[#1e293b] rounded-[2.5rem] border border-slate-800 p-8">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-xl font-bold text-white">Diskusi Terpopuler</h3>
-                        <a href="forum.php" class="text-emerald-500 text-xs font-bold hover:underline tracking-widest">BUKA FORUM</a>
+                        <a href="forum" class="text-emerald-500 text-xs font-bold hover:underline tracking-widest">BUKA FORUM</a>
                     </div>
                     <div class="space-y-4">
                         <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
@@ -170,7 +170,7 @@ if ($query_lahan) {
                         <span class="bg-white/20 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Tips Hari Ini</span>
                         <h3 class="text-2xl font-bold text-white mt-4 leading-tight">Optimasi Pemupukan dengan Data Cuaca</h3>
                         <p class="text-emerald-100/70 text-sm mt-3 mb-6">Gunakan data BPS Nasional untuk memantau tren produksi di wilayah Anda.</p>
-                        <a href="konten_edukasi.php" class="inline-block bg-white text-emerald-700 px-6 py-3 rounded-2xl font-black text-xs hover:scale-105 transition-transform shadow-xl shadow-black/20">
+                        <a href="konten_edukasi" class="inline-block bg-white text-emerald-700 px-6 py-3 rounded-2xl font-black text-xs hover:scale-105 transition-transform shadow-xl shadow-black/20">
                             MULAI BELAJAR
                         </a>
                     </div>

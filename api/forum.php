@@ -3,7 +3,7 @@ session_start();
 include 'config.php';
 
 if(!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: /login");
     exit;
 }
 
@@ -17,7 +17,7 @@ if (isset($_POST['submit_post'])) {
     $query = "INSERT INTO forum_posts (user_id, konten, status, created_at) VALUES ('$user_id', '$konten', 'Pending', NOW())";
     
     if (mysqli_query($conn, $query)) {
-        echo "<script>alert('Postingan dikirim! Menunggu moderasi admin.'); window.location.href='forum.php';</script>";
+        echo "<script>alert('Postingan dikirim! Menunggu moderasi admin.'); window.location.href='/forum';</script>";
     }
 }
 ?>
@@ -35,7 +35,7 @@ if (isset($_POST['submit_post'])) {
     </style>
 </head>
 <body class="flex h-screen overflow-hidden">
-    <?php include 'sidebar.php'; ?>
+    <?php include 'sidebar'; ?>
 
     <main class="flex-1 overflow-y-auto p-12">
         <h2 class="text-3xl font-bold mb-8">Forum Diskusi Petani</h2>

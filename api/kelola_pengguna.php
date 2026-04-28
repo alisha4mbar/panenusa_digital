@@ -4,7 +4,7 @@ include 'config.php';
 
 // Proteksi: Hanya Admin yang bisa mengakses halaman ini
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: dashboard");
+    header("Location: /dashboard");
     exit;
 }
 
@@ -45,15 +45,15 @@ $users = [
         </div>
 
         <nav class="flex-1 overflow-y-auto">
-            <a href="dashboard.php" class="sidebar-item flex items-center gap-4 p-3.5">
+            <a href="dashboard" class="sidebar-item flex items-center gap-4 p-3.5">
                 <div class="w-5 text-center"><i class="fas fa-chart-pie text-sm"></i></div>
                 <span class="text-sm">Dashboard</span>
             </a>
-            <a href="kelola_pengguna.php" class="sidebar-item sidebar-active flex items-center gap-4 p-3.5">
+            <a href="kelola_pengguna" class="sidebar-item sidebar-active flex items-center gap-4 p-3.5">
                 <div class="w-5 text-center"><i class="fas fa-users text-sm"></i></div>
                 <span class="text-sm">Kelola Pengguna</span>
             </a>
-            <a href="moderasi_forum.php" class="sidebar-item flex items-center gap-4 p-3.5">
+            <a href="moderasi_forum" class="sidebar-item flex items-center gap-4 p-3.5">
                 <div class="w-5 text-center"><i class="fas fa-shield-halved text-sm"></i></div>
                 <span class="text-sm">Moderasi</span>
             </a>

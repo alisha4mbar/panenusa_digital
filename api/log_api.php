@@ -4,7 +4,7 @@ include 'config.php';
 
 // Proteksi: Hanya Admin yang bisa mengakses log sistem
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: dashboard");
+    header("Location: /dashboard");
     exit;
 }
 
@@ -51,15 +51,15 @@ $logs = [
         </div>
 
         <nav class="flex-1 overflow-y-auto">
-            <a href="dashboard.php" class="sidebar-item flex items-center gap-4 p-3.5">
+            <a href="dashboard" class="sidebar-item flex items-center gap-4 p-3.5">
                 <div class="w-5 text-center"><i class="fas fa-chart-pie"></i></div>
                 <span class="text-sm">Dashboard</span>
             </a>
-            <a href="log_api.php" class="sidebar-item sidebar-active flex items-center gap-4 p-3.5">
+            <a href="log_api" class="sidebar-item sidebar-active flex items-center gap-4 p-3.5">
                 <div class="w-5 text-center"><i class="fas fa-terminal"></i></div>
                 <span class="text-sm">API Logs</span>
             </a>
-            <a href="kelola_pengguna.php" class="sidebar-item flex items-center gap-4 p-3.5">
+            <a href="kelola_pengguna" class="sidebar-item flex items-center gap-4 p-3.5">
                 <div class="w-5 text-center"><i class="fas fa-users"></i></div>
                 <span class="text-sm">Kelola Pengguna</span>
             </a>

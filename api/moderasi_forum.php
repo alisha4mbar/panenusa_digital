@@ -4,7 +4,7 @@ include 'config.php';
 
 // 1. Proteksi: Hanya Admin yang bisa masuk
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: dashboard");
+    header("Location: /dashboard");
     exit;
 }
 
@@ -21,11 +21,11 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     if ($action == 'approve') {
         // Ubah status jadi Approved agar muncul di halaman Forum User
         mysqli_query($conn, "UPDATE forum_posts SET status = 'Approved' WHERE id = $id");
-        echo "<script>alert('Postingan disetujui!'); window.location.href='moderasi_forum.php';</script>";
+        echo "<script>alert('Postingan disetujui!'); window.location.href='/moderasi_forum';</script>";
     } elseif ($action == 'delete') {
         // Hapus postingan dari database
         mysqli_query($conn, "DELETE FROM forum_posts WHERE id = $id");
-        echo "<script>alert('Postingan berhasil dihapus!'); window.location.href='moderasi_forum.php';</script>";
+        echo "<script>alert('Postingan berhasil dihapus!'); window.location.href='/moderasi_forum';</script>";
     }
 }
 
