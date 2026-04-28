@@ -1,11 +1,18 @@
 <?php
 session_start();
 include 'config.php';
-include 'api_bps.php'; // Ambil data BPS
+include 'data_bps.php'; // Diubah dari api_bps.php
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') { // Admin huruf besar
     header("Location: dashboard.php");
     exit();
+}
+
+// Menghitung total produksi dari data BPS
+$data_bps = function_exists('getBpsData') ? getBpsData() : [];
+$total_produksi_8 = 0;
+foreach($data_bps as $provinsi) {
+    $total_produksi_8 += $provinsi['value'];
 }
 ?>
 <!DOCTYPE html>
