@@ -1,39 +1,40 @@
 <?php
 ob_start();
 session_start();
-require_once 'config.php';
+include 'config.php';
 
-// 1. Proteksi Halaman: Cek apakah user sudah login melalui session atau cookie
-$is_logged_in = false;
-if (isset($_SESSION['user_id'])) {
-    $is_logged_in = true;
-    $user_id = $_SESSION['user_id'];
-    $nama_user = $_SESSION['nama'];
-    $role_user = $_SESSION['role'];
-} elseif (isset($_COOKIE['panenusa_auth'])) {
-    $cookie_data = json_decode($_COOKIE['panenusa_auth'], true);
-    if ($cookie_data) {
-        $is_logged_in = true;
-        $user_id = $cookie_data['user_id'];
-        $nama_user = $cookie_data['nama'];
-        $role_user = $cookie_data['role'];
-        // Sinkronkan ke session
-        $_SESSION['user_id'] = $user_id;
-        $_SESSION['nama'] = $nama_user;
-        $_SESSION['role'] = $role_user;
+/** * LOGIKA PEMBACAAN COOKIE 
+ * Mengambil data dari cookie 'panenusa_auth' jika session hilang
+ */
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['panenusa_auth'])) {
+    $data = json_decode($_COOKIE['panenusa_auth'], true);
+    
+    // Pastikan data user_id ada dalam cookie sebelum dimasukkan ke session
+    if (isset($data['user_id'])) {
+        $_SESSION['user_id'] = $data['user_id'];
+        $_SESSION['nama'] = $data['nama'] ?? 'User';
+        $_SESSION['role'] = $data['role'] ?? 'User';
     }
 }
 
-// 2. Jika tidak ada akses, tendang ke halaman login
-if (!$is_logged_in) {
+/** * PROTEKSI HALAMAN
+ * Jika session dan cookie tidak ada, paksa kembali ke login
+ */
+if (!isset($_SESSION['user_id'])) {
     header("Location: /login");
     exit();
 }
 
-// 3. Ambil data dari database untuk ditampilkan di dashboard
+// Data siap digunakan untuk query database
+$user_id = $_SESSION['user_id'];
+$nama_user = $_SESSION['nama'];
+$role_user = $_SESSION['role'];
+
+// Contoh pengambilan data lahan berdasarkan user_id dari cookie/session tadi
 $query_lahan = $conn->query("SELECT SUM(luas) as total_luas FROM data_lahan WHERE user_id = '$user_id'");
 $row_lahan = $query_lahan->fetch_assoc();
 $total_luas = $row_lahan['total_luas'] ?? 0;
+?>
 ?>
 <!DOCTYPE html>
 <html lang="id">

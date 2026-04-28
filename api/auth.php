@@ -12,29 +12,39 @@ if ($action == 'logout') {
     header("Location: /login");
     exit();
 }
+// --- CUPLIKAN BAGIAN LOGIN DI auth.php ---
+if ($action == 'login') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $password = $_POST['password'];
 
-// REGISTER
-if ($action == 'register' && $_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nama = $conn->real_escape_string($_POST['nama']);
-    $email = $conn->real_escape_string($_POST['email']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    
-    // Cek Email
-    $check = $conn->query("SELECT email FROM users WHERE email='$email'");
-    if ($check->num_rows > 0) {
-        echo "<script>alert('Email sudah terdaftar!'); window.history.back();</script>";
-        exit();
-    }
+        $result = mysqli_query($conn, "SELECT * FROM users WHERE email = '$email'");
+        if ($user = mysqli_fetch_assoc($result)) {
+            if (password_verify($password, $user['password'])) {
+    // Di dalam proses login (setelah password_verify berhasil)
+       // 1. Pastikan data user sudah diambil dari database ($user)
+// 2. Definisikan array data yang ingin disimpan
+        $userData = [
+    'user_id' => $user['id'],
+    'nama'    => $user['nama'],
+    'role'    => $user['role']
+];
 
-    try {
-        $sql = "INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password', 'user')";
-        if ($conn->query($sql)) {
-            echo "<script>alert('Registrasi Berhasil!'); window.location.href='/login';</script>";
-            exit();
+// 3. Simpan ke Session (Hanya 1x)
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['nama']    = $user['nama'];
+    $_SESSION['role']    = $user['role'];
+
+// 4. Simpan ke Cookie (Hanya 1x - Cukup panggil di sini saja)
+// Gunakan json_encode untuk mengubah array menjadi teks agar bisa disimpan di cookie
+setcookie('panenusa_auth', json_encode($userData), time() + (86400 * 30), "/");
+
+// 5. Alihkan ke dashboard
+header("Location: /dashboard");
+exit();
+            }
         }
-    } catch (mysqli_sql_exception $e) {
-        echo "<script>alert('Terjadi kesalahan database.'); window.history.back();</script>";
-        exit();
+        echo "<script>alert('Login Gagal!'); window.location.href='/login';</script>";
     }
 }
 
