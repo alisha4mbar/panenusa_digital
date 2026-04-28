@@ -44,9 +44,9 @@ if ($query_lahan) {
     <title>Dashboard | Panenusa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .sidebar-item-active { @apply bg-emerald-500/10 text-emerald-400 border-r-4 border-emerald-500; }
-    </style>
+        <style type="text/tailwindcss">
+            .sidebar-item-active { @apply bg-emerald-500/10 text-emerald-400 border-r-4 border-emerald-500; }
+        </style>
 </head>
 <body class="bg-[#0f172a] text-slate-200 flex min-h-screen font-sans">
 
