@@ -2,6 +2,16 @@
 session_start();
 include 'config.php';
 
+// Sinkronisasi cookie ke session (wajib untuk Vercel serverless)
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['panenusa_auth'])) {
+    $data = json_decode($_COOKIE['panenusa_auth'], true);
+    if (isset($data['user_id'])) {
+        $_SESSION['user_id'] = $data['user_id'];
+        $_SESSION['nama'] = $data['nama'];
+        $_SESSION['role'] = $data['role'];
+    }
+}
+
 if(!isset($_SESSION['user_id'])) {
     header("Location: /login");
     exit;
@@ -35,7 +45,7 @@ if (isset($_POST['submit_post'])) {
     </style>
 </head>
 <body class="flex h-screen overflow-hidden">
-    <?php include 'sidebar'; ?>
+    <?php include 'sidebar.php'; ?>
 
     <main class="flex-1 overflow-y-auto p-12">
         <h2 class="text-3xl font-bold mb-8">Forum Diskusi Petani</h2>

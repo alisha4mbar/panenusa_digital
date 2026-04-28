@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'config.php';
 
 if (!isset($_COOKIE['panenusa_auth'])) {
@@ -6,8 +7,18 @@ if (!isset($_COOKIE['panenusa_auth'])) {
     exit();
 }
 
+// Sinkronisasi cookie ke session (wajib untuk Vercel serverless)
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['panenusa_auth'])) {
+    $data = json_decode($_COOKIE['panenusa_auth'], true);
+    if (isset($data['user_id'])) {
+        $_SESSION['user_id'] = $data['user_id'];
+        $_SESSION['nama'] = $data['nama'];
+        $_SESSION['role'] = $data['role'];
+    }
+}
+
 $auth = json_decode($_COOKIE['panenusa_auth'], true);
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') { // Ubah jadi 'Admin'
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
     header("Location: /dashboard");
     exit();
 }

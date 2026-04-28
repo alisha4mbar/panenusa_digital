@@ -2,6 +2,16 @@
 session_start();
 include 'config.php';
 
+// Sinkronisasi cookie ke session (wajib untuk Vercel serverless)
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['panenusa_auth'])) {
+    $data = json_decode($_COOKIE['panenusa_auth'], true);
+    if (isset($data['user_id'])) {
+        $_SESSION['user_id'] = $data['user_id'];
+        $_SESSION['nama'] = $data['nama'];
+        $_SESSION['role'] = $data['role'];
+    }
+}
+
 // 1. Proteksi: Hanya Admin yang bisa masuk
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
     header("Location: /dashboard");

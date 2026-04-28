@@ -152,7 +152,7 @@ if ($query_lahan) {
                 <div class="bg-[#1e293b] rounded-[2.5rem] border border-slate-800 p-8">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-xl font-bold text-white">Diskusi Terpopuler</h3>
-                        <a href="forum" class="text-emerald-500 text-xs font-bold hover:underline tracking-widest">BUKA FORUM</a>
+                        <a href="/forum" class="text-emerald-500 text-xs font-bold hover:underline tracking-widest">BUKA FORUM</a>
                     </div>
                     <div class="space-y-4">
                         <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
@@ -170,7 +170,7 @@ if ($query_lahan) {
                         <span class="bg-white/20 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Tips Hari Ini</span>
                         <h3 class="text-2xl font-bold text-white mt-4 leading-tight">Optimasi Pemupukan dengan Data Cuaca</h3>
                         <p class="text-emerald-100/70 text-sm mt-3 mb-6">Gunakan data BPS Nasional untuk memantau tren produksi di wilayah Anda.</p>
-                        <a href="konten_edukasi" class="inline-block bg-white text-emerald-700 px-6 py-3 rounded-2xl font-black text-xs hover:scale-105 transition-transform shadow-xl shadow-black/20">
+                        <a href="/konten_edukasi" class="inline-block bg-white text-emerald-700 px-6 py-3 rounded-2xl font-black text-xs hover:scale-105 transition-transform shadow-xl shadow-black/20">
                             MULAI BELAJAR
                         </a>
                     </div>

@@ -1,18 +1,19 @@
 <?php
 ob_start();
 session_start();
-require_once 'config.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
-// --- LOGOUT ---
+// --- LOGOUT --- (dipisah sebelum koneksi DB agar selalu berhasil)
 if ($action == 'logout') {
     session_unset();
     session_destroy();
-    setcookie('panenusa_auth', '', time() - 3600, '/'); // Hapus cookie juga
+    setcookie('panenusa_auth', '', time() - 3600, '/');
     header("Location: /login");
     exit();
 }
+
+require_once 'config.php';
 
 // --- REGISTER (Ditambahkan Kembali) ---
 if ($action == 'register') {
