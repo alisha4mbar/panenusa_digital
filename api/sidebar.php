@@ -24,40 +24,40 @@ $accent = ($role == 'Admin') ? '#6366f1' : '#10b981';
     <nav class="flex-1 overflow-y-auto">
         <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 px-4">Menu Utama</div>
         
-        <a href="dashboard" class="sidebar-item flex items-center gap-4 p-3.5 text-slate-400 hover:text-white transition">
+        <a href="/dashboard" class="sidebar-item flex items-center gap-4 p-3.5 text-slate-400 hover:text-white transition">
             <div class="w-5 text-center"><i class="fas fa-chart-pie"></i></div>
             <span class="text-sm">Dashboard</span>
         </a>
 
         <?php if($role == 'Admin'): ?>
             <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest my-4 px-4">Kontrol Admin</div>
-            <a href="moderasi_forum" class="sidebar-item flex items-center gap-4 p-3.5 text-slate-400 hover:text-white">
+            <a href="/moderasi_forum" class="sidebar-item flex items-center gap-4 p-3.5 text-slate-400 hover:text-white">
                 <div class="w-5 text-center"><i class="fas fa-shield-halved"></i></div>
                 <span class="text-sm">Moderasi Forum</span>
             </a>
-            <a href="kelola_pengguna" class="sidebar-item flex items-center gap-4 p-3.5 text-slate-400 hover:text-white">
+            <a href="/kelola_user" class="sidebar-item flex items-center gap-4 p-3.5 text-slate-400 hover:text-white">
                 <div class="w-5 text-center"><i class="fas fa-users-gear"></i></div>
                 <span class="text-sm">Kelola User</span>
             </a>
 
         <?php else: ?>
             <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest my-4 px-4">Fitur Petani</div>
-            <a href="peta_panen" class="sidebar-item flex items-center gap-4 p-3.5 text-slate-400 hover:text-white">
+            <a href="/peta_panen" class="sidebar-item flex items-center gap-4 p-3.5 text-slate-400 hover:text-white">
                 <div class="w-5 text-center"><i class="fas fa-map-location-dot"></i></div>
                 <span class="text-sm">Peta Pangan</span>
             </a>
-            <a href="data_lahan" class="sidebar-item flex items-center gap-4 p-3.5 text-slate-400 hover:text-white">
+            <a href="/data_lahan" class="sidebar-item flex items-center gap-4 p-3.5 text-slate-400 hover:text-white">
                 <div class="w-5 text-center"><i class="fas fa-mountain-sun"></i></div>
                 <span class="text-sm">Data Lahan</span>
             </a>
-            <a href="forum" class="sidebar-item flex items-center gap-4 p-3.5 text-slate-400 hover:text-white">
+            <a href="/forum" class="sidebar-item flex items-center gap-4 p-3.5 text-slate-400 hover:text-white">
                 <div class="w-5 text-center"><i class="fas fa-comments"></i></div>
                 <span class="text-sm">Forum Diskusi</span>
             </a>
         <?php endif; ?>
     </nav>
 
-    <a href="auth.php?action=logout" class="sidebar-item flex items-center gap-4 p-3.5 text-red-400 font-bold mt-auto border-t border-white/5 pt-5">
+    <a href="/auth/logout" class="sidebar-item flex items-center gap-4 p-3.5 text-red-400 font-bold mt-auto border-t border-white/5 pt-5">
         <i class="fas fa-power-off"></i> <span>Keluar</span>
     </a>
 </aside>
