@@ -1,4 +1,4 @@
-<?<?php
+<?php
 session_start();
 
 // 1. Jika Session tidak ada, coba cek apakah ada Cookie
