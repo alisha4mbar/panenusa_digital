@@ -4,7 +4,7 @@ include 'config.php';
 include 'data_bps.php'; // Diubah dari api_bps.php
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') { // Admin huruf besar
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 

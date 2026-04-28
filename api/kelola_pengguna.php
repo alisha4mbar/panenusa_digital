@@ -4,7 +4,7 @@ include 'config.php';
 
 // Proteksi: Hanya Admin yang bisa mengakses halaman ini
 if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit;
 }
 

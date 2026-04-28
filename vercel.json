@@ -1,17 +1,17 @@
 {
   "functions": {
-    "API/*.php": {
+    "api/*.php": {
       "runtime": "vercel-php@0.7.2"
     }
   },
   "routes": [
     { "src": "/", "dest": "/index.html" },
     { "src": "/index.html", "dest": "/index.html" },
-    { "src": "/auth/login", "dest": "/API/auth.php?action=login" },
-    { "src": "/auth/register", "dest": "/API/auth.php?action=register" },
-    { "src": "/auth/logout", "dest": "/API/auth.php?action=logout" },
-    { "src": "/login", "dest": "/API/login.php" },
-    { "src": "/dashboard", "dest": "/API/dashboard.php" },
-    { "src": "/(.*)", "dest": "/API/$1.php" }
+    { "src": "/auth/login", "dest": "/api/auth.php?action=login" },
+    { "src": "/auth/register", "dest": "/api/auth.php?action=register" },
+    { "src": "/auth/logout", "dest": "/api/auth.php?action=logout" },
+    { "src": "/login", "dest": "/api/login.php" },
+    { "src": "/dashboard", "dest": "/api/dashboard.php" },
+    { "src": "/(.*)", "dest": "/api/$1.php" }
   ]
 }

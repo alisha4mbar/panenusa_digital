@@ -8,7 +8,7 @@ if (!isset($_COOKIE['panenusa_auth'])) {
 
 $auth = json_decode($_COOKIE['panenusa_auth'], true);
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') { // Ubah jadi 'Admin'
-    header("Location: dashboard.php");
+    header("Location: dashboard");
     exit();
 }
 
