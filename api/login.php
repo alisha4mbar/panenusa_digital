@@ -12,15 +12,16 @@ if (isset($_SESSION['user_id'])) {
 $error = '';
 $msg   = '';
 
-// Menangkap parameter status dari URL
-$status = isset($_GET['status']) ? (string)$_GET['status'] : '';
-$msg_type = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
+// 1. TANGKAP SESSION FLASH DARI REGISTER (Menghindari Eror 403 WAF Vercel)
+if (isset($_SESSION['reg_success_flash'])) {
+    $msg = $_SESSION['reg_success_flash'];
+    // Langsung hapus dari session agar tidak muncul terus-menerus saat di-refresh
+    unset($_SESSION['reg_success_flash']);
+}
 
-if ($status === 'reg_success') {
-    $msg = 'Registrasi berhasil! Silakan login.';
-} elseif ($status === 'login_failed') {
-    $error = 'Email atau Password salah!';
-} elseif ($msg_type === 'expired') {
+// Menangkap parameter status alternatif dari URL (jika ada fallback)
+$msg_type = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
+if ($msg_type === 'expired') {
     $msg = 'Sesi habis. Silakan login kembali.';
 }
 
@@ -32,6 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Email dan password wajib diisi.';
     } else {
         try {
+            // Validasi koneksi database murni menggunakan MySQLi dari config.php
+            if (!$conn) {
+                throw new Exception('Koneksi database ke TiDB Cloud terputus.');
+            }
+
             $email_clean = mysqli_real_escape_string($conn, $email);
             
             // Query menggunakan mysqli sesuai dengan config.php
@@ -41,16 +47,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($result && $user = mysqli_fetch_assoc($result)) {
                 if (password_verify($password, $user['password'])) {
                     
-                    // Set Session
+                    // Set Session Utama
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['nama']    = $user['nama'];
                     $_SESSION['role']    = $user['role'];
+                    $_SESSION['divisi']  = $user['divisi'] ?? '';
+                    $_SESSION['email']   = $user['email'] ?? '';
 
-                    // Set Cookie untuk Vercel Serverless State
+                    // Set Cookie untuk Vercel Serverless State (Sinkronisasi State)
                     $userData = [
                         'user_id' => $user['id'],
                         'nama'    => $user['nama'],
-                        'role'    => $user['role']
+                        'role'    => $user['role'],
+                        'divisi'  => $user['divisi'] ?? '',
+                        'email'   => $user['email'] ?? ''
                     ];
                     setcookie('panenusa_auth', json_encode($userData), time() + (86400 * 30), "/", "", false, true);
 
