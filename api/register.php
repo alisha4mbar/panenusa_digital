@@ -1,50 +1,80 @@
 <?php
 ob_start();
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/session.php';
 
-if (isLoggedIn()) redirectToDashboard();
+// PERBAIKAN JALUR: Mengarah langsung ke config.php yang ada di folder api/
+require_once __DIR__ . '/config.php';
+
+// Cek status login dari session
+if (isset($_SESSION['user_id'])) {
+    header("Location: dashboard.php");
+    exit();
+}
 
 $error  = '';
-$fields = ['nama'=>'','email'=>'','role'=>'user','divisi'=>''];
+$fields = ['nama'=>'','email'=>'','role'=>'User','divisi'=>''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama     = trim(filter_input(INPUT_POST,'nama',    FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
     $email    = trim(filter_input(INPUT_POST,'email',   FILTER_SANITIZE_EMAIL)         ?? '');
     $password = trim(filter_input(INPUT_POST,'password',FILTER_UNSAFE_RAW)             ?? '');
     $confirm  = trim(filter_input(INPUT_POST,'confirm', FILTER_UNSAFE_RAW)             ?? '');
-    $role     = filter_input(INPUT_POST,'role',  FILTER_SANITIZE_SPECIAL_CHARS) ?? 'user';
+    $role     = filter_input(INPUT_POST,'role',  FILTER_SANITIZE_SPECIAL_CHARS) ?? 'User';
     $divisi   = filter_input(INPUT_POST,'divisi',FILTER_SANITIZE_SPECIAL_CHARS) ?? '';
     $fields   = compact('nama','email','role','divisi');
 
-    $allowedRoles = ['user','supplier','admin'];
-    if (!in_array($role, $allowedRoles, true)) $role = 'user';
+    $allowedRoles = ['User','Supplier','Admin'];
+    if (!in_array($role, $allowedRoles, true)) $role = 'User';
 
-    if (!$nama || !$email || !$password)      { $error = 'Semua kolom wajib diisi.'; }
-    elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) { $error = 'Format email tidak valid.'; }
-    elseif (strlen($password) < 6)             { $error = 'Password minimal 6 karakter.'; }
-    elseif ($password !== $confirm)            { $error = 'Konfirmasi password tidak cocok.'; }
-    else {
+    if (!$nama || !$email || !$password) { 
+        $error = 'Semua kolom wajib diisi.'; 
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) { 
+        $error = 'Format email tidak valid.'; 
+    } elseif (strlen($password) < 6) { 
+        $error = 'Password minimal 6 karakter.'; 
+    } elseif ($password !== $confirm) { 
+        $error = 'Konfirmasi password tidak cocok.'; 
+    } else {
         try {
-            initSchema();
-            $pdo = getDB();
+            // Validasi koneksi database murni menggunakan MySQLi dari config.php
+            if (!$conn) {
+                throw new Exception('Koneksi database ke TiDB Cloud terputus.');
+            }
 
-            // User pertama otomatis jadi superadmin
-            $count = (int)$pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
-            if ($count === 0) $role = 'superadmin';
-
-            $ck = $pdo->prepare("SELECT id FROM users WHERE email=? LIMIT 1");
-            $ck->execute([$email]);
-            if ($ck->fetch()) {
+            $email_clean = mysqli_real_escape_string($conn, $email);
+            
+            // Cek apakah email sudah digunakan
+            $check_query = "SELECT id FROM users WHERE email='$email_clean' LIMIT 1";
+            $check_result = mysqli_query($conn, $check_query);
+            
+            if ($check_result && mysqli_num_rows($check_result) > 0) {
                 $error = 'Email sudah terdaftar.';
             } else {
-                $hash = password_hash($password, PASSWORD_BCRYPT, ['cost'=>12]);
-                $pdo->prepare("INSERT INTO users (nama,email,password,role,divisi) VALUES (?,?,?,?,?)")
-                    ->execute([$nama,$email,$hash,$role,$divisi?:null]);
-                header('Location: /login?msg=registered');
-                exit;
+                // Ambil total user untuk menentukan Admin pertama otomatis
+                $res_count = mysqli_query($conn, "SELECT COUNT(*) as total FROM users");
+                $row_count = mysqli_fetch_assoc($res_count);
+                if ((int)$row_count['total'] === 0) {
+                    $role = 'Admin';
+                }
+
+                $hash_password = password_hash($password, PASSWORD_DEFAULT);
+                $nama_clean    = mysqli_real_escape_string($conn, $nama);
+                $role_clean    = mysqli_real_escape_string($conn, $role);
+                $divisi_clean  = $divisi ? "'" . mysqli_real_escape_string($conn, $divisi) . "'" : "NULL";
+
+                // Query Insert murni MySQLi
+                $insert_query = "INSERT INTO users (nama, email, password, role, divisi) VALUES ('$nama_clean', '$email_clean', '$hash_password', '$role_clean', $divisi_clean)";
+                
+                if (mysqli_query($conn, $insert_query)) {
+                    ob_end_clean();
+                    header('Location: login.php?status=reg_success');
+                    exit();
+                } else {
+                    $error = 'Gagal menyimpan data ke database online.';
+                }
             }
-        } catch (Exception $e) { $error = 'Terjadi kesalahan. Coba lagi.'; }
+        } catch (Exception $e) { 
+            $error = 'Terjadi kesalahan sistem: ' . $e->getMessage(); 
+        }
     }
 }
 ?>
@@ -108,9 +138,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Daftar Sebagai</label>
                     <select name="role" id="roleSelect" onchange="toggleDivisi()"
                             class="w-full p-4 rounded-xl bg-slate-700 text-white outline-none focus:ring-2 focus:ring-emerald-500 border border-slate-600 transition">
-                        <option value="user"     <?= $fields['role']==='user'    ?'selected':'' ?>>Pembeli (User Umum)</option>
-                        <option value="supplier" <?= $fields['role']==='supplier'?'selected':'' ?>>Supplier / Petani</option>
-                        <option value="admin"    <?= $fields['role']==='admin'   ?'selected':'' ?>>Admin Operasional</option>
+                        <option value="User"     <?= $fields['role']==='User'    ?'selected':'' ?>>Pembeli (User Umum)</option>
+                        <option value="Supplier" <?= $fields['role']==='Supplier'?'selected':'' ?>>Supplier / Petani</option>
+                        <option value="Admin"    <?= $fields['role']==='Admin'   ?'selected':'' ?>>Admin Operasional</option>
                     </select>
                 </div>
                 <div id="divisiGroup" class="hidden">
@@ -128,14 +158,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
 
             <p class="text-center text-slate-400 mt-6 text-sm">
-                Sudah punya akun? <a href="/login" class="text-emerald-400 font-bold hover:text-emerald-300 transition">Masuk</a>
+                Sudah punya akun? <a href="login.php" class="text-emerald-400 font-bold hover:text-emerald-300 transition">Masuk</a>
             </p>
         </div>
     </div>
 
 <script>
 function togglePwd(id,iconId){const f=document.getElementById(id);const i=document.getElementById(iconId);f.type=f.type==='password'?'text':'password';i.className=f.type==='password'?'fas fa-eye':'fas fa-eye-slash';}
-function toggleDivisi(){document.getElementById('divisiGroup').classList.toggle('hidden',document.getElementById('roleSelect').value!=='admin');}
+function toggleDivisi(){document.getElementById('divisiGroup').classList.toggle('hidden',document.getElementById('roleSelect').value!=='Admin');}
 toggleDivisi();
 </script>
 </body>
