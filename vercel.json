@@ -7,11 +7,24 @@
   "routes": [
     { "src": "/", "dest": "/index.html" },
     { "src": "/index.html", "dest": "/index.html" },
+    
     { "src": "/auth/login", "dest": "/api/auth.php?action=login" },
     { "src": "/auth/register", "dest": "/api/auth.php?action=register" },
     { "src": "/auth/logout", "dest": "/api/auth.php?action=logout" },
+    
     { "src": "/login", "dest": "/api/login.php" },
+    { "src": "/register", "dest": "/api/register.php" },
     { "src": "/dashboard", "dest": "/api/dashboard.php" },
-    { "src": "/(.*)", "dest": "/api/$1.php" }
+    { "src": "/data_lahan", "dest": "/api/data_lahan.php" },
+    { "src": "/forum", "dest": "/api/forum.php" },
+    { "src": "/kelola_pengguna", "dest": "/api/kelola_pengguna.php" },
+    { "src": "/edit_profil", "dest": "/api/edit_profil.php" },
+    { "src": "/peta_panen", "dest": "/api/peta_panen.php" },
+
+    {
+      "src": "/(.*)",
+      "dest": "/$1",
+      "check": true
+    }
   ]
 }
