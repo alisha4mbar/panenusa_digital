@@ -1,0 +1,8 @@
+{
+    "intelephense.environment.includePaths": [
+        "./config"
+    ],
+    "php.validate.enable": false,
+    "php.suggest.basic": false
+}
+

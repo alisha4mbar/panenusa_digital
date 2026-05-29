@@ -29,12 +29,15 @@ $nama_user = $_SESSION['nama'];
 $role_user = $_SESSION['role'];
 
 // 3. QUERY DATA STATISTIK BERDASARKAN ROLE
-// Jika Admin: Melihat Total Nasional | Jika User: Melihat Lahan Sendiri
 if ($role_user === 'Admin') {
-    $query_lahan = $conn->query("SELECT COUNT(*) as jml, SUM(luas) as total FROM data_lahan");
+    // Admin melihat semua data
+    $sql = "SELECT COUNT(*) as jml, SUM(luas) as total FROM data_lahan";
+    $query_lahan = $conn->query($sql);
     $label_stat = "Total Lahan Nasional";
 } else {
-    $query_lahan = $conn->query("SELECT COUNT(*) as jml, SUM(luas) as total FROM data_lahan WHERE user_id = '$user_id'");
+    // User hanya melihat miliknya sendiri (Gunakan user_id yang valid)
+    $sql = "SELECT COUNT(*) as jml, SUM(luas) as total FROM data_lahan WHERE user_id = '$user_id'";
+    $query_lahan = $conn->query($sql);
     $label_stat = "Total Luas Lahan Anda";
 }
 
