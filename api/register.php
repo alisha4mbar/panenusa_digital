@@ -11,19 +11,20 @@ if (isset($_SESSION['user_id'])) {
 }
 
 $error  = '';
-$fields = ['nama'=>'','email'=>'','role'=>'User','divisi'=>''];
+$fields = ['nama'=>'','email'=>'','role'=>'user','divisi'=>''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama     = trim(filter_input(INPUT_POST,'nama',    FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
     $email    = trim(filter_input(INPUT_POST,'email',   FILTER_SANITIZE_EMAIL)         ?? '');
     $password = trim(filter_input(INPUT_POST,'password',FILTER_UNSAFE_RAW)             ?? '');
     $confirm  = trim(filter_input(INPUT_POST,'confirm', FILTER_UNSAFE_RAW)             ?? '');
-    $role     = filter_input(INPUT_POST,'role',  FILTER_SANITIZE_SPECIAL_CHARS) ?? 'User';
+    $role     = filter_input(INPUT_POST,'role',  FILTER_SANITIZE_SPECIAL_CHARS) ?? 'user';
     $divisi   = filter_input(INPUT_POST,'divisi',FILTER_SANITIZE_SPECIAL_CHARS) ?? '';
     $fields   = compact('nama','email','role','divisi');
 
-    $allowedRoles = ['User','Supplier','Admin'];
-    if (!in_array($role, $allowedRoles, true)) $role = 'User';
+    // Penyelarasan role dengan huruf kecil agar pas dengan ENUM database TiDB
+    $allowedRoles = ['user','supplier','admin'];
+    if (!in_array($role, $allowedRoles, true)) $role = 'user';
 
     if (!$nama || !$email || !$password) { 
         $error = 'Semua kolom wajib diisi.'; 
@@ -53,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $res_count = mysqli_query($conn, "SELECT COUNT(*) as total FROM users");
                 $row_count = mysqli_fetch_assoc($res_count);
                 if ((int)$row_count['total'] === 0) {
-                    $role = 'Admin';
+                    $role = 'admin';
                 }
 
                 $hash_password = password_hash($password, PASSWORD_DEFAULT);
@@ -138,9 +139,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Daftar Sebagai</label>
                     <select name="role" id="roleSelect" onchange="toggleDivisi()"
                             class="w-full p-4 rounded-xl bg-slate-700 text-white outline-none focus:ring-2 focus:ring-emerald-500 border border-slate-600 transition">
-                        <option value="User"     <?= $fields['role']==='User'    ?'selected':'' ?>>Pembeli (User Umum)</option>
-                        <option value="Supplier" <?= $fields['role']==='Supplier'?'selected':'' ?>>Supplier / Petani</option>
-                        <option value="Admin"    <?= $fields['role']==='Admin'   ?'selected':'' ?>>Admin Operasional</option>
+                        <option value="user"     <?= $fields['role']==='user'    ?'selected':'' ?>>Pembeli (User Umum)</option>
+                        <option value="supplier" <?= $fields['role']==='supplier'?'selected':'' ?>>Supplier / Petani</option>
+                        <option value="admin"    <?= $fields['role']==='admin'   ?'selected':'' ?>>Admin Operasional</option>
                     </select>
                 </div>
                 <div id="divisiGroup" class="hidden">
@@ -165,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <script>
 function togglePwd(id,iconId){const f=document.getElementById(id);const i=document.getElementById(iconId);f.type=f.type==='password'?'text':'password';i.className=f.type==='password'?'fas fa-eye':'fas fa-eye-slash';}
-function toggleDivisi(){document.getElementById('divisiGroup').classList.toggle('hidden',document.getElementById('roleSelect').value!=='Admin');}
+function toggleDivisi(){document.getElementById('divisiGroup').classList.toggle('hidden',document.getElementById('roleSelect').value!=='admin');}
 toggleDivisi();
 </script>
 </body>
