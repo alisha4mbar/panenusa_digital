@@ -67,7 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 if (mysqli_query($conn, $insert_query)) {
                     ob_end_clean();
-                    header('Location: login.php?status=reg_success');
+                    // MENGGUNAKAN SESSION FLASH AGAR AMAN DARI BLOKIR FIREWALL VERCEL 403
+                    $_SESSION['reg_success_flash'] = 'Registrasi berhasil! Silakan login.';
+                    header('Location: login.php');
                     exit();
                 } else {
                     $error = 'Gagal menyimpan data ke database online.';
