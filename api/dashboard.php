@@ -1,41 +1,22 @@
 <?php
 ob_start();
-session_start();
-
-// 1. KONEKSI KE DATABASE (Gunakan __DIR__ agar tidak Forbidden di Vercel)
 require_once(__DIR__ . '/config.php');
 
-// 2. LOGIKA AUTENTIKASI SINKRON
-$user_id = $_SESSION['user_id'] ?? null;
-
-// Jika session kosong, coba ambil dari cookie
-if (!$user_id && isset($_COOKIE['panenusa_auth'])) {
-    $data = json_decode($_COOKIE['panenusa_auth'], true);
-    if (isset($data['user_id'])) {
-        $_SESSION['user_id'] = $data['user_id'];
-        $_SESSION['nama'] = $data['nama'];
-        $_SESSION['role'] = $data['role'];
-        $user_id = $_SESSION['user_id'];
-    }
-}
-
-// Proteksi Halaman: Jika belum login, redirect ke login.php (BUKAN folder /login)
-if (!$user_id) {
+// Proteksi Halaman Menggunakan config.php
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
+$user_id = $_SESSION['user_id'];
 $nama_user = $_SESSION['nama'];
 $role_user = $_SESSION['role'];
 
-// 3. QUERY DATA STATISTIK BERDASARKAN ROLE
 if ($role_user === 'Admin') {
-    // Admin melihat semua data
     $sql = "SELECT COUNT(*) as jml, SUM(luas) as total FROM data_lahan";
     $query_lahan = $conn->query($sql);
     $label_stat = "Total Lahan Nasional";
 } else {
-    // User hanya melihat miliknya sendiri (Gunakan user_id yang valid)
     $sql = "SELECT COUNT(*) as jml, SUM(luas) as total FROM data_lahan WHERE user_id = '$user_id'";
     $query_lahan = $conn->query($sql);
     $label_stat = "Total Luas Lahan Anda";
@@ -88,18 +69,15 @@ if ($query_lahan) {
             <?php if ($role_user === 'Admin'): ?>
                 <div class="pt-4 mt-4 border-t border-slate-800">
                     <p class="text-[10px] font-bold text-slate-500 px-4 mb-2 uppercase tracking-widest">Administrator</p>
-                    <a href="kelola_user.php" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
+                    <a href="kelola_pengguna.php" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
                         <i class="fas fa-users-gear w-5"></i> <span>Kelola Pengguna</span>
-                    </a>
-                    <a href="laporan_nasional.php" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition-all">
-                        <i class="fas fa-chart-line w-5"></i> <span>Laporan Nasional</span>
                     </a>
                 </div>
             <?php endif; ?>
         </nav>
 
         <div class="p-4 mt-auto">
-            <a href="logout.php" class="flex items-center gap-3 p-3 text-red-400 hover:bg-red-500/10 rounded-xl transition-all">
+            <a href="auth.php?action=logout" class="flex items-center gap-3 p-3 text-red-400 hover:bg-red-500/10 rounded-xl transition-all">
                 <i class="fas fa-power-off w-5"></i> <span>Keluar Akun</span>
             </a>
         </div>
@@ -113,9 +91,9 @@ if ($query_lahan) {
                     <p class="text-sm font-bold text-white"><?= htmlspecialchars($nama_user) ?></p>
                     <p class="text-[10px] text-emerald-500 font-bold uppercase"><?= $role_user ?></p>
                 </div>
-                <div class="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center border border-slate-600">
+                <a href="edit_profil.php" class="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center border border-slate-600">
                     <i class="fas fa-user text-slate-300"></i>
-                </div>
+                </a>
             </div>
         </div>
 
@@ -139,48 +117,6 @@ if ($query_lahan) {
                 <div class="bg-[#1e293b] p-6 rounded-[2rem] border border-slate-800">
                     <p class="text-slate-400 text-sm font-semibold uppercase tracking-wider">Status Akses</p>
                     <h3 class="text-2xl font-black text-emerald-500 mt-1 uppercase italic"><?= $role_user ?></h3>
-                </div>
-            </div>
-
-            <div class="bg-[#1e293b] rounded-[2.5rem] border border-slate-800 p-8 mb-8">
-                <h3 class="text-xl font-bold text-white mb-6"><i class="fas fa-trophy text-amber-400 mr-2"></i> Peringkat Produksi Nasional</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="p-4 bg-slate-900/50 rounded-2xl border border-slate-700">
-                        <p class="text-xs text-slate-500 font-bold">WILAYAH 1</p>
-                        <p class="text-lg font-bold text-white">Jawa Timur</p>
-                        <p class="text-emerald-500 font-black">9,5 Juta Ton</p>
-                    </div>
-                    <div class="p-4 bg-slate-900/50 rounded-2xl border border-slate-700">
-                        <p class="text-xs text-slate-500 font-bold">WILAYAH 2</p>
-                        <p class="text-lg font-bold text-white">Jawa Tengah</p>
-                        <p class="text-emerald-500 font-black">9,2 Juta Ton</p>
-                    </div>
-                    <div class="p-4 bg-slate-900/50 rounded-2xl border border-slate-700">
-                        <p class="text-xs text-slate-500 font-bold">WILAYAH 3</p>
-                        <p class="text-lg font-bold text-white">Jawa Barat</p>
-                        <p class="text-emerald-500 font-black">9,1 Juta Ton</p>
-                    </div>
-                </div>
-                <div class="mt-6 pt-6 border-t border-slate-800 flex justify-between items-center">
-                    <p class="text-sm text-slate-400">Hubungkan dengan portal data resmi</p>
-                    <a href="https://www.bps.go.id/id/statistics-any/padi" target="_blank" class="text-emerald-500 text-sm font-bold hover:underline">KONEKSI BPS <i class="fas fa-external-link-alt ml-1"></i></a>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-[#1e293b] rounded-[2.5rem] border border-slate-800 p-8">
-                    <h3 class="text-xl font-bold text-white mb-6">Diskusi Forum</h3>
-                    <div class="space-y-4">
-                        <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
-                            <p class="text-sm text-slate-300">"Optimasi pupuk organik untuk tanah subur..."</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-emerald-600 rounded-[2.5rem] p-8 relative overflow-hidden">
-                    <h3 class="text-2xl font-bold text-white leading-tight">Edukasi Tani</h3>
-                    <p class="text-emerald-100/70 text-sm mt-3 mb-6">Pelajari teknik irigasi terbaru di modul edukasi.</p>
-                    <a href="edukasi.php" class="inline-block bg-white text-emerald-700 px-6 py-3 rounded-2xl font-black text-xs hover:scale-105 transition-transform">MULAI BELAJAR</a>
                 </div>
             </div>
         </div>

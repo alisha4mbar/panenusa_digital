@@ -1,78 +1,70 @@
 <?php
 ob_start();
+// Mengarahkan include langsung ke config.php yang berada di folder yang sama (api/)
+require_once __DIR__ . '/config.php';
 
-/**
- * @see isLoggedIn() — config/session.php
- * @see redirectToDashboard() — config/session.php
- * @see setUserSession() — config/session.php
- * @see initSchema() — config/db.php
- * @see getDB() — config/db.php
- * @see logActivity() — config/db.php
- */
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/session.php';
-
-if (isLoggedIn()) redirectToDashboard();
+// Jika session user_id sudah ada, langsung lempar ke dashboard
+if (isset($_SESSION['user_id'])) {
+    header("Location: dashboard.php");
+    exit();
+}
 
 $error = '';
 $msg   = '';
 
-$rawMsg = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
-if ($rawMsg === 'expired') {
-    $msg = 'Sesi habis. Silakan login kembali.';
-} elseif ($rawMsg === 'registered') {
+// Menangkap parameter status dari URL
+$status = isset($_GET['status']) ? (string)$_GET['status'] : '';
+$msg_type = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
+
+if ($status === 'reg_success') {
     $msg = 'Registrasi berhasil! Silakan login.';
+} elseif ($status === 'login_failed') {
+    $error = 'Email atau Password salah!';
+} elseif ($msg_type === 'expired') {
+    $msg = 'Sesi habis. Silakan login kembali.';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email    = trim(filter_input(INPUT_POST, 'email',    FILTER_SANITIZE_EMAIL) ?? '');
-    $password = trim(filter_input(INPUT_POST, 'password', FILTER_UNSAFE_RAW)     ?? '');
+    $email    = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL) ?? '');
+    $password = trim(filter_input(INPUT_POST, 'password', FILTER_UNSAFE_RAW) ?? '');
 
     if (!$email || !$password) {
         $error = 'Email dan password wajib diisi.';
     } else {
-        $dbReady = false;
         try {
-            initSchema();
-            $dbReady = true;
-        } catch (Exception $e) {
-            $error = 'Gagal inisialisasi database. Coba lagi.';
-        }
+            $email_clean = mysqli_real_escape_string($conn, $email);
+            
+            // Query menggunakan mysqli sesuai dengan config.php
+            $query = "SELECT * FROM users WHERE email = '$email_clean' LIMIT 1";
+            $result = mysqli_query($conn, $query);
 
-        if ($dbReady) {
-            try {
-                $pdo = getDB();
+            if ($result && $user = mysqli_fetch_assoc($result)) {
+                if (password_verify($password, $user['password'])) {
+                    
+                    // Set Session
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['nama']    = $user['nama'];
+                    $_SESSION['role']    = $user['role'];
 
-                if (!$pdo instanceof PDO) {
-                    throw new Exception('Koneksi database tidak valid.');
-                }
+                    // Set Cookie untuk Vercel Serverless State
+                    $userData = [
+                        'user_id' => $user['id'],
+                        'nama'    => $user['nama'],
+                        'role'    => $user['role']
+                    ];
+                    setcookie('panenusa_auth', json_encode($userData), time() + (86400 * 30), "/", "", false, true);
 
-                $stmt = $pdo->prepare(
-                    "SELECT * FROM users WHERE email = ? AND status = 'aktif' LIMIT 1"
-                );
-                $stmt->execute([$email]);
-                $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                if (
-                    $user !== false
-                    && is_array($user)
-                    && isset($user['password'])
-                    && password_verify($password, $user['password'])
-                ) {
-                    setUserSession($user);
-                    logActivity(
-                        (int)$user['id'],
-                        'LOGIN',
-                        'IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown')
-                    );
                     ob_end_clean();
-                    redirectToDashboard();
+                    header("Location: dashboard.php");
+                    exit();
                 } else {
                     $error = 'Email atau Password salah!';
                 }
-            } catch (Exception $e) {
-                $error = 'Terjadi kesalahan sistem. Coba lagi.';
+            } else {
+                $error = 'Email atau Password salah!';
             }
+        } catch (Exception $e) {
+            $error = 'Terjadi kesalahan sistem. Coba lagi.';
         }
     }
 }
@@ -106,6 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <i class="fas fa-info-circle mr-2"></i><?= htmlspecialchars($msg) ?>
             </div>
             <?php endif; ?>
+            
             <?php if ($error): ?>
             <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-5 text-sm">
                 <i class="fas fa-exclamation-circle mr-2"></i><?= htmlspecialchars($error) ?>
@@ -135,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
 
             <p class="text-center text-slate-400 mt-6 text-sm">
-                Belum punya akun? <a href="/register" class="text-emerald-400 font-bold hover:text-emerald-300 transition">Daftar Sekarang</a>
+                Belum punya akun? <a href="register.php" class="text-emerald-400 font-bold hover:text-emerald-300 transition">Daftar Sekarang</a>
             </p>
         </div>
 
