@@ -24,13 +24,9 @@ if (!$conn) {
 
 // JIKA BUKAN LOCALHOST (DI VERCEL), AKTIFKAN PENGATURAN SSL WAJIB TIDB
 if ($db_host !== 'localhost' && $db_host !== '127.0.0.1') {
-    // Bendera ini memaksa mysqli menggunakan koneksi SSL terenkripsi yang diwajibkan TiDB Cloud
     mysqli_options($conn, MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, true);
-    
-    // Melakukan koneksi menggunakan flag SSL pada port default TiDB (4000)
     $connected = mysqli_real_connect($conn, $db_host, $db_user, $db_pass, $db_name, 4000, null, MYSQLI_CLIENT_SSL);
 } else {
-    // Fallback koneksi untuk XAMPP lokal komputer kamu (tanpa SSL)
     $connected = mysqli_real_connect($conn, $db_host, $db_user, $db_pass, $db_name);
 }
 
@@ -38,7 +34,7 @@ if (!$connected) {
     die("Koneksi database gagal: " . mysqli_connect_error());
 }
 
-// SINKRONISASI COOKIE → SESSION (Diperbaiki agar tidak merusak state array)
+// SINKRONISASI COOKIE → SESSION (Aman dari null array state)
 if (empty($_SESSION['user_id']) && isset($_COOKIE['panenusa_auth'])) {
     $data = json_decode($_COOKIE['panenusa_auth'], true);
     if (!empty($data['user_id'])) {
@@ -50,7 +46,7 @@ if (empty($_SESSION['user_id']) && isset($_COOKIE['panenusa_auth'])) {
     }
 }
 
-// FUNGSI PROTEKSI HALAMAN (Membaca data array dengan aman)
+// FUNGSI PROTEKSI HALAMAN DANDASHBOARD
 function requireLogin(?string $role = null): array {
     if (empty($_SESSION['user_id'])) {
         header('Location: login.php?msg=expired');

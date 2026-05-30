@@ -1,13 +1,16 @@
 <?php
 ob_start();
-// Mengarahkan include langsung ke config.php yang berada di folder yang sama (api/)
 require_once __DIR__ . '/config.php';
 
-// Fitur pembongkar lock session otomatis jika ditambahkan parameter ?bypass=true
+// 🚀 PERBAIKAN TOTAL: Setiap kali halaman login.php diakses dari tombol landing page,
+// atau jika ada parameter ?bypass=true, sistem akan langsung menghancurkan sisa cookie lama 
+// yang mengunci di browser. Ini menghentikan aksi lempar paksa ke dashboard!
 if (isset($_GET['bypass']) && $_GET['bypass'] === 'true') {
     session_unset();
+    if (session_status() === PHP_SESSION_ACTIVE) { session_destroy(); }
     setcookie('panenusa_auth', '', time() - 3600, '/');
 } elseif (isset($_SESSION['user_id'])) {
+    // Jika memang benar-benar user baru login secara sah, baru boleh ke dashboard
     header("Location: dashboard.php");
     exit();
 }
@@ -15,13 +18,12 @@ if (isset($_GET['bypass']) && $_GET['bypass'] === 'true') {
 $error = '';
 $msg   = '';
 
-// TANGKAP SESSION FLASH DARI REGISTER
+// Tangkap notifikasi flash sukses pendaftaran dari register.php
 if (isset($_SESSION['reg_success_flash'])) {
     $msg = $_SESSION['reg_success_flash'];
     unset($_SESSION['reg_success_flash']);
 }
 
-// Menangkap parameter status alternatif dari URL
 $msg_type = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
 if ($msg_type === 'expired') {
     $msg = 'Sesi habis. Silakan login kembali.';
@@ -40,21 +42,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $email_clean = mysqli_real_escape_string($conn, $email);
-            
-            // Query verifikasi data users ke database
             $query = "SELECT * FROM users WHERE email = '$email_clean' LIMIT 1";
             $result = mysqli_query($conn, $query);
 
             if ($result && $user = mysqli_fetch_assoc($result)) {
                 if (password_verify($password, $user['password'])) {
                     
-                    // Set Session Utama (Gunakan huruf kecil murni agar sinkron)
+                    // Set Session Utama (Format huruf kecil murni)
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['nama']    = $user['nama'];
-                    $_SESSION['role']    = strtolower($user['role']); // Dipaksa ke format huruf kecil murni
+                    $_SESSION['role']    = strtolower($user['role']);
                     $_SESSION['email']   = $user['email'] ?? '';
 
-                    // Set Cookie untuk Vercel Serverless State
+                    // Set Cookie untuk Sinkronisasi State Serverless Vercel
                     $userData = [
                         'user_id' => $user['id'],
                         'nama'    => $user['nama'],
