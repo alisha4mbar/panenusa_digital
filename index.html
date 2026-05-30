@@ -38,11 +38,11 @@
         }
 
         .bgn-nav {
-            backdrop-filter: blur(8px);
-            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.85);
         }
         .dark .bgn-nav {
-            background: rgba(6, 78, 59, 0.95);
+            background: rgba(6, 78, 59, 0.85);
         }
 
         .btn-bgn-primary {
@@ -54,23 +54,34 @@
             transform: translateY(-1px);
         }
 
-        .btn-bgn-outline {
-            border: 2px solid #22c55e;
-            color: #15803d;
+        .btn-bgn-outline-hero {
+            border: 2px solid #ffffff;
+            color: #ffffff;
             transition: all 0.2s ease;
         }
-        .btn-bgn-outline:hover {
-            background-color: #22c55e;
-            color: #ffffff;
+        .btn-bgn-outline-hero:hover {
+            background-color: #ffffff;
+            color: #064e3b;
             transform: translateY(-1px);
         }
-        .dark .btn-bgn-outline {
-            border: 2px solid #4ade80;
-            color: #4ade80;
+
+        /* Video Background Wrapper Styling */
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 85vh; /* Menyisakan ruang proporsional untuk statistik di bawahnya */
+            overflow: hidden;
         }
-        .dark .btn-bgn-outline:hover {
-            background-color: #4ade80;
-            color: #064e3b;
+        .video-container video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
         }
     </style>
 </head>
@@ -78,7 +89,7 @@
 <body class="bg-bgn-pureWhite dark:bg-bgn-darkBg text-slate-900 dark:text-slate-100 transition-colors duration-500">
 
     <!-- HEADER / NAVIGATION HORIZONTAL BGN STYLE -->
-    <nav class="fixed w-full z-50 bgn-nav border-b border-slate-200/60 dark:border-emerald-900/40 shadow-sm">
+    <nav class="fixed w-full z-50 bgn-nav border-b border-slate-200/40 dark:border-emerald-900/20 shadow-sm">
         <div class="max-w-7xl mx-auto px-6 sm:px-12 h-20 flex items-center justify-between">
             
             <!-- Logo Sektor Publik -->
@@ -89,14 +100,14 @@
                 <span class="text-xl font-extrabold tracking-tight text-bgn-deepGreen dark:text-bgn-freshGreen">PANENUSA</span>
             </div>
 
-            <!-- Menu Navigasi Horizontal Sesuai Request -->
+            <!-- Menu Navigasi Horizontal -->
             <div class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-700 dark:text-slate-200">
                 <a href="#fitur" class="hover:text-bgn-freshGreen dark:hover:text-bgn-freshGreen transition-colors">Fitur Utama</a>
                 <a href="#statistik" class="hover:text-bgn-freshGreen dark:hover:text-bgn-freshGreen transition-colors">Data Ekosistem</a>
                 <a href="#tentang" class="hover:text-bgn-freshGreen dark:hover:text-bgn-freshGreen transition-colors">Tentang</a>
                 
                 <!-- Toggle Dark Mode Minimalis -->
-                <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-emerald-900/50 border border-slate-200 dark:border-emerald-800/40 text-slate-600 dark:text-bgn-freshGreen transition-all">
+                <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-emerald-900/50 border border-slate-200/80 dark:border-emerald-800/40 text-slate-600 dark:text-bgn-freshGreen transition-all">
                     <i id="theme-toggle-dark-icon" class="hidden fas fa-moon"></i>
                     <i id="theme-toggle-light-icon" class="hidden fas fa-sun"></i>
                 </button>
@@ -109,106 +120,113 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION (HUMAN-CENTERED / BGN INFRASTRUCTURE STYLE) -->
-    <section class="relative pt-32 pb-16 lg:pt-48 lg:pb-20 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+    <!-- HERO SECTION DENGAN BACKGROUND VIDEO & OVERLAY TRANSPARAN -->
+    <section class="video-container pt-20">
+        <!-- Video Hasil Pertanian / Panen / Drone Realistis (Menggunakan Placeholder Video Pertanian Terbuka) -->
+        <video autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&q=80&w=1200">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-agriculture-drone-flying-over-a-field-41617-large.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Overlay Gelap Transparan untuk Menjaga Keterbacaan Teks -->
+        <div class="absolute inset-0 bg-black/45 dark:bg-black/60 z-10"></div>
+
+        <!-- Konten Utama di Atas Video -->
+        <div class="absolute inset-0 z-20 flex items-center justify-center text-center px-6">
+            <div class="max-w-3xl space-y-6" data-aos="zoom-in">
+                <div class="inline-flex items-center gap-2 text-bgn-freshGreen text-xs font-bold tracking-widest uppercase bg-emerald-950/60 backdrop-blur-md px-4 py-2 rounded-full border border-emerald-500/30">
+                    <span class="w-2 h-2 rounded-full bg-bgn-freshGreen animate-pulse"></span> Portal Ekosistem Digital Pertanian
+                </div>
                 
-                <!-- Sisi Kiri: Headline & Deskripsi Resmi -->
-                <div class="lg:col-span-6 space-y-6" data-aos="fade-right">
-                    <div class="inline-flex items-center gap-2 text-bgn-deepGreen dark:text-bgn-freshGreen text-xs font-bold tracking-wide uppercase">
-                        <span class="w-2 h-2 rounded-full bg-bgn-freshGreen animate-pulse"></span> Portal Integrasi Pertanian Nasional
-                    </div>
-                    
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
-                        Maksimalkan <br>
-                        <span class="text-bgn-deepGreen dark:text-bgn-freshGreen">Panen Anda.</span>
-                    </h1>
-                    
-                    <p class="text-slate-600 dark:text-slate-300 text-base md:text-md leading-relaxed max-w-xl">
-                        Ekosistem digital pertanian Panenusa hadir untuk mendampingi mobilitas pengelolaan lahan terpadu, penyediaan akses satu data statistik pertanian, serta membangun ruang kolaborasi inklusif demi ketahanan pangan berkelanjutan.
-                    </p>
+                <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight uppercase">
+                    Maksimalkan <br>
+                    <span class="text-bgn-freshGreen">Panen Anda.</span>
+                </h1>
+                
+                <p class="text-slate-100 text-sm sm:text-base leading-relaxed max-w-xl mx-auto font-medium">
+                    Ekosistem digital pertanian Panenusa hadir untuk mendampingi mobilitas pengelolaan lahan terpadu, penyediaan akses satu data statistik pertanian, serta membangun ruang kolaborasi inklusif.
+                </p>
 
-                    <!-- Tombol Aksi Kerja -->
-                    <div class="flex flex-col sm:flex-row items-center gap-4 pt-2">
-                        <a href="register.php" class="btn-bgn-primary w-full sm:w-auto px-7 py-3.5 text-white rounded-lg font-bold text-sm text-center shadow-sm">
-                            Mulai Sekarang
-                        </a>
-                        <a href="login.php" class="btn-bgn-outline w-full sm:w-auto px-7 py-3.5 rounded-lg font-bold text-sm text-center bg-transparent">
-                            Masuk Dashboard
-                        </a>
-                    </div>
+                <!-- Tombol Aksi Kerja Terpadu -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                    <a href="register.php" class="btn-bgn-primary w-full sm:w-auto px-8 py-3.5 text-white rounded-lg font-bold text-sm text-center shadow-md">
+                        Mulai Sekarang
+                    </a>
+                    <a href="login.php" class="btn-bgn-outline-hero w-full sm:w-auto px-8 py-3.5 rounded-lg font-bold text-sm text-center bg-transparent">
+                        Masuk Dashboard
+                    </a>
                 </div>
-
-                <!-- Sisi Kanan: Foto Komunitas Petani Humanis Realistis -->
-                <div class="lg:col-span-6" data-aos="fade-left">
-                    <div class="relative max-w-[540px] mx-auto">
-                        <!-- Foto Petani Tersenyum Natural di Lahan Hijau -->
-                        <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-emerald-800 shadow-md">
-                            <img src="https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&q=80&w=700" 
-                                 alt="Komunitas Petani Indonesia Terbuka" class="w-full h-[380px] object-cover">
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </section>
 
-    <!-- HIGHLIGHT ANGKA STATISTIK (DI BAWAH HERO SECTION - MINIMALIS) -->
-    <section id="statistik" class="py-12 bg-bgn-lightGray dark:bg-slate-900/40 border-y border-slate-200/70 dark:border-emerald-900/30">
+    <!-- HIGHLIGHT ANGKA STATISTIK (DITEMPATKAN DI BAWAH HERO - SESUAI REQUEST) -->
+    <section id="statistik" class="py-12 bg-bgn-lightGray dark:bg-slate-900/60 border-b border-slate-200/60 dark:border-emerald-900/30">
         <div class="max-w-7xl mx-auto px-6 sm:px-12">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
                 
                 <div class="space-y-1 border-r border-slate-200 dark:border-emerald-900/30 last:border-none">
                     <p class="text-3xl font-bold text-bgn-deepGreen dark:text-bgn-freshGreen">4,800+</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide uppercase">Petani Terintegrasi</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide uppercase">Petani Terintegrasi</p>
                 </div>
 
                 <div class="space-y-1 border-r border-slate-200 dark:border-emerald-900/30 last:border-none">
                     <p class="text-3xl font-bold text-bgn-deepGreen dark:text-bgn-freshGreen">38.4%</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide uppercase">Peningkatan Efisiensi</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide uppercase">Efisiensi Lahan</p>
                 </div>
 
                 <div class="space-y-1 border-r border-slate-200 dark:border-emerald-900/30 last:border-none">
                     <p class="text-3xl font-bold text-bgn-deepGreen dark:text-bgn-freshGreen">24/7</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide uppercase">Pemantauan Lahan</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide uppercase">Pemantauan Lahan</p>
                 </div>
 
                 <div class="space-y-1 last:border-none">
                     <p class="text-3xl font-bold text-bgn-deepGreen dark:text-bgn-freshGreen">Satu Data</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide uppercase">Sinkronisasi BPS RI</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide uppercase">Sinkronisasi BPS RI</p>
                 </div>
 
             </div>
         </div>
     </section>
 
-    <!-- FITUR UTAMA SEKTOR SOLUSI -->
-    <section id="fitur" class="py-20 bg-bgn-pureWhite dark:bg-bgn-darkBg">
+    <!-- FITUR UTAMA SEKTOR SOLUSI (HUMANIS & TRANSPARAN) -->
+    <section id="fitur" class="py-24 bg-bgn-pureWhite dark:bg-bgn-darkBg">
         <div class="max-w-7xl mx-auto px-6 sm:px-12">
-            <div class="max-w-2xl mb-12">
-                <h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Layanan Publik Digitalization</h2>
-                <div class="h-1 w-12 bg-bgn-freshGreen mt-2"></div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
+                <div class="lg:col-span-6 space-y-4">
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Transparansi Layanan Publik Digital pertanian</h2>
+                    <div class="h-1 w-12 bg-bgn-freshGreen"></div>
+                    <p class="text-slate-500 dark:text-slate-300 text-sm leading-relaxed pt-2">
+                        Kami menyajikan kemudahan pemantauan statistik bagi seluruh elemen ekosistem tani secara transparan dan berorientasi pada kesejahteraan humanis masyarakat produsen pangan.
+                    </p>
+                </div>
+                <!-- Gambar Pendukung Petani Tersenyum Humanis -->
+                <div class="lg:col-span-6">
+                    <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-emerald-800 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1592417817098-8f3d6eb19675?auto=format&fit=crop&q=80&w=700" 
+                             alt="Komunitas Panen Petani Tersenyum" class="w-full h-[240px] object-cover">
+                    </div>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Solusi 1 -->
-                <div class="p-6 bg-bgn-lightGray dark:bg-slate-900/30 rounded-xl border border-slate-100 dark:border-emerald-800/20">
+                <!-- Card 1 -->
+                <div class="p-6 bg-bgn-lightGray dark:bg-slate-900/30 rounded-xl border border-slate-200/40 dark:border-emerald-800/20">
                     <div class="text-bgn-deepGreen dark:text-bgn-freshGreen mb-4 text-lg"><i class="fas fa-chart-area"></i></div>
-                    <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">Manajemen Produktivitas Lahan</h3>
+                    <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">Manajemen Lahan</h3>
                     <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Pencatatan luas lahan kustomisasi wilayah regional petak pertanian untuk optimalisasi kalkulasi kapasitas panen raya.</p>
                 </div>
-                <!-- Solusi 2 -->
-                <div class="p-6 bg-bgn-lightGray dark:bg-slate-900/30 rounded-xl border border-slate-100 dark:border-emerald-800/20">
+                <!-- Card 2 -->
+                <div class="p-6 bg-bgn-lightGray dark:bg-slate-900/30 rounded-xl border border-slate-200/40 dark:border-emerald-800/20">
                     <div class="text-bgn-deepGreen dark:text-bgn-freshGreen mb-4 text-lg"><i class="fas fa-server"></i></div>
-                    <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">Keterbukaan Informasi BPS</h3>
+                    <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">Sinkronisasi BPS</h3>
                     <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Penyajian grafik statistik inflasi, harga pangan eceran, serta pola permintaan komoditas pasar secara transparan.</p>
                 </div>
-                <!-- Solusi 3 -->
-                <div class="p-6 bg-bgn-lightGray dark:bg-slate-900/30 rounded-xl border border-slate-100 dark:border-emerald-800/20">
+                <!-- Card 3 -->
+                <div class="p-6 bg-bgn-lightGray dark:bg-slate-900/30 rounded-xl border border-slate-200/40 dark:border-emerald-800/20">
                     <div class="text-bgn-deepGreen dark:text-bgn-freshGreen mb-4 text-lg"><i class="fas fa-bullhorn"></i></div>
-                    <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">Konsultasi Mitra Sejawat</h3>
+                    <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">Konsultasi Sejawat</h3>
                     <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Ruang interaksi inklusif antar praktisi tani guna mendiskusikan penanganan kendala hama secara terpadu.</p>
                 </div>
             </div>
