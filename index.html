@@ -17,9 +17,9 @@
                 extend: {
                     colors: {
                         bgn: {
-                            freshGreen: '#22c55e',   // Hijau cerah utama BGN
+                            freshGreen: '#22c55e',   // Hijau cerah utama
                             deepGreen: '#15803d',    // Hijau tua instansi
-                            darkBg: '#042f1a',       // Hijau tua transparan dasar (Hutan Botani)
+                            darkBg: '#042f1a',       // Hijau tua transparan dasar (Dark Mode)
                             pureWhite: '#ffffff',
                             lightGray: '#f8fafc'
                         }
@@ -58,10 +58,10 @@
             box-shadow: 0 10px 20px -5px rgba(34, 197, 94, 0.3);
         }
 
-        /* Tombol Outline Putih/Hijau Semi-Transparan */
+        /* Tombol Outline Hijau/Putih Semi-Transparan */
         .btn-bgn-outline-hero {
             border: 2px solid rgba(255, 255, 255, 0.6);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(4px);
             color: #ffffff;
             transition: all 0.2s ease;
@@ -73,23 +73,14 @@
             transform: translateY(-1px);
         }
 
-        /* Struktur Kontainer Video Sawah */
-        .video-container {
+        /* Struktur Kontainer Foto Hero Realistis */
+        .hero-photo-container {
             position: relative;
             width: 100%;
             height: 88vh; 
-            overflow: hidden;
-        }
-        .video-container video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            transform: translate(-50%, -50%);
-            object-fit: cover;
+            background-image: url('https://images.unsplash.com/photo-1516253593875-bd7ba052fbc5?auto=format&fit=crop&q=80&w=1600');
+            background-size: cover;
+            background-position: center;
         }
     </style>
 </head>
@@ -128,37 +119,31 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION DENGAN BACKGROUND VIDEO & OVERLAY TRANSPARAN -->
-    <section class="video-container">
-        <!-- Video Hasil Pertanian / Panen Padi / Drone Sawah Realistis -->
-        <video autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&q=80&w=1200">
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-agriculture-drone-flying-over-a-field-41617-large.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+    <!-- HERO SECTION DENGAN BACKGROUND FOTO PETANI REALISTIS & OVERLAY TRANSPARAN -->
+    <section class="hero-photo-container">
+        <!-- Overlay Gelap Transparan Pelindung Kontras Teks -->
+        <div class="absolute inset-0 bg-black/45 dark:bg-black/60 z-10"></div>
 
-        <!-- Overlay Gelap Transparan Lembut -->
-        <div class="absolute inset-0 bg-black/40 dark:bg-black/55 z-10"></div>
-
-        <!-- Konten Utama di Atas Video -->
+        <!-- Konten Utama di Atas Foto -->
         <div class="absolute inset-0 z-20 flex items-center justify-center text-center px-6">
             <div class="max-w-3xl space-y-6 pt-24 md:pt-32" data-aos="zoom-in">
                 
                 <!-- Elemen Badge: Sejajar, Proporsional & Transparan -->
-                <div class="inline-flex items-center gap-2 text-bgn-freshGreen text-xs font-bold tracking-widest uppercase bg-emerald-950/50 backdrop-blur-md px-5 py-2.5 rounded-full border border-emerald-500/20 shadow-md">
+                <div class="inline-flex items-center gap-2 text-bgn-freshGreen text-xs font-bold tracking-widest uppercase bg-emerald-950/60 backdrop-blur-md px-5 py-2.5 rounded-full border border-emerald-500/20 shadow-md">
                     <span class="w-2 h-2 rounded-full bg-bgn-freshGreen animate-pulse"></span> Portal Ekosistem Digital Pertanian
                 </div>
                 
-                <!-- Headline dengan Overlay Transparan Halus -->
+                <!-- Headline Besar "Maksimalkan Panen Anda" -->
                 <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight uppercase drop-shadow-md">
                     Maksimalkan <br>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-bgn-freshGreen to-emerald-300">Panen Anda.</span>
                 </h1>
                 
                 <p class="text-slate-100 text-sm sm:text-base leading-relaxed max-w-xl mx-auto font-medium drop-shadow-sm">
-                    Ekosistem digital pertanian Panenusa hadir untuk mendampingi mobilitas pengelolaan lahan terpadu, penyediaan akses satu data statistik pertanian, serta membangun ruang kolaborasi inklusif.
+                    Ekosistem digital pertanian Panenusa hadir untuk mendampingi mobilitas pengelolaan lahan terpadu, penyediaan akses satu data statistik pertanian, serta membangun ruang kolaborasi inklusif demi stabilitas pangan nasional.
                 </p>
 
-                <!-- Tombol Aksi Transparan -->
+                <!-- Tombol Akses Transparan -->
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
                     <a href="register.php" class="btn-bgn-trans-green w-full sm:w-auto px-8 py-3.5 text-white rounded-lg font-bold text-sm text-center shadow-md">
                         Mulai Sekarang
@@ -171,7 +156,7 @@
         </div>
     </section>
 
-    <!-- HIGHLIGHT ANGKA STATISTIK (DI BAWAH HERO - BERSIH & SEMI-TRANSPARAN) -->
+    <!-- HIGHLIGHT ANGKA STATISTIK (DI BAWAH HERO SECTION - BERSIH & SEMI-TRANSPARAN) -->
     <section id="statistik" class="py-12 bg-bgn-lightGray dark:bg-bgn-darkBg/95 backdrop-blur-md border-b border-slate-200/50 dark:border-emerald-900/20">
         <div class="max-w-7xl mx-auto px-6 sm:px-12">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
@@ -200,7 +185,7 @@
         </div>
     </section>
 
-    <!-- FITUR UTAMA SEKTOR SOLUSI (HUMANIS, CLEAN & NATURAL) -->
+    <!-- FITUR UTAMA & ELEMEN VISUAL HUMANIS ALAMI -->
     <section id="fitur" class="py-24 bg-bgn-pureWhite dark:bg-bgn-darkBg">
         <div class="max-w-7xl mx-auto px-6 sm:px-12">
             
@@ -209,14 +194,14 @@
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Transparansi Layanan Publik Digital Pertanian</h2>
                     <div class="h-[3px] w-12 bg-bgn-freshGreen/60 rounded-full"></div>
                     <p class="text-slate-500 dark:text-slate-300 text-sm leading-relaxed pt-2">
-                        Kami menyajikan kemudahan pemantauan statistik bagi seluruh elemen ekosistem tani secara transparan dan berorientasi pada kesejahteraan humanis masyarakat produsen pangan.
+                        Kami menyajikan kemudahan pemantauan statistik bagi seluruh elemen ekosistem tani secara transparan dan berorientasi pada kesejahteraan humanis masyarakat produsen pangan Indonesia.
                     </p>
                 </div>
-                <!-- Visual Humanis: Komunitas Tani Tersenyum Alami -->
+                <!-- Elemen Visual Humanis: Foto Petani Tersenyum Alami -->
                 <div class="lg:col-span-6" data-aos="fade-left">
                     <div class="rounded-xl overflow-hidden border border-slate-200/60 dark:border-emerald-900/30 shadow-sm bg-slate-50 p-2 dark:bg-emerald-950/20">
-                        <img src="https://images.unsplash.com/photo-1592417817098-8f3d6eb19675?auto=format&fit=crop&q=80&w=700" 
-                             alt="Komunitas Panen Petani Tersenyum" class="w-full h-[240px] object-cover rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&q=80&w=700" 
+                             alt="Komunitas Tani Tersenyum Alami" class="w-full h-[240px] object-cover rounded-lg">
                     </div>
                 </div>
             </div>
