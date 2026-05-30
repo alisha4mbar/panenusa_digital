@@ -17,9 +17,9 @@
                 extend: {
                     colors: {
                         bgn: {
-                            freshGreen: '#22c55e',   // Hijau cerah identitas utama BGN
-                            deepGreen: '#15803d',    // Hijau tua untuk teks headline instansi
-                            darkBg: '#064e3b',       // Latar hijau tua minimalis saat dark mode
+                            freshGreen: '#22c55e',   
+                            deepGreen: '#15803d',    
+                            darkBg: '#064e3b',       
                             pureWhite: '#ffffff',
                             lightGray: '#f8fafc'
                         }
@@ -65,11 +65,10 @@
             transform: translateY(-1px);
         }
 
-        /* Video Background Wrapper Styling */
         .video-container {
             position: relative;
             width: 100%;
-            height: 85vh; /* Menyisakan ruang proporsional untuk statistik di bawahnya */
+            height: 90vh; 
             overflow: hidden;
         }
         .video-container video {
@@ -121,24 +120,27 @@
     </nav>
 
     <!-- HERO SECTION DENGAN BACKGROUND VIDEO & OVERLAY TRANSPARAN -->
-    <section class="video-container pt-20">
-        <!-- Video Hasil Pertanian / Panen / Drone Realistis (Menggunakan Placeholder Video Pertanian Terbuka) -->
+    <section class="video-container">
+        <!-- Video Hasil Pertanian / Panen / Drone Realistis -->
         <video autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&q=80&w=1200">
             <source src="https://assets.mixkit.co/videos/preview/mixkit-agriculture-drone-flying-over-a-field-41617-large.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
-        <!-- Overlay Gelap Transparan untuk Menjaga Keterbacaan Teks -->
+        <!-- Overlay Gelap Transparan -->
         <div class="absolute inset-0 bg-black/45 dark:bg-black/60 z-10"></div>
 
         <!-- Konten Utama di Atas Video -->
         <div class="absolute inset-0 z-20 flex items-center justify-center text-center px-6">
-            <div class="max-w-3xl space-y-6" data-aos="zoom-in">
-                <div class="inline-flex items-center gap-2 text-bgn-freshGreen text-xs font-bold tracking-widest uppercase bg-emerald-950/60 backdrop-blur-md px-4 py-2 rounded-full border border-emerald-500/30">
+            <!-- PERBAIKAN: Padding top ditambahkan agar konten turun dan sejajar dengan deskripsi, terpisah jauh dari navbar -->
+            <div class="max-w-3xl space-y-6 pt-28 md:pt-36" data-aos="zoom-in">
+                
+                <!-- Elemen Badge: Sekarang aman di bawah header, sejajar sebagai bagian dari kesatuan deskripsi hero -->
+                <div class="inline-flex items-center gap-2 text-bgn-freshGreen text-xs font-bold tracking-widest uppercase bg-emerald-950/70 backdrop-blur-md px-5 py-2.5 rounded-full border border-emerald-500/30 shadow-md">
                     <span class="w-2 h-2 rounded-full bg-bgn-freshGreen animate-pulse"></span> Portal Ekosistem Digital Pertanian
                 </div>
                 
-                <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight uppercase">
+                <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight uppercase shadow-sm">
                     Maksimalkan <br>
                     <span class="text-bgn-freshGreen">Panen Anda.</span>
                 </h1>
@@ -148,7 +150,7 @@
                 </p>
 
                 <!-- Tombol Aksi Kerja Terpadu -->
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
                     <a href="register.php" class="btn-bgn-primary w-full sm:w-auto px-8 py-3.5 text-white rounded-lg font-bold text-sm text-center shadow-md">
                         Mulai Sekarang
                     </a>
@@ -189,19 +191,18 @@
         </div>
     </section>
 
-    <!-- FITUR UTAMA SEKTOR SOLUSI (HUMANIS & TRANSPARAN) -->
+    <!-- FITUR UTAMA SEKTOR SOLUSI -->
     <section id="fitur" class="py-24 bg-bgn-pureWhite dark:bg-bgn-darkBg">
         <div class="max-w-7xl mx-auto px-6 sm:px-12">
             
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
                 <div class="lg:col-span-6 space-y-4">
-                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Transparansi Layanan Publik Digital pertanian</h2>
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Transparansi Layanan Publik Digital Pertanian</h2>
                     <div class="h-1 w-12 bg-bgn-freshGreen"></div>
                     <p class="text-slate-500 dark:text-slate-300 text-sm leading-relaxed pt-2">
                         Kami menyajikan kemudahan pemantauan statistik bagi seluruh elemen ekosistem tani secara transparan dan berorientasi pada kesejahteraan humanis masyarakat produsen pangan.
                     </p>
                 </div>
-                <!-- Gambar Pendukung Petani Tersenyum Humanis -->
                 <div class="lg:col-span-6">
                     <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-emerald-800 shadow-sm">
                         <img src="https://images.unsplash.com/photo-1592417817098-8f3d6eb19675?auto=format&fit=crop&q=80&w=700" 
@@ -211,19 +212,16 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Card 1 -->
                 <div class="p-6 bg-bgn-lightGray dark:bg-slate-900/30 rounded-xl border border-slate-200/40 dark:border-emerald-800/20">
                     <div class="text-bgn-deepGreen dark:text-bgn-freshGreen mb-4 text-lg"><i class="fas fa-chart-area"></i></div>
                     <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">Manajemen Lahan</h3>
                     <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Pencatatan luas lahan kustomisasi wilayah regional petak pertanian untuk optimalisasi kalkulasi kapasitas panen raya.</p>
                 </div>
-                <!-- Card 2 -->
                 <div class="p-6 bg-bgn-lightGray dark:bg-slate-900/30 rounded-xl border border-slate-200/40 dark:border-emerald-800/20">
                     <div class="text-bgn-deepGreen dark:text-bgn-freshGreen mb-4 text-lg"><i class="fas fa-server"></i></div>
                     <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">Sinkronisasi BPS</h3>
                     <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Penyajian grafik statistik inflasi, harga pangan eceran, serta pola permintaan komoditas pasar secara transparan.</p>
                 </div>
-                <!-- Card 3 -->
                 <div class="p-6 bg-bgn-lightGray dark:bg-slate-900/30 rounded-xl border border-slate-200/40 dark:border-emerald-800/20">
                     <div class="text-bgn-deepGreen dark:text-bgn-freshGreen mb-4 text-lg"><i class="fas fa-bullhorn"></i></div>
                     <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">Konsultasi Sejawat</h3>
@@ -245,11 +243,9 @@
         </div>
     </footer>
 
-    <!-- JAVASCRIPT ANIMASI & TEMATIK CONTROL -->
     <script>
         AOS.init({ duration: 800, once: true });
 
-        // Minimalist Dark Mode Logic
         const themeToggleBtn = document.getElementById('theme-toggle');
         const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
         const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
