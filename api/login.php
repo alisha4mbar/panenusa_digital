@@ -1,5 +1,6 @@
 <?php
 ob_start();
+// Mengarahkan include langsung ke config.php yang berada di folder yang sama (api/)
 require_once __DIR__ . '/config.php';
 
 // Fitur pembongkar lock session otomatis jika ditambahkan parameter ?bypass=true
@@ -14,11 +15,13 @@ if (isset($_GET['bypass']) && $_GET['bypass'] === 'true') {
 $error = '';
 $msg   = '';
 
+// TANGKAP SESSION FLASH DARI REGISTER
 if (isset($_SESSION['reg_success_flash'])) {
     $msg = $_SESSION['reg_success_flash'];
     unset($_SESSION['reg_success_flash']);
 }
 
+// Menangkap parameter status alternatif dari URL
 $msg_type = isset($_GET['msg']) ? (string)$_GET['msg'] : '';
 if ($msg_type === 'expired') {
     $msg = 'Sesi habis. Silakan login kembali.';
@@ -37,17 +40,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $email_clean = mysqli_real_escape_string($conn, $email);
+            
+            // Query verifikasi data users ke database
             $query = "SELECT * FROM users WHERE email = '$email_clean' LIMIT 1";
             $result = mysqli_query($conn, $query);
 
             if ($result && $user = mysqli_fetch_assoc($result)) {
                 if (password_verify($password, $user['password'])) {
                     
+                    // Set Session Utama (Gunakan huruf kecil murni agar sinkron)
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['nama']    = $user['nama'];
-                    $_SESSION['role']    = strtolower($user['role']);
+                    $_SESSION['role']    = strtolower($user['role']); // Dipaksa ke format huruf kecil murni
                     $_SESSION['email']   = $user['email'] ?? '';
 
+                    // Set Cookie untuk Vercel Serverless State
                     $userData = [
                         'user_id' => $user['id'],
                         'nama'    => $user['nama'],
