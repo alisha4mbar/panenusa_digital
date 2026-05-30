@@ -14,13 +14,17 @@ $role_user = $userData['role'];
 // Normalisasi huruf untuk pencocokan database (karena registrasi menggunakan huruf kecil)
 $role_check = strtolower($role_user);
 
+// 🚀 JIKA NAMA KOLOM LUAS DI DATABASE KAMU BERBEDA (Misal: luas_lahan), 
+// Kamu cukup ganti teks di dalam tanda kutip di bawah ini saja:
+$kolom_luas = "luas"; 
+
 if ($role_check === 'admin') {
-    // Memastikan query aman jika tabel data_lahan atau lahan belum sinkron
-    $sql = "SELECT COUNT(*) as jml, SUM(luas) as total FROM lahan";
+    // Memastikan query menggunakan nama kolom yang didefinisikan di atas
+    $sql = "SELECT COUNT(*) as jml, SUM($kolom_luas) as total FROM lahan";
     $query_lahan = mysqli_query($conn, $sql);
     $label_stat = "Total Lahan Nasional";
 } else {
-    $sql = "SELECT COUNT(*) as jml, SUM(luas) as total FROM lahan WHERE user_id = '$user_id'";
+    $sql = "SELECT COUNT(*) as jml, SUM($kolom_luas) as total FROM lahan WHERE user_id = '$user_id'";
     $query_lahan = mysqli_query($conn, $sql);
     $label_stat = "Total Luas Lahan Anda";
 }
