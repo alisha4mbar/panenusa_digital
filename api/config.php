@@ -24,13 +24,9 @@ if (!$conn) {
 
 // JIKA BUKAN LOCALHOST (DI VERCEL), AKTIFKAN PENGATURAN SSL WAJIB TIDB
 if ($db_host !== 'localhost' && $db_host !== '127.0.0.1') {
-    // Bendera ini memaksa mysqli menggunakan koneksi SSL terenkripsi yang diwajibkan TiDB Cloud
     mysqli_options($conn, MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, true);
-    
-    // Melakukan koneksi menggunakan flag SSL pada port default TiDB (4000)
     $connected = mysqli_real_connect($conn, $db_host, $db_user, $db_pass, $db_name, 4000, null, MYSQLI_CLIENT_SSL);
 } else {
-    // Fallback koneksi untuk XAMPP lokal komputer kamu (tanpa SSL)
     $connected = mysqli_real_connect($conn, $db_host, $db_user, $db_pass, $db_name);
 }
 
@@ -38,13 +34,13 @@ if (!$connected) {
     die("Koneksi database gagal: " . mysqli_connect_error());
 }
 
-// SINKRONISASI COOKIE → SESSION (Wajib untuk Vercel Serverless State)
+// SINKRONISASI COOKIE → SESSION (Diperbaiki agar tidak merusak state array)
 if (empty($_SESSION['user_id']) && isset($_COOKIE['panenusa_auth'])) {
     $data = json_decode($_COOKIE['panenusa_auth'], true);
     if (!empty($data['user_id'])) {
         $_SESSION['user_id'] = $data['user_id'];
         $_SESSION['nama']    = $data['nama'];
-        $_SESSION['role']    = $data['role'];
+        $_SESSION['role']    = strtolower($data['role']); // Pastikan huruf kecil murni
         $_SESSION['divisi']  = $data['divisi'] ?? '';
         $_SESSION['email']   = $data['email']  ?? '';
     }
@@ -56,14 +52,17 @@ function requireLogin(?string $role = null): array {
         header('Location: login.php?msg=expired');
         exit;
     }
-    if ($role !== null && strtolower($_SESSION['role'] ?? '') !== strtolower($role)) {
+    
+    $current_role = strtolower($_SESSION['role'] ?? 'user');
+    if ($role !== null && $current_role !== strtolower($role)) {
         redirectToDashboard();
     }
+    
     return [
         'id'     => (int)$_SESSION['user_id'],
-        'nama'   => $_SESSION['nama']   ?? '',
+        'nama'   => $_SESSION['nama']   ?? 'User Panenusa',
         'email'  => $_SESSION['email']  ?? '',
-        'role'   => $_SESSION['role']   ?? 'user',
+        'role'   => $current_role,
         'divisi' => $_SESSION['divisi'] ?? '',
     ];
 }
