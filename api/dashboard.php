@@ -15,10 +15,10 @@ $role_user = $userData['role'];
 $role_check = strtolower($role_user);
 
 // ==========================================
-// 🚀 KONFIGURASI SUDAH DISESUAIKAN (FIXED)
+// 🚀 KONFIGURASI NAMA KOLOM DATABASE
 // ==========================================
-$kolom_luas = "luas_ha";          // Sesuai gambar kamu: luas_ha
-$kolom_relasi_user = "pemilik_id"; // Sesuai gambar kamu: pemilik_id
+$kolom_luas = "luas_ha";          
+$kolom_relasi_user = "pemilik_id"; 
 // ==========================================
 
 if ($role_check === 'admin') {
@@ -36,11 +36,7 @@ if ($role_check === 'admin') {
 $total_luas = 0;
 $jml_lahan = 0;
 
-if ($query_lahan && $row = mysqli_fetch_assoc($query_lahan)) {
-    $total_luas = $row['total'] ?? 0;
-    $jml_lahan = $row['jml'] ?? 0;
-}
-?>
+// Di sini proses penarikan data yang sempat bocor tadi dialokasikan kembali dengan benar
 if ($query_lahan && $row = mysqli_fetch_assoc($query_lahan)) {
     $total_luas = $row['total'] ?? 0;
     $jml_lahan = $row['jml'] ?? 0;
