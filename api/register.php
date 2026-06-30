@@ -1,5 +1,6 @@
 <?php
 ob_start();
+session_start(); // Pastikan session dimulai jika ingin menggunakan flash message/session bypass
 require_once __DIR__ . '/config.php';
 
 // BYPASS INTERCEPTOR: Dinonaktifkan permanen agar mempermudah proses testing antrean rotasi akun baru
@@ -9,16 +10,19 @@ if (isset($_GET['bypass']) && $_GET['bypass'] === 'true') {
 }
 
 $error  = '';
-$fields = ['nama'=>'','email'=>''];
+$fields = ['nama' => '', 'email' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nama     = trim(filter_input(INPUT_POST, 'nama',     FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
-    $email    = trim(filter_input(INPUT_POST, 'email',    FILTER_SANITIZE_EMAIL)         ?? '');
-    $password = trim(filter_input(INPUT_POST, 'password', FILTER_UNSAFE_RAW)             ?? '');
-    $confirm  = trim(filter_input(INPUT_POST, 'confirm',  FILTER_UNSAFE_RAW)             ?? '');
-    $fields   = compact('nama', 'email');
+    // Perbaikan Sanitasi: Gunakan FILTER_DEFAULT untuk string mentah, lalu trim. 
+    // Menggunakan FILTER_SANITIZE_SPECIAL_CHARS pada email akan merusak karakter valid email.
+    $nama     = trim($_POST['nama'] ?? '');
+    $email    = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirm  = $_POST['confirm'] ?? '';
+    
+    $fields   = ['nama' => $nama, 'email' => $email];
 
-    if (!$nama || !$email || !$password) { 
+    if (empty($nama) || empty($email) || empty($password)) { 
         $error = 'Semua kolom wajib diisi.'; 
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) { 
         $error = 'Format email tidak valid.'; 
@@ -32,13 +36,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception('Koneksi database ke TiDB Cloud terputus.');
             }
 
-            $email_clean = mysqli_real_escape_string($conn, $email);
-            $check_query = "SELECT id FROM users WHERE email='$email_clean' LIMIT 1";
-            $check_result = mysqli_query($conn, $check_query);
+            // AMAN & AKURAT: Menggunakan Prepared Statement untuk cek email menghindari distorsi karakter
+            $check_stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE email = ? LIMIT 1");
+            mysqli_stmt_bind_param($check_stmt, "s", $email);
+            mysqli_stmt_execute($check_stmt);
+            mysqli_stmt_store_result($check_stmt);
             
-            if ($check_result && mysqli_num_rows($check_result) > 0) {
+            if (mysqli_stmt_num_rows($check_stmt) > 0) {
                 $error = 'Email sudah terdaftar.';
+                mysqli_stmt_close($check_stmt);
             } else {
+                mysqli_stmt_close($check_stmt);
+
                 // Penentuan Role Berdasarkan Urutan Pendaftaran Modulus Berputar (3 Role)
                 $res_count = mysqli_query($conn, "SELECT COUNT(*) as total FROM users");
                 if (!$res_count) {
@@ -52,19 +61,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($modulus === 0) {
                     $role = 'admin';
                 } elseif ($modulus === 1) {
-                    $role = 'user';
+                    $role = 'user'; // Sesuai dengan value database standar Anda
                 } else {
                     $role = 'supplier';
                 }
 
                 $hash_password = password_hash($password, PASSWORD_DEFAULT);
-                $nama_clean    = mysqli_real_escape_string($conn, $nama);
-                $role_clean    = mysqli_real_escape_string($conn, $role);
 
-                $insert_query = "INSERT INTO users (nama, email, password, role) VALUES ('$nama_clean', '$email_clean', '$hash_password', '$role_clean')";
+                // AMAN: Menggunakan Prepared Statement untuk Insert Data
+                $insert_stmt = mysqli_prepare($conn, "INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, ?)");
+                mysqli_stmt_bind_param($insert_stmt, "ssss", $nama, $email, $hash_password, $role);
                 
-                if (mysqli_query($conn, $insert_query)) {
+                if (mysqli_stmt_execute($insert_stmt)) {
+                    mysqli_stmt_close($insert_stmt);
                     ob_end_clean();
+                    
                     $_SESSION['reg_success_flash'] = "Registrasi sukses! Akun Anda otomatis mendapatkan akses: " . strtoupper($role);
                     header('Location: login.php');
                     exit();
@@ -136,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20 text-[11px] text-emerald-400">
-                    <i class="fas fa-info-circle mr-1"></i> Sistem menentukan akses otomatis: **Admin**, **Pembeli**, atau **Supplier**.
+                    <i class="fas fa-info-circle mr-1"></i> Sistem menentukan akses otomatis: **Admin**, **User**, atau **Supplier**.
                 </div>
 
                 <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-xl font-bold transition text-sm shadow-lg shadow-emerald-500/20">
