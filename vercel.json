@@ -16,6 +16,13 @@
     { "src": "/login.php", "dest": "/api/login.php" },
     { "src": "/register", "dest": "/api/register.php" },
     { "src": "/register.php", "dest": "/api/register.php" },
+    
+    /* 🚀 TAMBAHAN ROUTING BARU UNTUK MULTI-DASHBOARD PANENUSA */
+    { "src": "/dashboard_admin", "dest": "/api/dashboard_admin.php" },
+    { "src": "/dashboard_admin.php", "dest": "/api/dashboard_admin.php" },
+    { "src": "/dashboard_user", "dest": "/api/dashboard_user.php" },
+    { "src": "/dashboard_user.php", "dest": "/api/dashboard_user.php" },
+    
     { "src": "/dashboard", "dest": "/api/dashboard.php" },
     { "src": "/dashboard.php", "dest": "/api/dashboard.php" },
     { "src": "/data_lahan", "dest": "/api/data_lahan.php" },
