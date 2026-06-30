@@ -3,7 +3,7 @@ ob_start();
 session_start(); 
 require_once __DIR__ . '/config.php';
 
-// BYPASS INTERCEPTOR: Dinonaktifkan permanen agar mempermudah proses testing antrean rotasi akun baru
+// BYPASS INTERCEPTOR
 if (isset($_GET['bypass']) && $_GET['bypass'] === 'true') {
     session_unset();
     setcookie('panenusa_auth', '', time() - 3600, '/');
@@ -17,11 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email    = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     $confirm  = $_POST['confirm'] ?? '';
+    $role     = $_POST['role'] ?? 'user'; // Mengambil nilai role langsung dari input Form manual
     
     $fields   = ['nama' => $nama, 'email' => $email];
 
-    if (empty($nama) || empty($email) || empty($password)) { 
-        $error = 'Semua kolom wajib diisi.'; 
+    if (empty($nama) || empty($email) || empty($password) || empty($role)) { 
+        $error = 'Semua kolom wajib diisi termasuk pilihan peran.'; 
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) { 
         $error = 'Format email tidak valid.'; 
     } elseif (strlen($password) < 6) { 
@@ -34,48 +35,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception('Koneksi database ke TiDB Cloud terputus.');
             }
 
-            // Prepared Statement untuk cek email menghindari distorsi karakter
+            // Prepared Statement untuk cek duplikasi email
             $check_stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE email = ? LIMIT 1");
             mysqli_stmt_bind_param($check_stmt, "s", $email);
             mysqli_stmt_execute($check_stmt);
             mysqli_stmt_store_result($check_stmt);
             
             if (mysqli_stmt_num_rows($check_stmt) > 0) {
-                $error = 'Email sudah terdaftar.';
+                $error = 'Email sudah terdaftar. Silakan gunakan email lain atau langsung masuk.';
                 mysqli_stmt_close($check_stmt);
             } else {
                 mysqli_stmt_close($check_stmt);
 
-                // Penentuan Role Berdasarkan Urutan Pendaftaran Modulus Berputar (3 Role)
-                $res_count = mysqli_query($conn, "SELECT COUNT(*) as total FROM users");
-                if (!$res_count) {
-                    throw new Exception('Gagal menghitung jumlah antrean user.');
-                }
-                
-                $row_count = mysqli_fetch_assoc($res_count);
-                $current_total = (int)$row_count['total'];
-                $modulus = $current_total % 3;
-
-                if ($modulus === 0) {
-                    $role = 'admin';
-                } elseif ($modulus === 1) {
-                    $role = 'user'; 
-                } else {
-                    $role = 'supplier';
-                }
-
                 $hash_password = password_hash($password, PASSWORD_DEFAULT);
 
-                // Prepared Statement untuk Insert Data
+                // Insert data pendaftaran dengan role yang dipilih user
                 $insert_stmt = mysqli_prepare($conn, "INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, ?)");
                 mysqli_stmt_bind_param($insert_stmt, "ssss", $nama, $email, $hash_password, $role);
                 
                 if (mysqli_stmt_execute($insert_stmt)) {
                     mysqli_stmt_close($insert_stmt);
                     
-                    $role_assigned = strtoupper($role);
+                    $role_assigned = strtoupper($role === 'user' ? 'PETANI' : ($role === 'supplier' ? 'PEMILIK LAHAN' : 'ADMIN LOGISTIK'));
                     
-                    // HANCURKAN SESSION LAMA: Mencegah sisa login akun lama langsung bypass ke dashboard
+                    // Bersihkan session sisa agar tidak otomatis login bypass ke dashboard lama
                     session_unset();
                     if (ini_get("session.use_cookies")) {
                         $params = session_get_cookie_params();
@@ -86,9 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                     session_destroy();
                     
-                    // Mulai session baru khusus untuk menampung flash message sukses registrasi
+                    // Set flash message sukses pendaftaran
                     session_start();
-                    $_SESSION['reg_success_flash'] = "Registrasi sukses! Akun Anda otomatis mendapatkan akses: " . $role_assigned;
+                    $_SESSION['reg_success_flash'] = "Registrasi sukses! Akun berhasil dibuat dengan hak akses: " . $role_assigned;
                     
                     ob_end_clean();
                     header('Location: login.php');
@@ -108,11 +91,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Akun Otomatis | Panenusa</title>
+    <title>Daftar Akun Otoritas | Panenusa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-slate-900 flex items-center justify-center min-h-screen p-4">
+<body class="bg-[#0b1224] flex items-center justify-center min-h-screen p-4 font-sans">
     <div class="w-full max-w-md">
         <div class="text-center mb-6">
             <div class="inline-flex items-center gap-3 mb-2">
@@ -121,10 +104,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <span class="text-2xl font-black text-white">Panenusa</span>
             </div>
-            <p class="text-slate-400 text-xs">Assignment Role Otomatis Sesuai Antrean Registrasi</p>
+            <p class="text-slate-400 text-xs">Pendaftaran Akun Terintegrasi Kredensial Multi-Role</p>
         </div>
 
-        <div class="bg-slate-800 p-8 rounded-3xl shadow-2xl border border-slate-700/50">
+        <div class="bg-[#111c35] p-8 rounded-[2rem] shadow-2xl border border-slate-800/80">
             <h1 class="text-xl font-bold text-white text-center mb-6">Buat Akun</h1>
 
             <?php if ($error): ?>
@@ -137,18 +120,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div>
                     <label class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Nama Lengkap</label>
                     <input type="text" name="nama" value="<?= htmlspecialchars($fields['nama']) ?>" placeholder="John Doe"
-                           class="w-full p-4 rounded-xl bg-slate-700 text-white text-sm outline-none focus:ring-2 focus:ring-emerald-500 border border-slate-600 transition" required>
+                           class="w-full p-4 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-emerald-500 transition" required>
                 </div>
                 <div>
                     <label class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Email</label>
                     <input type="email" name="email" value="<?= htmlspecialchars($fields['email']) ?>" placeholder="email@contoh.com"
-                           class="w-full p-4 rounded-xl bg-slate-700 text-white text-sm outline-none focus:ring-2 focus:ring-emerald-500 border border-slate-600 transition" required>
+                           class="w-full p-4 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-emerald-500 transition" required>
                 </div>
+                
+                <div>
+                    <label class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Daftar Sebagai (Hak Akses Peran)</label>
+                    <select name="role" required class="w-full p-4 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-emerald-500 transition appearance-none">
+                        <option value="user" selected>Petani (Input Timbangan Hasil Kebun)</option>
+                        <option value="supplier">Pemilik Lahan / Investor (Pantau Tren Grafik)</option>
+                        <option value="admin">Admin Logistik (Otoritas Kliring Sortir)</option>
+                    </select>
+                </div>
+
                 <div>
                     <label class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Password</label>
                     <div class="relative">
                         <input type="password" id="pwd" name="password" placeholder="Min. 6 karakter"
-                               class="w-full p-4 rounded-xl bg-slate-700 text-white text-sm outline-none focus:ring-2 focus:ring-emerald-500 border border-slate-600 transition pr-12" required>
+                               class="w-full p-4 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-emerald-500 transition pr-12" required>
                         <button type="button" onclick="togglePwd('pwd','eye1')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
                             <i class="fas fa-eye" id="eye1"></i>
                         </button>
@@ -157,14 +150,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div>
                     <label class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Konfirmasi Password</label>
                     <input type="password" name="confirm" placeholder="Ulangi password"
-                           class="w-full p-4 rounded-xl bg-slate-700 text-white text-sm outline-none focus:ring-2 focus:ring-emerald-500 border border-slate-600 transition" required>
+                           class="w-full p-4 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm outline-none focus:border-emerald-500 transition" required>
                 </div>
 
-                <div class="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20 text-[11px] text-emerald-400">
-                    <i class="fas fa-info-circle mr-1"></i> Sistem menentukan akses otomatis: **Admin**, **User**, atau **Supplier**.
-                </div>
-
-                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-xl font-bold transition text-sm shadow-lg shadow-emerald-500/20">
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-xl font-bold transition text-sm shadow-lg shadow-emerald-500/20 pt-3.5">
                     Daftar Akun Sekarang
                 </button>
             </form>
