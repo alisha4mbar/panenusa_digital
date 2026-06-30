@@ -17,18 +17,6 @@
     { "src": "/register", "dest": "/api/register.php" },
     { "src": "/register.php", "dest": "/api/register.php" },
     
-    { "src": "/dashboard_admin", "dest": "/api/dashboard_admin.php" },
-    { "src": "/dashboard_admin.php", "dest": "/api/dashboard_admin.php" },
-    { "src": "/dashboard_user", "dest": "/api/dashboard_user.php" },
-    { "src": "/dashboard_user.php", "dest": "/api/dashboard_user.php" },
-    
-    { "src": "/verifikasi_panen", "dest": "/api/verifikasi_panen.php" },
-    { "src": "/verifikasi_panen.php", "dest": "/api/verifikasi_panen.php" },
-    { "src": "/cetak_surat_jalan", "dest": "/api/cetak_surat_jalan.php" },
-    { "src": "/cetak_surat_jalan.php", "dest": "/api/cetak_surat_jalan.php" },
-    { "src": "/input_panen", "dest": "/api/input_panen.php" },
-    { "src": "/input_panen.php", "dest": "/api/input_panen.php" },
-    
     { "src": "/dashboard", "dest": "/api/dashboard.php" },
     { "src": "/dashboard.php", "dest": "/api/dashboard.php" },
     { "src": "/data_lahan", "dest": "/api/data_lahan.php" },
@@ -41,6 +29,22 @@
     { "src": "/edit_profil.php", "dest": "/api/edit_profil.php" },
     { "src": "/peta_panen", "dest": "/api/peta_panen.php" },
     { "src": "/peta_panen.php", "dest": "/api/peta_panen.php" },
+    
+    { "src": "/dashboard_admin", "dest": "/api/dashboard_admin.php" },
+    { "src": "/dashboard_admin.php", "dest": "/api/dashboard_admin.php" },
+    
+    { "src": "/dashboard_user", "dest": "/api/dashboard_user.php" },
+    { "src": "/dashboard_user.php", "dest": "/api/dashboard_user.php" },
+    
+    { "src": "/dashboard_user_supplier", "dest": "/api/dashboard_user_supplier.php" },
+    { "src": "/dashboard_user_supplier.php", "dest": "/api/dashboard_user_supplier.php" },
+    
+    { "src": "/verifikasi_panen", "dest": "/api/verifikasi_panen.php" },
+    { "src": "/verifikasi_panen.php", "dest": "/api/verifikasi_panen.php" },
+    { "src": "/cetak_surat_jalan", "dest": "/api/cetak_surat_jalan.php" },
+    { "src": "/cetak_surat_jalan.php", "dest": "/api/cetak_surat_jalan.php" },
+    { "src": "/input_panen", "dest": "/api/input_panen.php" },
+    { "src": "/input_panen.php", "dest": "/api/input_panen.php" },
 
     {
       "src": "/(.*)",
