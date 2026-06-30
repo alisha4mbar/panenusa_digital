@@ -55,7 +55,7 @@ $query_verifikasi = mysqli_query($conn, "SELECT tp.*, u.nama as nama_petani FROM
         <nav class="flex-1 px-4 space-y-1">
             <p class="text-[10px] font-bold text-slate-500 px-4 mb-2 uppercase tracking-widest">Menu Utama</p>
             
-            <a href="dashboard.php" class="flex items-center gap-3 p-3 text-emerald-400 bg-emerald-400/5 rounded-xl border border-emerald-400/10">
+            <a href="dashboard_admin.php" class="flex items-center gap-3 p-3 text-emerald-400 bg-emerald-400/5 rounded-xl border border-emerald-400/10">
                 <i class="fas fa-th-large w-5"></i> <span>Dashboard</span>
             </a>
             
@@ -173,8 +173,7 @@ $query_verifikasi = mysqli_query($conn, "SELECT tp.*, u.nama as nama_petani FROM
                                         </a>
                                     </td>
                                 </tr>
-                                <?php endtr; ?>
-                            <?php else: ?>
+                                <?php endwhile; ?> <?php else: ?>
                                 <tr>
                                     <td colspan="5" class="py-8 text-center text-slate-500 text-xs">
                                         <i class="fas fa-inbox text-2xl mb-2 block"></i> Tidak ada transaksi panen baru yang membutuhkan verifikasi.
