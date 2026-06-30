@@ -8,10 +8,6 @@
     { "src": "/", "dest": "/index.html" },
     { "src": "/index.html", "dest": "/index.html" },
     
-    { "src": "/auth/login", "dest": "/api/auth.php?action=login" },
-    { "src": "/auth/register", "dest": "/api/auth.php?action=register" },
-    { "src": "/auth/logout", "dest": "/api/auth.php?action=logout" },
-    
     { "src": "/login", "dest": "/api/login.php" },
     { "src": "/login.php", "dest": "/api/login.php" },
     { "src": "/register", "dest": "/api/register.php" },
@@ -31,21 +27,15 @@
     { "src": "/input_panen", "dest": "/api/input_panen.php" },
     { "src": "/input_panen.php", "dest": "/api/input_panen.php" },
     
-    { "src": "/dashboard", "dest": "/api/dashboard.php" },
-    { "src": "/dashboard.php", "dest": "/api/dashboard.php" },
     { "src": "/data_lahan", "dest": "/api/data_lahan.php" },
     { "src": "/data_lahan.php", "dest": "/api/data_lahan.php" },
     { "src": "/data_referensi", "dest": "/api/data_referensi.php" },
     { "src": "/data_referensi.php", "dest": "/api/data_referensi.php" },
-    { "src": "/forum", "dest": "/api/forum.php" },
-    { "src": "/forum.php", "dest": "/api/forum.php" },
     
     { "src": "/kelola_pengguna", "dest": "/api/kelola_pengguna.php" },
     { "src": "/kelola_pengguna.php", "dest": "/api/kelola_pengguna.php" },
     { "src": "/edit_profil", "dest": "/api/edit_profil.php" },
     { "src": "/edit_profil.php", "dest": "/api/edit_profil.php" },
-    { "src": "/peta_panen", "dest": "/api/peta_panen.php" },
-    { "src": "/peta_panen.php", "dest": "/api/peta_panen.php" },
     
     { "src": "/auth", "dest": "/api/auth.php" },
     { "src": "/auth.php", "dest": "/api/auth.php" },
