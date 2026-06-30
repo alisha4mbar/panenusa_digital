@@ -1,19 +1,20 @@
 <?php
 ob_start();
-session_start();
+session_start(); // Pastikan session dimulai jika ingin menggunakan flash message/session bypass
 require_once __DIR__ . '/config.php';
 
-// 🚀 PERBAIKAN TOTAL: Setiap kali halaman login.php diakses dari tombol landing page,
-// atau jika ada parameter ?bypass=true, sistem akan langsung menghancurkan sisa cookie lama 
-// yang mengunci di browser. Ini menghentikan aksi lempar paksa ke dashboard!
+// 🚀 PERBAIKAN TOTAL: Menghancurkan sisa session/cookie lama jika ada parameter bypass
 if (isset($_GET['bypass']) && $_GET['bypass'] === 'true') {
     session_unset();
     if (session_status() === PHP_SESSION_ACTIVE) { session_destroy(); }
     setcookie('panenusa_auth', '', time() - 3600, '/');
 } elseif (isset($_SESSION['user_id'])) {
-    // FIX REDIRECT: Jika session masih aktif, arahkan sesuai role yang tersimpan
-    if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+    // FIX REDIRECT AUTOMATIC: Mengarahkan dengan tepat sesuai dengan role session yang aktif
+    $role_check = strtolower($_SESSION['role'] ?? '');
+    if ($role_check === 'admin') {
         header("Location: dashboard_admin.php");
+    } elseif ($role_check === 'supplier') {
+        header("Location: dashboard_user_supplier.php");
     } else {
         header("Location: dashboard_user.php");
     }
@@ -35,7 +36,6 @@ if ($msg_type === 'expired') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Menggunakan standard global $_POST agar tidak merusak formatting string dari email mentah
     $email    = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception('Koneksi database terputus.');
             }
 
-            // AMAN: Menggunakan Prepared Statement untuk menarik data user berdasarkan email
+            // Prepared Statement untuk menarik data user berdasarkan email
             $stmt = mysqli_prepare($conn, "SELECT id, nama, password, role, email FROM users WHERE email = ? LIMIT 1");
             mysqli_stmt_bind_param($stmt, "s", $email);
             mysqli_stmt_execute($stmt);
@@ -76,9 +76,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     mysqli_stmt_close($stmt);
                     ob_end_clean();
                     
-                    // 🔥 FIX REDIRECT MULTI-ROLE: Mengarah ke dashboard yang sesuai spesifikasi
+                    // 🔥 PERBAIKAN FIX REDIRECT MULTI-ROLE: Distribusi 3 Jalur Dashboard secara Presisi
                     if ($role_clean === 'admin') {
                         header("Location: dashboard_admin.php");
+                    } elseif ($role_clean === 'supplier') {
+                        header("Location: dashboard_user_supplier.php");
                     } else {
                         header("Location: dashboard_user.php");
                     }
