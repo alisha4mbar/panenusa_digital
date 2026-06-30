@@ -15,14 +15,10 @@ $role_user = $userData['role'];
 $role_check = strtolower($role_user);
 
 // ==========================================
-// 🚀 KONFIGURASI NAMA KOLOM DATABASE KAMU
+// 🚀 KONFIGURASI SUDAH DISESUAIKAN (FIXED)
 // ==========================================
-// Jika nama kolom luas di tabel lahan bukan 'luas' (misal: luas_lahan), sesuaikan di bawah:
-$kolom_luas = "luas"; 
-
-// JIKA EROR TERJADI LAGI, ganti 'user_id' di bawah ini dengan nama kolom relasi 
-// yang ada di tabel lahan kamu (Contoh biasanya: 'id_user' atau 'id_pengguna')
-$kolom_relasi_user = "user_id"; 
+$kolom_luas = "luas_ha";          // Sesuai gambar kamu: luas_ha
+$kolom_relasi_user = "pemilik_id"; // Sesuai gambar kamu: pemilik_id
 // ==========================================
 
 if ($role_check === 'admin') {
@@ -40,6 +36,11 @@ if ($role_check === 'admin') {
 $total_luas = 0;
 $jml_lahan = 0;
 
+if ($query_lahan && $row = mysqli_fetch_assoc($query_lahan)) {
+    $total_luas = $row['total'] ?? 0;
+    $jml_lahan = $row['jml'] ?? 0;
+}
+?>
 if ($query_lahan && $row = mysqli_fetch_assoc($query_lahan)) {
     $total_luas = $row['total'] ?? 0;
     $jml_lahan = $row['jml'] ?? 0;
