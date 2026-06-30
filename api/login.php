@@ -1,5 +1,6 @@
 <?php
 ob_start();
+session_start();
 require_once __DIR__ . '/config.php';
 
 // 🚀 PERBAIKAN TOTAL: Setiap kali halaman login.php diakses dari tombol landing page,
@@ -10,8 +11,12 @@ if (isset($_GET['bypass']) && $_GET['bypass'] === 'true') {
     if (session_status() === PHP_SESSION_ACTIVE) { session_destroy(); }
     setcookie('panenusa_auth', '', time() - 3600, '/');
 } elseif (isset($_SESSION['user_id'])) {
-    // Jika memang benar-benar user baru login secara sah, baru boleh ke dashboard
-    header("Location: dashboard.php");
+    // FIX REDIRECT: Jika session masih aktif, arahkan sesuai role yang tersimpan
+    if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+        header("Location: dashboard_admin.php");
+    } else {
+        header("Location: dashboard_user.php");
+    }
     exit();
 }
 
@@ -30,10 +35,11 @@ if ($msg_type === 'expired') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email    = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL) ?? '');
-    $password = trim(filter_input(INPUT_POST, 'password', FILTER_UNSAFE_RAW) ?? '');
+    // Menggunakan standard global $_POST agar tidak merusak formatting string dari email mentah
+    $email    = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
 
-    if (!$email || !$password) {
+    if (empty($email) || empty($password)) {
         $error = 'Email dan password wajib diisi.';
     } else {
         try {
@@ -41,30 +47,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception('Koneksi database terputus.');
             }
 
-            $email_clean = mysqli_real_escape_string($conn, $email);
-            $query = "SELECT * FROM users WHERE email = '$email_clean' LIMIT 1";
-            $result = mysqli_query($conn, $query);
+            // AMAN: Menggunakan Prepared Statement untuk menarik data user berdasarkan email
+            $stmt = mysqli_prepare($conn, "SELECT id, nama, password, role, email FROM users WHERE email = ? LIMIT 1");
+            mysqli_stmt_bind_param($stmt, "s", $email);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
 
             if ($result && $user = mysqli_fetch_assoc($result)) {
                 if (password_verify($password, $user['password'])) {
                     
+                    $role_clean = strtolower($user['role']);
+
                     // Set Session Utama (Format huruf kecil murni)
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['nama']    = $user['nama'];
-                    $_SESSION['role']    = strtolower($user['role']);
+                    $_SESSION['role']    = $role_clean;
                     $_SESSION['email']   = $user['email'] ?? '';
 
                     // Set Cookie untuk Sinkronisasi State Serverless Vercel
                     $userData = [
                         'user_id' => $user['id'],
                         'nama'    => $user['nama'],
-                        'role'    => strtolower($user['role']),
+                        'role'    => $role_clean,
                         'email'   => $user['email'] ?? ''
                     ];
                     setcookie('panenusa_auth', json_encode($userData), time() + (86400 * 30), "/", "", false, true);
 
+                    mysqli_stmt_close($stmt);
                     ob_end_clean();
-                    header("Location: dashboard.php");
+                    
+                    // 🔥 FIX REDIRECT MULTI-ROLE: Mengarah ke dashboard yang sesuai spesifikasi
+                    if ($role_clean === 'admin') {
+                        header("Location: dashboard_admin.php");
+                    } else {
+                        header("Location: dashboard_user.php");
+                    }
                     exit();
                 } else {
                     $error = 'Email atau Password salah!';
@@ -72,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $error = 'Email atau Password salah!';
             }
+            if (isset($stmt)) { mysqli_stmt_close($stmt); }
         } catch (Exception $e) {
             $error = 'Terjadi kesalahan sistem. Coba lagi.';
         }
