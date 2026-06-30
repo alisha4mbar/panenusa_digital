@@ -1,6 +1,6 @@
 <?php
 ob_start();
-session_start(); // Pastikan session dimulai jika ingin menggunakan flash message/session bypass
+session_start(); 
 require_once __DIR__ . '/config.php';
 
 // BYPASS INTERCEPTOR: Dinonaktifkan permanen agar mempermudah proses testing antrean rotasi akun baru
@@ -13,8 +13,6 @@ $error  = '';
 $fields = ['nama' => '', 'email' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Perbaikan Sanitasi: Gunakan FILTER_DEFAULT untuk string mentah, lalu trim. 
-    // Menggunakan FILTER_SANITIZE_SPECIAL_CHARS pada email akan merusak karakter valid email.
     $nama     = trim($_POST['nama'] ?? '');
     $email    = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -36,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception('Koneksi database ke TiDB Cloud terputus.');
             }
 
-            // AMAN & AKURAT: Menggunakan Prepared Statement untuk cek email menghindari distorsi karakter
+            // Prepared Statement untuk cek email menghindari distorsi karakter
             $check_stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE email = ? LIMIT 1");
             mysqli_stmt_bind_param($check_stmt, "s", $email);
             mysqli_stmt_execute($check_stmt);
@@ -61,22 +59,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($modulus === 0) {
                     $role = 'admin';
                 } elseif ($modulus === 1) {
-                    $role = 'user'; // Sesuai dengan value database standar Anda
+                    $role = 'user'; 
                 } else {
                     $role = 'supplier';
                 }
 
                 $hash_password = password_hash($password, PASSWORD_DEFAULT);
 
-                // AMAN: Menggunakan Prepared Statement untuk Insert Data
+                // Prepared Statement untuk Insert Data
                 $insert_stmt = mysqli_prepare($conn, "INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, ?)");
                 mysqli_stmt_bind_param($insert_stmt, "ssss", $nama, $email, $hash_password, $role);
                 
                 if (mysqli_stmt_execute($insert_stmt)) {
                     mysqli_stmt_close($insert_stmt);
-                    ob_end_clean();
                     
-                    $_SESSION['reg_success_flash'] = "Registrasi sukses! Akun Anda otomatis mendapatkan akses: " . strtoupper($role);
+                    $role_assigned = strtoupper($role);
+                    
+                    // HANCURKAN SESSION LAMA: Mencegah sisa login akun lama langsung bypass ke dashboard
+                    session_unset();
+                    if (ini_get("session.use_cookies")) {
+                        $params = session_get_cookie_params();
+                        setcookie(session_name(), '', time() - 42000,
+                            $params["path"], $params["domain"],
+                            $params["secure"], $params["httponly"]
+                        );
+                    }
+                    session_destroy();
+                    
+                    // Mulai session baru khusus untuk menampung flash message sukses registrasi
+                    session_start();
+                    $_SESSION['reg_success_flash'] = "Registrasi sukses! Akun Anda otomatis mendapatkan akses: " . $role_assigned;
+                    
+                    ob_end_clean();
                     header('Location: login.php');
                     exit();
                 } else {
