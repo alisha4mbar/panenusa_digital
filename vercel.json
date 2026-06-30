@@ -22,6 +22,13 @@
     { "src": "/dashboard_user", "dest": "/api/dashboard_user.php" },
     { "src": "/dashboard_user.php", "dest": "/api/dashboard_user.php" },
     
+    { "src": "/verifikasi_panen", "dest": "/api/verifikasi_panen.php" },
+    { "src": "/verifikasi_panen.php", "dest": "/api/verifikasi_panen.php" },
+    { "src": "/cetak_surat_jalan", "dest": "/api/cetak_surat_jalan.php" },
+    { "src": "/cetak_surat_jalan.php", "dest": "/api/cetak_surat_jalan.php" },
+    { "src": "/input_panen", "dest": "/api/input_panen.php" },
+    { "src": "/input_panen.php", "dest": "/api/input_panen.php" },
+    
     { "src": "/dashboard", "dest": "/api/dashboard.php" },
     { "src": "/dashboard.php", "dest": "/api/dashboard.php" },
     { "src": "/data_lahan", "dest": "/api/data_lahan.php" },
