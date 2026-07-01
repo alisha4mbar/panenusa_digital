@@ -37,6 +37,9 @@
     { "src": "/edit_profil", "dest": "/api/edit_profil.php" },
     { "src": "/edit_profil.php", "dest": "/api/edit_profil.php" },
     
+    { "src": "/forum", "dest": "/api/forum.php" },
+    { "src": "/forum.php", "dest": "/api/forum.php" },
+    
     { "src": "/auth", "dest": "/api/auth.php" },
     { "src": "/auth.php", "dest": "/api/auth.php" },
     { "src": "/config", "dest": "/api/config.php" },
