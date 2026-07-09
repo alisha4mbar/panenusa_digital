@@ -2,136 +2,100 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LaduSync — Portal Ekosistem Manajemen Pengairan Digital</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>PANENUSA | Admin Logistik Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Menyelaraskan warna hijau gelap premium khas sesuai gambar mockup */
-        body {
-            background-color: #042414;
-        }
-        .hero-bg {
-            /* Menggunakan overlay gelap agar teks hero tetap kontras dan scannable */
-            background: linear-gradient(rgba(4, 36, 20, 0.85), rgba(4, 36, 20, 0.85)), 
-                        url('https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?q=80&w=1920&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-        }
+        .page { display: none; }
+        .active-page { display: block; }
+        .sidebar-link.active { background: #1F4E79; color: white; border-radius: 12px; }
     </style>
 </head>
-<body class="text-slate-100 font-sans min-h-screen antialiased">
+<body class="bg-slate-50 font-sans text-slate-800">
 
-    <nav class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <div class="bg-[#10b981] text-[#042414] p-1.5 rounded-lg text-sm font-bold">💧</div>
-            <span class="font-black text-xl tracking-wider text-[#10b981]">Ladu Sync</span>
-        </div>
-        <div class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-300 tracking-wide">
-            <a href="#" class="hover:text-white transition-colors">Fitur Utama</a>
-            <a href="#" class="hover:text-white transition-colors">Data Ekosistem</a>
-            <a href="#" class="hover:text-white transition-colors">Tentang</a>
-            <button class="text-slate-400 hover:text-white">⚙</button>
-        </div>
-        <div class="flex items-center gap-4 text-xs font-bold">
-            <a href="api/login.php" class="text-slate-300 hover:text-white px-3 py-2">Masuk</a>
-            <a href="api/login.php?tab=register" class="bg-[#10b981] hover:bg-[#059669] text-[#042414] px-4 py-2 rounded-xl transition-all duration-200">
-                Daftar Akun
-            </a>
-        </div>
-    </nav>
+<div class="flex h-screen">
+    <aside class="w-72 bg-white m-4 rounded-3xl border border-slate-100 p-6 flex flex-col shadow-sm">
+        <h1 class="text-2xl font-extrabold text-[#1F4E79] mb-10 flex items-center gap-2"><i data-lucide="wheat"></i> PANENUSA</h1>
+        <nav class="space-y-2 flex-1">
+            <button onclick="showPage('dash', this)" class="sidebar-link active w-full p-4 flex items-center gap-3 font-semibold"><i data-lucide="layout-dashboard"></i> Dashboard</button>
+            <button onclick="showPage('verif', this)" class="sidebar-link w-full p-4 flex items-center gap-3 font-semibold"><i data-lucide="check-square"></i> Verifikasi Panen</button>
+            <button onclick="showPage('cetak', this)" class="sidebar-link w-full p-4 flex items-center gap-3 font-semibold"><i data-lucide="printer"></i> Surat Jalan</button>
+            <button onclick="showPage('user', this)" class="sidebar-link w-full p-4 flex items-center gap-3 font-semibold"><i data-lucide="users"></i> Manajemen Pengguna</button>
+            <button onclick="showPage('ref', this)" class="sidebar-link w-full p-4 flex items-center gap-3 font-semibold"><i data-lucide="database"></i> Data Referensi</button>
+        </nav>
+    </aside>
 
-    <header class="hero-bg border-b border-emerald-950/40 py-24 px-6 text-center flex flex-col items-center justify-center min-h-[520px]">
-        <div class="max-w-3xl">
-            <span class="text-[10px] font-bold text-[#10b981] tracking-widest uppercase bg-emerald-950/80 border border-emerald-800/40 px-3 py-1.5 rounded-full">
-                ● PORTAL EKOSISTEM DIGITAL PERTANIAN & PENGAIRAN
-            </span>
-            <h1 class="text-4xl sm:text-5xl font-black text-white mt-6 leading-tight tracking-tight uppercase">
-                MAKSIMALKAN <br><span class="text-[#10b981]">PANEN ANDA.</span>
-            </h1>
-            <p class="text-slate-300 text-xs sm:text-sm mt-6 max-w-2xl mx-auto leading-relaxed font-medium opacity-90">
-                Ekosistem digital SM Irigasi hadir untuk mendampingi mobilitas pengelolaan lahan terpadu, penyediaan akses satu data statistik pengairan, serta membangun ruang kolaborasi inklusif demi stabilitas pangan nasional.
-            </p>
-            <div class="mt-8 flex flex-wrap justify-center gap-4 text-xs font-bold">
-                <a href="#ekosistem" class="bg-[#10b981] hover:bg-[#059669] text-[#042414] px-6 py-3 rounded-xl transition-colors">
-                    Mulai Sekarang
-                </a>
-                <a href="dashboard.html" class="bg-transparent hover:bg-white/5 border border-slate-500 text-white px-6 py-3 rounded-xl transition-colors">
-                    Masuk Dashboard
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <section class="max-w-6xl mx-auto px-6 py-12 border-b border-emerald-950/30">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
-            <div class="md:border-r border-emerald-950/40 md:pr-4">
-                <span class="text-2xl sm:text-3xl font-black text-white block">4,800+</span>
-                <span class="text-[10px] font-bold text-emerald-500 tracking-wider uppercase block mt-1">Petani Terintegrasi</span>
-            </div>
-            <div class="md:border-r border-emerald-950/40 md:px-4">
-                <span class="text-2xl sm:text-3xl font-black text-white block">38.4%</span>
-                <span class="text-[10px] font-bold text-emerald-500 tracking-wider uppercase block mt-1">Efisiensi Distribusi Air</span>
-            </div>
-            <div class="md:border-r border-emerald-950/40 md:px-4">
-                <span class="text-2xl sm:text-3xl font-black text-white block">24/7</span>
-                <span class="text-[10px] font-bold text-emerald-500 tracking-wider uppercase block mt-1">Pemantauan Debit Air</span>
-            </div>
-            <div class="md:pl-4">
-                <span class="text-2xl sm:text-3xl font-black text-white block">Satu Data</span>
-                <span class="text-[10px] font-bold text-emerald-500 tracking-wider uppercase block mt-1">Sinkronisasi Real-Time</span>
-            </div>
-        </div>
-    </section>
-
-    <section id="ekosistem" class="max-w-6xl mx-auto px-6 py-16">
-        <div class="flex flex-col md:flex-row items-center gap-12">
-            <div class="md:w-1/2">
-                <h2 class="text-2xl sm:text-3xl font-black text-white leading-tight">
-                    Transparansi Layanan Publik Digital <br>Pertanian
-                </h2>
-                <p class="text-slate-300 text-xs sm:text-sm mt-4 leading-relaxed opacity-80">
-                    Kami menyajikan kemudahan pemantauan statistik pengairan bagi seluruh elemen ekosistem tani secara transparan dan berorientasi pada kesejahteraan humanis masyarakat produsen pangan Indonesia.
-                </p>
-            </div>
-            <div class="md:w-1/2 w-full">
-                <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=800&auto=format&fit=crop" 
-                     alt="Irigasi Lahan Pertanian" 
-                     class="rounded-2xl border border-emerald-900/30 w-full object-cover h-56 shadow-2xl">
+    <main class="flex-1 p-10 overflow-y-auto">
+        
+        <div id="dash" class="page active-page">
+            <h2 class="text-3xl font-extrabold mb-8">Dashboard Admin</h2>
+            <div class="grid grid-cols-3 gap-6 mb-8">
+                <div class="bg-[#1F4E79] p-8 rounded-3xl text-white">
+                    <p class="opacity-80">Total Tonase Harian</p>
+                    <h3 class="text-4xl font-extrabold mt-2">125.4 Ton</h3>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border shadow-sm">
+                    <p class="text-slate-500">Kapasitas Gudang</p>
+                    <h3 class="text-4xl font-extrabold mt-2 text-[#54A9CE]">85%</h3>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border shadow-sm">
+                    <p class="text-slate-500">Antrian Verifikasi</p>
+                    <h3 class="text-4xl font-extrabold mt-2 text-amber-600">12</h3>
+                </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-            
-            <div class="bg-[#052b18] border border-emerald-950/50 rounded-xl p-6 hover:border-[#10b981]/30 transition-all duration-300">
-                <div class="text-xl mb-4 text-[#10b981]">🗺️</div>
-                <h3 class="text-sm font-bold text-white tracking-wide">Manajemen Lahan</h3>
-                <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">
-                    Pencatatan luas lahan kustomisasi wilayah regional, pemetaan petak pertanian untuk optimalisasi kalkulasi kapasitas dan kebutuhan air panen raya.
-                </p>
+        <div id="verif" class="page">
+            <h2 class="text-3xl font-extrabold mb-6">Verifikasi Data Panen</h2>
+            <div class="bg-white rounded-3xl border p-6 shadow-sm">
+                <table class="w-full text-left">
+                    <thead class="text-slate-400 text-xs uppercase"><tr><th class="p-4">Petani</th><th class="p-4">Kualitas</th><th class="p-4">Aksi</th></tr></thead>
+                    <tbody class="divide-y">
+                        <tr><td class="p-4 font-bold">Pak Ahmad</td><td class="p-4 text-green-600 font-bold">Layak</td><td class="p-4"><button class="bg-[#1F4E79] text-white px-4 py-2 rounded-xl text-sm">Konfirmasi</button></td></tr>
+                    </tbody>
+                </table>
             </div>
-
-            <div class="bg-[#052b18] border border-emerald-950/50 rounded-xl p-6 hover:border-[#10b981]/30 transition-all duration-300">
-                <div class="text-xl mb-4 text-[#10b981]">📊</div>
-                <h3 class="text-sm font-bold text-white tracking-wide">Sinkronisasi Data</h3>
-                <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">
-                    Penyajian grafik statistik kelembapan tanah, sensor debit arus air, serta pola kebutuhan komoditas pasar secara transparan dan berkala.
-                </p>
-            </div>
-
-            <div class="bg-[#052b18] border border-emerald-950/50 rounded-xl p-6 hover:border-[#10b981]/30 transition-all duration-300">
-                <div class="text-xl mb-4 text-[#10b981]">🔊</div>
-                <h3 class="text-sm font-bold text-white tracking-wide">Konsultasi Sejawat</h3>
-                <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">
-                    Ruang interaksi inklusif antar praktisi tani guna mendiskusikan penanganan kendala irigasi, pembagian jadwal air, dan kendala hama secara terpadu.
-                </p>
-            </div>
-
         </div>
-    </section>
 
-    <footer class="bg-[#031d10] border-t border-emerald-950/40 text-center py-6 text-[11px] text-slate-500">
-        © 2026 SM IRIGASI Indonesia. All Rights Reserved.
-    </footer>
+        <div id="cetak" class="page">
+            <h2 class="text-3xl font-extrabold mb-6">Cetak Surat Jalan</h2>
+            <div class="bg-white rounded-3xl border p-10 text-center">
+                <p class="text-slate-500 mb-6">Pilih transaksi yang telah terverifikasi untuk menerbitkan Surat Jalan Distribusi.</p>
+                <button class="bg-[#54A9CE] text-white px-8 py-3 rounded-xl font-bold">Cetak Dokumen</button>
+            </div>
+        </div>
 
+        <div id="user" class="page">
+            <h2 class="text-3xl font-extrabold mb-6">Manajemen Pengguna</h2>
+            <div class="bg-white rounded-3xl border p-6">
+                <button class="bg-green-700 text-white px-6 py-2 rounded-xl mb-6 font-bold">+ Tambah Akun</button>
+                <p class="text-sm text-slate-500">CRUD: Mengelola akun Petani, Admin, dan Pemilik Lahan.</p>
+            </div>
+        </div>
+
+        <div id="ref" class="page">
+            <h2 class="text-3xl font-extrabold mb-6">Manajemen Data Referensi</h2>
+            <div class="bg-white rounded-3xl border p-6">
+                <p class="mb-4 text-slate-600">Pengelolaan master data Lahan, Musim Tanam, dan Komoditas.</p>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="border rounded-2xl p-4 font-bold text-[#1F4E79]">Lahan</div>
+                    <div class="border rounded-2xl p-4 font-bold">Musim Tanam</div>
+                    <div class="border rounded-2xl p-4 font-bold">Komoditas</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+    lucide.createIcons();
+    function showPage(pageId, btn) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+        document.getElementById(pageId).classList.add('active-page');
+        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+    }
+</script>
 </body>
 </html>
