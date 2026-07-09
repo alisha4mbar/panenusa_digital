@@ -2,74 +2,104 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>PANENUSA | Modern Farming Management</title>
+    <title>PANENUSA | Sistem Terpadu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .page { display: none; }
+        .active-page { display: block; }
+        .nav-btn.active { background: #1F4E79; color: white; border-radius: 12px; }
+        .neo-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-[#F8FAFC]">
 
-    <nav class="flex justify-between items-center px-20 py-8">
-        <div class="text-2xl font-extrabold text-[#1F4E79] flex items-center gap-2"><i data-lucide="wheat"></i> PANENUSA</div>
-        <div class="space-x-8 font-semibold text-sm">
-            <a href="#" class="hover:text-[#54A9CE]">Beranda</a>
-            <a href="#" class="hover:text-[#54A9CE]">Fitur</a>
-            <a href="#" class="hover:text-[#54A9CE]">Tentang</a>
-        </div>
-        <div class="space-x-4">
-            <button class="px-6 py-2 font-bold text-[#1F4E79]">Masuk</button>
-            <button class="px-6 py-2 bg-[#1F4E79] text-white rounded-xl font-bold shadow-lg shadow-blue-900/20">Daftar</button>
-        </div>
-    </nav>
+    <!-- 1. LANDING PAGE -->
+    <div id="landing" class="page active-page">
+        <nav class="flex justify-between items-center px-20 py-8 bg-white">
+            <h1 class="text-2xl font-extrabold text-[#1F4E79] flex items-center gap-2"><i data-lucide="wheat"></i> PANENUSA</h1>
+            <div class="space-x-4">
+                <button onclick="showPage('login')" class="font-bold text-[#1F4E79]">Masuk</button>
+                <button onclick="showPage('register')" class="bg-[#1F4E79] text-white px-6 py-2 rounded-xl font-bold">Daftar</button>
+            </div>
+        </nav>
+        <header class="text-center py-20 px-20">
+            <h1 class="text-6xl font-extrabold mb-6">Kelola Panen Lebih Cerdas</h1>
+            <button onclick="showPage('register')" class="bg-[#1F4E79] text-white px-8 py-4 rounded-2xl font-bold text-lg">Mulai Sekarang</button>
+        </header>
+    </div>
 
-    <header class="px-20 py-16 flex items-center">
-        <div class="w-1/2 space-y-8">
-            <span class="bg-blue-100 text-[#1F4E79] px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest">Sistem Panen Terintegrasi</span>
-            <h1 class="text-7xl font-extrabold leading-tight">Catat Hasil Panen Lebih <span class="text-[#54A9CE]">Mudah & Transparan</span></h1>
-            <p class="text-lg text-slate-500 max-w-lg">PANENUSA hadir untuk menyederhanakan alur kerja petani dan admin logistik dalam satu platform digital yang cerdas.</p>
-            <div class="flex gap-4">
-                <button class="bg-[#1F4E79] text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-blue-900/20 flex items-center gap-2">Mulai Sekarang <i data-lucide="arrow-right" class="w-5"></i></button>
-                <button class="bg-white px-8 py-4 rounded-2xl font-bold border border-slate-200">Pelajari Fitur</button>
-            </div>
+    <!-- 2. LOGIN -->
+    <div id="login" class="page min-h-screen flex items-center justify-center">
+        <div class="bg-white p-10 rounded-3xl border shadow-lg w-96">
+            <h2 class="text-2xl font-bold mb-6">Masuk Admin</h2>
+            <input class="w-full p-3 border rounded-xl mb-4" placeholder="Email">
+            <input type="password" class="w-full p-3 border rounded-xl mb-6" placeholder="Password">
+            <button onclick="showPage('dash')" class="w-full bg-[#1F4E79] text-white py-3 rounded-xl font-bold">Masuk</button>
+            <button onclick="showPage('landing')" class="w-full mt-4 text-sm text-slate-500">Kembali ke Home</button>
         </div>
-        <div class="w-1/2 p-10">
-            <div class="bg-gradient-to-tr from-[#1F4E79] to-[#54A9CE] w-full h-[400px] rounded-[3rem] shadow-2xl flex items-center justify-center text-white">
-                <i data-lucide="bar-chart-3" class="w-32 h-32 opacity-20"></i>
-                <p class="text-xl font-bold absolute">Tampilan Dashboard Modern</p>
-            </div>
-        </div>
-    </header>
+    </div>
 
-    <section class="px-20 py-20 bg-white">
-        <h2 class="text-4xl font-extrabold text-center mb-16">Kenapa Pilih PANENUSA?</h2>
-        <div class="grid grid-cols-3 gap-10">
-            <div class="p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition">
-                <div class="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center text-[#1F4E79] mb-6"><i data-lucide="smartphone"></i></div>
-                <h3 class="text-xl font-bold mb-3">Input Digital</h3>
-                <p class="text-slate-500">Catat berat dan kualitas panen langsung dari smartphone di ladang.</p>
-            </div>
-            <div class="p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition">
-                <div class="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center text-[#1F4E79] mb-6"><i data-lucide="cpu"></i></div>
-                <h3 class="text-xl font-bold mb-3">Sortir Cerdas</h3>
-                <p class="text-slate-500">Sistem otomatis klasifikasi hasil panen layak atau cacat dengan presisi tinggi.</p>
-            </div>
-            <div class="p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition">
-                <div class="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center text-[#1F4E79] mb-6"><i data-lucide="pie-chart"></i></div>
-                <h3 class="text-xl font-bold mb-3">Laporan Real-Time</h3>
-                <p class="text-slate-500">Pantau tren produksi dan stok gudang kapan saja dan di mana saja.</p>
-            </div>
+    <!-- 3. REGISTER -->
+    <div id="register" class="page min-h-screen flex items-center justify-center">
+        <div class="bg-white p-10 rounded-3xl border shadow-lg w-96">
+            <h2 class="text-2xl font-bold mb-6">Daftar Akun Baru</h2>
+            <input class="w-full p-3 border rounded-xl mb-4" placeholder="Nama Lengkap">
+            <input class="w-full p-3 border rounded-xl mb-6" placeholder="Email">
+            <button onclick="showPage('login')" class="w-full bg-[#1F4E79] text-white py-3 rounded-xl font-bold">Daftar Sekarang</button>
         </div>
-    </section>
+    </div>
 
-    <footer class="px-20 py-10 text-center text-slate-400 text-sm border-t">
-        &copy; 2026 PANENUSA – D3 Teknik Informatika UNS
-    </footer>
+    <!-- 4. DASHBOARD ADMIN (Container) -->
+    <div id="admin-panel" class="page flex h-screen">
+        <aside class="w-72 bg-white border-r p-6 flex flex-col">
+            <h1 class="text-xl font-extrabold text-[#1F4E79] mb-10"><i data-lucide="wheat"></i> PANENUSA</h1>
+            <nav class="space-y-2 flex-1">
+                <button onclick="showPage('dash-content', this)" class="nav-btn active w-full p-3 text-left rounded-xl flex items-center gap-3 font-semibold"><i data-lucide="layout-dashboard"></i> Dashboard</button>
+                <button onclick="showPage('verif', this)" class="nav-btn w-full p-3 text-left rounded-xl flex items-center gap-3 font-semibold"><i data-lucide="check-square"></i> Verifikasi</button>
+                <button onclick="showPage('cetak', this)" class="nav-btn w-full p-3 text-left rounded-xl flex items-center gap-3 font-semibold"><i data-lucide="printer"></i> Surat Jalan</button>
+                <button onclick="showPage('user', this)" class="nav-btn w-full p-3 text-left rounded-xl flex items-center gap-3 font-semibold"><i data-lucide="users"></i> Manajemen Pengguna</button>
+                <button onclick="showPage('ref', this)" class="nav-btn w-full p-3 text-left rounded-xl flex items-center gap-3 font-semibold"><i data-lucide="database"></i> Referensi</button>
+            </nav>
+            <button onclick="showPage('landing')" class="text-red-600 font-bold flex items-center gap-2"><i data-lucide="log-out"></i> Logout</button>
+        </aside>
+
+        <main class="flex-1 p-10 overflow-y-auto">
+            <!-- Isi Konten Admin di bawah -->
+            <div id="dash-content" class="dash-page active-page">
+                <h2 class="text-3xl font-extrabold mb-8">Dashboard Admin</h2>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="neo-card p-8 bg-[#1F4E79] text-white"><p>Total Tonase</p><h3 class="text-3xl font-bold">125.4 Ton</h3></div>
+                </div>
+            </div>
+
+            <div id="verif" class="dash-page page"><h2 class="text-3xl font-extrabold mb-6">Verifikasi Panen</h2><div class="neo-card p-6">Tabel Verifikasi...</div></div>
+            <div id="cetak" class="dash-page page"><h2 class="text-3xl font-extrabold mb-6">Surat Jalan</h2><div class="neo-card p-10 text-center">Cetak Dokumen...</div></div>
+            <div id="user" class="dash-page page"><h2 class="text-3xl font-extrabold mb-6">Manajemen Pengguna</h2><div class="neo-card p-8">CRUD User...</div></div>
+            <div id="ref" class="dash-page page"><h2 class="text-3xl font-extrabold mb-6">Data Referensi</h2><div class="neo-card p-8">Lahan, Musim, Komoditas...</div></div>
+        </main>
+    </div>
 
     <script>
         lucide.createIcons();
+        function showPage(pageId, btn) {
+            // Logika pindah halaman Utama
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(pageId).classList.add('active-page');
+            
+            // Logika admin panel
+            if(pageId === 'dash') document.getElementById('admin-panel').classList.add('active-page');
+            
+            // Logika sub-menu admin
+            if(btn) {
+                document.querySelectorAll('.nav-btn').forEach(l => l.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.dash-page').forEach(p => p.classList.remove('active-page'));
+                document.getElementById(pageId + (pageId === 'dash' ? '-content' : '')).classList.add('active-page');
+            }
+        }
     </script>
 </body>
 </html>
