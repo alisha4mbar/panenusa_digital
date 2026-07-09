@@ -2,12 +2,14 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PANENUSA | Solusi Digital Pertanian</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
+        
+        /* Logika Halaman */
         .page { display: none; }
         .active-page { display: block; }
     </style>
@@ -15,59 +17,43 @@
 <body>
 
     <!-- 1. LANDING PAGE -->
-    <div id="landing-page" class="page active-page">
+    <div id="landing-page" class="page active-page min-h-screen">
         <!-- Navbar -->
-        <nav class="flex justify-between items-center px-20 py-8 bg-white shadow-sm">
-            <h1 class="text-2xl font-extrabold text-[#1F4E79] flex items-center gap-2">
-                <i data-lucide="wheat"></i> PANENUSA
-            </h1>
-            <div class="space-x-6 text-sm font-semibold text-slate-600">
-                <a href="#" class="hover:text-[#1F4E79]">Beranda</a>
-                <a href="#" class="hover:text-[#1F4E79]">Fitur</a>
-                <a href="#" class="hover:text-[#1F4E79]">Tentang</a>
-            </div>
-            <div class="space-x-4">
-                <button onclick="showPage('login-page')" class="font-bold text-[#1F4E79]">Masuk</button>
-                <button onclick="showPage('register-page')" class="bg-[#1F4E79] text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-900 transition">Daftar</button>
-            </div>
+        <nav class="flex justify-between items-center px-20 py-8">
+            <h1 class="text-2xl font-extrabold text-[#1F4E79]">PANENUSA</h1>
+            <button onclick="showPage('login-page')" class="bg-[#1F4E79] text-white px-8 py-3 rounded-2xl font-bold shadow-lg shadow-blue-900/20 hover:bg-blue-900 transition">
+                Masuk Sekarang
+            </button>
         </nav>
 
         <!-- Hero -->
-        <header class="py-24 text-center px-20">
-            <h1 class="text-6xl font-extrabold mb-6">Catat Panen, <span class="text-[#54A9CE]">Tingkatkan Profit.</span></h1>
-            <p class="text-lg text-slate-500 mb-10 max-w-2xl mx-auto">Sistem informasi digital untuk petani dan logistik dalam satu platform terintegrasi. Transparan, cepat, dan modern.</p>
-            <button onclick="showPage('register-page')" class="bg-[#1F4E79] text-white px-10 py-4 rounded-2xl font-bold text-lg hover:shadow-xl transition">Mulai Sekarang →</button>
+        <header class="text-center py-20 px-10">
+            <h1 class="text-7xl font-extrabold text-slate-900 mb-6">Catat Panen, <span class="text-[#54A9CE]">Tingkatkan Profit.</span></h1>
+            <p class="text-lg text-slate-500 mb-12 max-w-xl mx-auto">Sistem informasi digital untuk petani dan logistik dalam satu platform terintegrasi. Transparan, cepat, dan modern.</p>
         </header>
     </div>
 
     <!-- 2. LOGIN PAGE -->
-    <div id="login-page" class="page min-h-screen flex items-center justify-center bg-slate-100">
-        <div class="bg-white p-10 rounded-3xl border shadow-xl w-96">
-            <h2 class="text-2xl font-bold mb-6">Masuk ke Akun</h2>
-            <input class="w-full p-3 border rounded-xl mb-4" placeholder="Email">
-            <input type="password" class="w-full p-3 border rounded-xl mb-6" placeholder="Password">
-            <button onclick="alert('Login Berhasil!')" class="w-full bg-[#1F4E79] text-white py-3 rounded-xl font-bold">Masuk</button>
-            <button onclick="showPage('landing-page')" class="w-full mt-4 text-sm text-slate-400">Kembali ke Home</button>
-        </div>
-    </div>
-
-    <!-- 3. REGISTER PAGE -->
-    <div id="register-page" class="page min-h-screen flex items-center justify-center bg-slate-100">
-        <div class="bg-white p-10 rounded-3xl border shadow-xl w-96">
-            <h2 class="text-2xl font-bold mb-6">Daftar Sekarang</h2>
-            <input class="w-full p-3 border rounded-xl mb-4" placeholder="Nama Lengkap">
-            <input class="w-full p-3 border rounded-xl mb-6" placeholder="Email">
-            <button onclick="alert('Pendaftaran Berhasil!')" class="w-full bg-[#1F4E79] text-white py-3 rounded-xl font-bold">Daftar Akun</button>
-            <button onclick="showPage('landing-page')" class="w-full mt-4 text-sm text-slate-400">Kembali ke Home</button>
+    <div id="login-page" class="page min-h-screen flex items-center justify-center p-6">
+        <div class="bg-white p-10 rounded-3xl border border-slate-100 shadow-2xl shadow-slate-200 w-full max-w-md">
+            <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Masuk ke Akun</h2>
+            <p class="text-slate-500 mb-8">Selamat datang kembali, admin!</p>
+            
+            <div class="space-y-4">
+                <input type="email" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#1F4E79] outline-none" placeholder="Email">
+                <input type="password" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#1F4E79] outline-none" placeholder="Password">
+                <button class="w-full bg-[#1F4E79] text-white py-4 rounded-2xl font-bold text-lg hover:bg-blue-900 transition">Masuk</button>
+            </div>
+            
+            <button onclick="showPage('landing-page')" class="w-full mt-6 text-sm text-slate-400 font-semibold hover:text-[#1F4E79]">← Kembali ke Home</button>
         </div>
     </div>
 
     <script>
-        lucide.createIcons();
         function showPage(pageId) {
-            // Sembunyikan semua halaman
+            // Sembunyikan semua page
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            // Tampilkan halaman yang dituju
+            // Tampilkan page yang dipilih
             document.getElementById(pageId).classList.add('active-page');
         }
     </script>
