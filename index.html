@@ -2,100 +2,74 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>PANENUSA | Admin Logistik Pro</title>
+    <title>PANENUSA | Modern Farming Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .page { display: none; }
-        .active-page { display: block; }
-        .sidebar-link.active { background: #1F4E79; color: white; border-radius: 12px; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800">
+<body class="bg-slate-50 text-slate-900">
 
-<div class="flex h-screen">
-    <aside class="w-72 bg-white m-4 rounded-3xl border border-slate-100 p-6 flex flex-col shadow-sm">
-        <h1 class="text-2xl font-extrabold text-[#1F4E79] mb-10 flex items-center gap-2"><i data-lucide="wheat"></i> PANENUSA</h1>
-        <nav class="space-y-2 flex-1">
-            <button onclick="showPage('dash', this)" class="sidebar-link active w-full p-4 flex items-center gap-3 font-semibold"><i data-lucide="layout-dashboard"></i> Dashboard</button>
-            <button onclick="showPage('verif', this)" class="sidebar-link w-full p-4 flex items-center gap-3 font-semibold"><i data-lucide="check-square"></i> Verifikasi Panen</button>
-            <button onclick="showPage('cetak', this)" class="sidebar-link w-full p-4 flex items-center gap-3 font-semibold"><i data-lucide="printer"></i> Surat Jalan</button>
-            <button onclick="showPage('user', this)" class="sidebar-link w-full p-4 flex items-center gap-3 font-semibold"><i data-lucide="users"></i> Manajemen Pengguna</button>
-            <button onclick="showPage('ref', this)" class="sidebar-link w-full p-4 flex items-center gap-3 font-semibold"><i data-lucide="database"></i> Data Referensi</button>
-        </nav>
-    </aside>
+    <nav class="flex justify-between items-center px-20 py-8">
+        <div class="text-2xl font-extrabold text-[#1F4E79] flex items-center gap-2"><i data-lucide="wheat"></i> PANENUSA</div>
+        <div class="space-x-8 font-semibold text-sm">
+            <a href="#" class="hover:text-[#54A9CE]">Beranda</a>
+            <a href="#" class="hover:text-[#54A9CE]">Fitur</a>
+            <a href="#" class="hover:text-[#54A9CE]">Tentang</a>
+        </div>
+        <div class="space-x-4">
+            <button class="px-6 py-2 font-bold text-[#1F4E79]">Masuk</button>
+            <button class="px-6 py-2 bg-[#1F4E79] text-white rounded-xl font-bold shadow-lg shadow-blue-900/20">Daftar</button>
+        </div>
+    </nav>
 
-    <main class="flex-1 p-10 overflow-y-auto">
-        
-        <div id="dash" class="page active-page">
-            <h2 class="text-3xl font-extrabold mb-8">Dashboard Admin</h2>
-            <div class="grid grid-cols-3 gap-6 mb-8">
-                <div class="bg-[#1F4E79] p-8 rounded-3xl text-white">
-                    <p class="opacity-80">Total Tonase Harian</p>
-                    <h3 class="text-4xl font-extrabold mt-2">125.4 Ton</h3>
-                </div>
-                <div class="bg-white p-8 rounded-3xl border shadow-sm">
-                    <p class="text-slate-500">Kapasitas Gudang</p>
-                    <h3 class="text-4xl font-extrabold mt-2 text-[#54A9CE]">85%</h3>
-                </div>
-                <div class="bg-white p-8 rounded-3xl border shadow-sm">
-                    <p class="text-slate-500">Antrian Verifikasi</p>
-                    <h3 class="text-4xl font-extrabold mt-2 text-amber-600">12</h3>
-                </div>
+    <header class="px-20 py-16 flex items-center">
+        <div class="w-1/2 space-y-8">
+            <span class="bg-blue-100 text-[#1F4E79] px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest">Sistem Panen Terintegrasi</span>
+            <h1 class="text-7xl font-extrabold leading-tight">Catat Hasil Panen Lebih <span class="text-[#54A9CE]">Mudah & Transparan</span></h1>
+            <p class="text-lg text-slate-500 max-w-lg">PANENUSA hadir untuk menyederhanakan alur kerja petani dan admin logistik dalam satu platform digital yang cerdas.</p>
+            <div class="flex gap-4">
+                <button class="bg-[#1F4E79] text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-blue-900/20 flex items-center gap-2">Mulai Sekarang <i data-lucide="arrow-right" class="w-5"></i></button>
+                <button class="bg-white px-8 py-4 rounded-2xl font-bold border border-slate-200">Pelajari Fitur</button>
             </div>
         </div>
-
-        <div id="verif" class="page">
-            <h2 class="text-3xl font-extrabold mb-6">Verifikasi Data Panen</h2>
-            <div class="bg-white rounded-3xl border p-6 shadow-sm">
-                <table class="w-full text-left">
-                    <thead class="text-slate-400 text-xs uppercase"><tr><th class="p-4">Petani</th><th class="p-4">Kualitas</th><th class="p-4">Aksi</th></tr></thead>
-                    <tbody class="divide-y">
-                        <tr><td class="p-4 font-bold">Pak Ahmad</td><td class="p-4 text-green-600 font-bold">Layak</td><td class="p-4"><button class="bg-[#1F4E79] text-white px-4 py-2 rounded-xl text-sm">Konfirmasi</button></td></tr>
-                    </tbody>
-                </table>
+        <div class="w-1/2 p-10">
+            <div class="bg-gradient-to-tr from-[#1F4E79] to-[#54A9CE] w-full h-[400px] rounded-[3rem] shadow-2xl flex items-center justify-center text-white">
+                <i data-lucide="bar-chart-3" class="w-32 h-32 opacity-20"></i>
+                <p class="text-xl font-bold absolute">Tampilan Dashboard Modern</p>
             </div>
         </div>
+    </header>
 
-        <div id="cetak" class="page">
-            <h2 class="text-3xl font-extrabold mb-6">Cetak Surat Jalan</h2>
-            <div class="bg-white rounded-3xl border p-10 text-center">
-                <p class="text-slate-500 mb-6">Pilih transaksi yang telah terverifikasi untuk menerbitkan Surat Jalan Distribusi.</p>
-                <button class="bg-[#54A9CE] text-white px-8 py-3 rounded-xl font-bold">Cetak Dokumen</button>
+    <section class="px-20 py-20 bg-white">
+        <h2 class="text-4xl font-extrabold text-center mb-16">Kenapa Pilih PANENUSA?</h2>
+        <div class="grid grid-cols-3 gap-10">
+            <div class="p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition">
+                <div class="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center text-[#1F4E79] mb-6"><i data-lucide="smartphone"></i></div>
+                <h3 class="text-xl font-bold mb-3">Input Digital</h3>
+                <p class="text-slate-500">Catat berat dan kualitas panen langsung dari smartphone di ladang.</p>
+            </div>
+            <div class="p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition">
+                <div class="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center text-[#1F4E79] mb-6"><i data-lucide="cpu"></i></div>
+                <h3 class="text-xl font-bold mb-3">Sortir Cerdas</h3>
+                <p class="text-slate-500">Sistem otomatis klasifikasi hasil panen layak atau cacat dengan presisi tinggi.</p>
+            </div>
+            <div class="p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition">
+                <div class="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center text-[#1F4E79] mb-6"><i data-lucide="pie-chart"></i></div>
+                <h3 class="text-xl font-bold mb-3">Laporan Real-Time</h3>
+                <p class="text-slate-500">Pantau tren produksi dan stok gudang kapan saja dan di mana saja.</p>
             </div>
         </div>
+    </section>
 
-        <div id="user" class="page">
-            <h2 class="text-3xl font-extrabold mb-6">Manajemen Pengguna</h2>
-            <div class="bg-white rounded-3xl border p-6">
-                <button class="bg-green-700 text-white px-6 py-2 rounded-xl mb-6 font-bold">+ Tambah Akun</button>
-                <p class="text-sm text-slate-500">CRUD: Mengelola akun Petani, Admin, dan Pemilik Lahan.</p>
-            </div>
-        </div>
+    <footer class="px-20 py-10 text-center text-slate-400 text-sm border-t">
+        &copy; 2026 PANENUSA – D3 Teknik Informatika UNS
+    </footer>
 
-        <div id="ref" class="page">
-            <h2 class="text-3xl font-extrabold mb-6">Manajemen Data Referensi</h2>
-            <div class="bg-white rounded-3xl border p-6">
-                <p class="mb-4 text-slate-600">Pengelolaan master data Lahan, Musim Tanam, dan Komoditas.</p>
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="border rounded-2xl p-4 font-bold text-[#1F4E79]">Lahan</div>
-                    <div class="border rounded-2xl p-4 font-bold">Musim Tanam</div>
-                    <div class="border rounded-2xl p-4 font-bold">Komoditas</div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-</div>
-
-<script>
-    lucide.createIcons();
-    function showPage(pageId, btn) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-        document.getElementById(pageId).classList.add('active-page');
-        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-        if(btn) btn.classList.add('active');
-    }
-</script>
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
