@@ -3,252 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panenusa | Pertanian Modern Presisi</title>
-    <!-- Menggunakan Font Inter yang modern -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <title>Panenusa | Platform Pertanian Presisi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #F8FAFC;
-            --card: rgba(255, 255, 255, 0.98);
             --ink: #0F172A;
-            --ink-soft: #475569;
             --accent-gold: #F59E0B;
             --forest-deep: #0B1224;
             --forest-base: #111C35;
-            --line: rgba(30, 64, 175, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg); 
-            color: var(--ink); 
-            line-height: 1.7; 
-            overflow-x: hidden;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg); color: var(--ink); line-height: 1.6; }
 
-        /* --- UTILITIES --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .section-pad { padding: 100px 0; }
-        
-        /* Animasi Fade-in */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* --- NAVIGASI BARU --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 8%; background: rgba(255,255,255,0.9);
+            position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-        .animate { animation: fadeInUp 0.8s ease forwards; opacity: 0; }
+        .logo { font-size: 24px; font-weight: 800; color: var(--forest-deep); }
+        .nav-btns a { text-decoration: none; font-weight: 600; margin-left: 20px; transition: 0.3s; }
+        .btn-login { color: var(--forest-deep); }
+        .btn-join { background: var(--forest-deep); color: white; padding: 10px 25px; border-radius: 12px; }
 
-        /* --- NAVIGASI --- */
-        nav {
-            padding: 25px 5%; display: flex; justify-content: space-between; align-items: center;
-            position: fixed; width: 100%; top: 0; z-index: 100;
-            background: rgba(11, 18, 36, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
-        }
-        .nav-logo { font-size: 24px; font-weight: 900; color: white; letter-spacing: -1px; }
-        .nav-links a { color: #E2E8F0; text-decoration: none; margin-left: 30px; font-size: 15px; font-weight: 500; transition: 0.3s; }
-        .nav-links a:hover { color: var(--accent-gold); }
-
-        /* --- HERO SECTION DENGAN GAMBAR --- */
+        /* --- HERO SECTION RE-DESIGN --- */
         .hero {
-            min-height: 95vh; display: flex; align-items: center; justify-content: center;
-            text-align: center; color: white; position: relative;
-            padding-top: 120px; /* Jarak karena navbar fixed */
+            padding: 100px 8%; display: flex; align-items: center; 
+            background: linear-gradient(135deg, var(--forest-deep) 0%, var(--forest-base) 100%);
+            color: white; border-radius: 0 0 60px 60px;
         }
+        .hero-text { flex: 1; }
+        .hero-text h1 { font-size: 4rem; margin-bottom: 20px; line-height: 1.1; }
+        .hero-text span { color: var(--accent-gold); }
+        .hero-img { flex: 1; text-align: right; }
         
-        /* Layer Gambar Background (Simulasi) */
-        .hero-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            /* Ganti URL ini dengan link gambar sawah/pertanian berkualitas tinggi Anda */
-            background: url('https://images.unsplash.com/photo-1592495284552-221525a29c60?q=80&w=1920') center/cover no-repeat;
-            z-index: -2;
+        /* --- FITUR BENTO GRID --- */
+        .section-features { padding: 100px 8%; }
+        .bento-grid { 
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; 
+            grid-auto-rows: 300px;
         }
-        
-        /* Overlay Navy Gelap agar teks terbaca */
-        .hero-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(11, 18, 36, 0.8), rgba(11, 18, 36, 0.95));
-            z-index: -1;
-        }
+        .card { background: white; padding: 30px; border-radius: 30px; border: 1px solid #E2E8F0; transition: 0.4s; }
+        .card:hover { border-color: var(--accent-gold); transform: scale(1.02); }
 
-        .hero h1 { font-size: 4.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 20px; letter-spacing: -2px; }
-        .hero h1 span { color: var(--accent-gold); }
-        .hero p { font-size: 1.3rem; color: #CBD5E1; max-width: 700px; margin: 0 auto 40px auto; font-weight: 300; }
-
-        .btn {
-            background: var(--accent-gold); color: var(--forest-deep);
-            padding: 18px 45px; border-radius: 50px; font-weight: 700; font-size: 16px;
-            text-decoration: none; transition: all 0.3s ease; display: inline-block;
-            text-transform: uppercase; letter-spacing: 1px; border: none; cursor: pointer;
-        }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(245, 158, 11, 0.4); }
-
-        /* --- FITUR GRID DENGAN IKON --- */
-        .features { background: var(--bg); }
-        .section-title { text-align: center; font-size: 3rem; margin-bottom: 15px; color: var(--forest-deep); letter-spacing: -1px; }
-        .section-subtitle { text-align: center; color: var(--ink-soft); margin-bottom: 70px; max-width: 500px; margin-left: auto; margin-right: auto; }
-        
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .feat-card { 
-            background: var(--card); padding: 50px; border-radius: 20px;
-            border: 1px solid var(--line); transition: all 0.4s ease;
-            position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-        }
-        .feat-card:hover { transform: translateY(-15px); border-color: rgba(245, 158, 11, 0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
-        
-        /* Ikon Placeholder (menggunakan SVG inline sederhana) */
-        .icon-box { 
-            width: 60px; height: 60px; background: rgba(245, 158, 11, 0.1); 
-            border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            margin-bottom: 30px;
-        }
-        
-        .feat-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--forest-deep); }
-        .feat-card p { color: var(--ink-soft); font-size: 1rem; }
-
-        /* --- TESTIMONI SECTION --- */
-        .testimonials { background: var(--forest-deep); color: white; }
-        .testi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-top: 60px; }
-        .testi-card { background: var(--forest-base); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); }
-        .quote { font-size: 4rem; color: var(--accent-gold); opacity: 0.3; line-height: 0; margin-bottom: 10px; display: block;}
-        .testi-meta { display: flex; align-items: center; margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .avatar { width: 50px; height: 50px; background: #374151; border-radius: 50%; margin-right: 15px; }
-        .testi-name { font-weight: 700; }
-        .testi-title { font-size: 0.9rem; color: #9CA3AF; }
-
-        /* --- FOOTER --- */
-        footer { background: var(--forest-deep); color: #9CA3AF; padding: 50px 5%; text-align: center; border-top: 1px solid var(--line); font-size: 0.9rem;}
-
-        /* --- RESPONSIVE MOBILE --- */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .grid, .testi-grid { grid-template-columns: 1fr; }
-            nav { padding: 20px 5%; }
-            .nav-links { display: none; } /* Sederhana untuk mobile */
+        /* --- CTA SECTION --- */
+        .cta-box {
+            background: var(--accent-gold); margin: 0 8% 100px; padding: 80px;
+            border-radius: 40px; text-align: center; color: var(--forest-deep);
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-logo">PANENUSA</div>
-        <div class="nav-links">
-            <a href="#fitur">Fitur</a>
-            <a href="#hasil">Hasil</a>
-            <a href="#testimoni">Testimoni</a>
-            <a href="#kontak" class="btn" style="padding: 10px 25px; margin-top: 0;">Kontak Kami</a>
+    <nav class="navbar">
+        <div class="logo">PANENUSA</div>
+        <div class="nav-btns">
+            <a href="#" class="btn-login">Masuk</a>
+            <a href="#" class="btn-join">Daftar Sekarang</a>
         </div>
     </nav>
 
-    <!-- Hero Section dengan Background Gambar -->
-    <header class="hero section-pad">
-        <div class="hero-bg"></div>
-        <div class="hero-overlay"></div>
-        <div class="container animate">
-            <h1>Modernisasi Pertanian <br> <span>Meningkatkan Kesejahteraan.</span></h1>
-            <p>Panenusa menghadirkan solusi teknologi presisi dari hulu ke hilir untuk hasil panen yang melimpah dan efisiensi biaya bagi petani Indonesia.</p>
-            <a href="#fitur" class="btn">Jelajahi Solusi</a>
+    <header class="hero">
+        <div class="hero-text">
+            <h1>Pertanian Masa Depan <span>Dimulai Dari Sini.</span></h1>
+            <p style="font-size: 1.2rem; color: #94A3B8; margin-bottom: 30px;">Panenusa mentransformasi cara petani bekerja dengan teknologi data presisi dan akses pasar langsung.</p>
+            <div style="display: flex; gap: 15px;">
+                <button class="btn-join" style="padding: 15px 40px; border:none; cursor:pointer;">Demo Produk</button>
+                <button style="padding: 15px 40px; border:1px solid white; background:transparent; color:white; border-radius:12px; cursor:pointer;">Pelajari Lebih Lanjut</button>
+            </div>
         </div>
     </header>
 
-    <!-- Fitur Section dengan Ikon -->
-    <section id="fitur" class="features section-pad">
-        <div class="container">
-            <h2 class="section-title">Teknologi Cerdas untuk Lahan Anda</h2>
-            <p class="section-subtitle">Kami mengintegrasikan IoT, Data Analytics, dan Akses Pasar dalam satu platform terpadu.</p>
-            
-            <div class="grid">
-                <!-- Kartu 1 -->
-                <div class="feat-card animate" style="animation-delay: 0.2s;">
-                    <div class="icon-box">
-                        <!-- Ikon SVG: Sensor Tanah -->
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="M9.09 9a3 3 0 0 1 5.83 0"/></svg>
-                    </div>
-                    <h3>Monitoring Lahan IoT</h3>
-                    <p>Pantau kondisi tanah, kelembapan, dan cuaca secara *real-time* langsung dari ponsel Anda. Ambil keputusan berdasarkan data, bukan perkiraan.</p>
-                </div>
-
-                <!-- Kartu 2 -->
-                <div class="feat-card animate" style="animation-delay: 0.4s;">
-                    <div class="icon-box">
-                        <!-- Ikon SVG: Drone/Optimation -->
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-                    </div>
-                    <h3>Drone Presisi</h3>
-                    <p>Gunakan teknologi drone untuk pemetaan lahan dan penyemprotan pupuk/pestisida yang lebih efisien, merata, dan hemat biaya.</p>
-                </div>
-
-                <!-- Kartu 3 -->
-                <div class="feat-card animate" style="animation-delay: 0.6s;">
-                    <div class="icon-box">
-                        <!-- Ikon SVG: Marketplace/Truck -->
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                    </div>
-                    <h3>Akses Rantai Pasok</h3>
-                    <p>Hubungkan hasil panen Anda langsung ke pembeli besar, restoran, dan supermarket dengan harga yang transparan dan adil.</p>
-                </div>
+    <section class="section-features">
+        <div class="bento-grid">
+            <div class="card" style="grid-column: span 2;">
+                <h2>Teknologi IoT Terpadu</h2>
+                <p>Sensor tanah tingkat lanjut untuk efisiensi air dan nutrisi maksimal.</p>
+            </div>
+            <div class="card">
+                <h2>Akses Pasar</h2>
+                <p>Harga adil langsung ke pembeli.</p>
+            </div>
+            <div class="card">
+                <h2>Analitik AI</h2>
+                <p>Prediksi panen berbasis data.</p>
+            </div>
+            <div class="card" style="grid-column: span 2;">
+                <h2>Ekosistem Petani</h2>
+                <p>Komunitas dan pendampingan ahli berkelanjutan.</p>
             </div>
         </div>
     </section>
 
-    <!-- Testimoni Section -->
-    <section id="testimoni" class="testimonials section-pad">
-        <div class="container">
-            <h2 class="section-title" style="color: white;">Suara Petani Panenusa</h2>
-            <p class="section-subtitle" style="color: #9CA3AF;">Dengar langsung pengalaman rekan petani yang telah bertransformasi bersama kami.</p>
-            
-            <div class="testi-grid">
-                <!-- Testimoni 1 -->
-                <div class="testi-card animate" style="animation-delay: 0.2s;">
-                    <span class="quote">"</span>
-                    <p>Semenjak pakai sensor tanah Panenusa, saya tahu persis kapan harus menyiram dan memupuk. Hasil panen padi musim ini meningkat 30% dan biaya operasional turun drastis.</p>
-                    <div class="testi-meta">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="avatar" alt="Pak Budi">
-                        <div>
-                            <div class="testi-name">Pak Budi Santoso</div>
-                            <div class="testi-title">Ketua Kelompok Tani, Jawa Timur</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Testimoni 2 -->
-                <div class="testi-card animate" style="animation-delay: 0.4s;">
-                    <span class="quote">"</span>
-                    <p>Biasanya saya bingung jual hasil sayur ke mana dan harganya dipermainkan tengkulak. Lewat aplikasi Panenusa, harga jual stabil dan pembeli langsung jemput barang ke kebun.</p>
-                    <div class="testi-meta">
-                        <img src="
-                <!-- Lanjutan Testimoni 2 -->
-                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="avatar" alt="Ibu Siti">
-                        <div>
-                            <div class="testi-name">Ibu Siti Aminah</div>
-                            <div class="testi-title">Petani Hortikultura, Jawa Barat</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <section class="cta-box">
+        <h2 style="font-size: 3rem; margin-bottom: 20px;">Siap Meningkatkan Hasil Panen Anda?</h2>
+        <p style="margin-bottom: 30px;">Bergabung dengan 10.000+ petani yang telah mendigitalisasi lahannya.</p>
+        <button style="padding: 20px 50px; border:none; background:var(--forest-deep); color:white; border-radius:15px; font-weight:800; cursor:pointer;">Mulai Perjalanan Anda</button>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 Panenusa. Semua Hak Dilindungi. Teknologi untuk Masa Depan Pertanian Indonesia.</p>
-        </div>
-    </footer>
-
-    <!-- Script Animasi Scroll (Agar kartu muncul saat di-scroll) -->
-    <script>
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = "1";
-                    entry.target.style.transform = "translateY(0)";
-                }
-            });
-        });
-
-        document.querySelectorAll('.animate').forEach((el) => observer.observe(el));
-    </script>
 </body>
 </html>
