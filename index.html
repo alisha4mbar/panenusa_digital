@@ -1,138 +1,77 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PANENUSA — Sistem Pencatatan Hasil Panen</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --bg: #F8FAFC;               /* Slate 50 */
-      --card: rgba(255, 255, 255, 0.95); 
-      --ink: #0F172A;              /* Slate 900 */
-      --ink-soft: #475569;         /* Slate 600 */
-      --accent-gold: #F59E0B;      /* Amber 500 */
-      --accent-lime: #10B981;      /* Emerald 500 */
-      --forest-deep: #0B1224;      /* Dark Navy Base */
-      --forest-base: #111C35;      /* Sidebar Navy */
-      --forest-light: #162544;     /* Active Card Navy */
-      --line: rgba(30, 64, 175, 0.1); 
-      --topbar: #0B1224;           /* Topbar Navy */
-    }
+    <style>
+        :root {
+            --bg: #F8FAFC;
+            --card: rgba(255, 255, 255, 0.95);
+            --ink: #0F172A;
+            --ink-soft: #475569;
+            --accent-gold: #F59E0B;
+            --forest-deep: #0B1224;
+            --forest-base: #111C35;
+            --line: rgba(30, 64, 175, 0.1);
+        }
 
-    body {
-      background: var(--bg);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      color: var(--ink);
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
 
-    @keyframes floatSlow {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
-    }
-    .orb-decor { animation: floatSlow 8s ease-in-out infinite; }
-    .orb-decor-reverse { animation: floatSlow 7s ease-in-out infinite reverse; }
+        /* Hero Modern */
+        .hero { 
+            height: 90vh; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: linear-gradient(to bottom, var(--forest-deep), var(--forest-base));
+            color: white; padding: 0 10%; text-align: center;
+        }
+        
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; line-height: 1.1; }
+        .hero span { color: var(--accent-gold); }
 
-    .topbar { background: var(--topbar); color: #F8FAFC; }
+        /* Button Premium */
+        .btn {
+            background: var(--accent-gold); color: var(--forest-deep);
+            padding: 15px 40px; border-radius: 50px; font-weight: 700;
+            text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: inline-block; margin-top: 30px;
+        }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3); }
 
-    .btn-round {
-      width: 52px; height: 52px; border-radius: 9999px;
-      background: linear-gradient(135deg, var(--forest-deep) 0%, var(--forest-base) 100%);
-      color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .btn-round:hover { transform: scale(1.1) rotate(15deg); box-shadow: 0 6px 20px rgba(11, 18, 36, 0.3); }
-
-    .pill {
-      border-radius: 12px; padding: .85rem 1.6rem; 
-      font-weight: 700; font-size: .8rem;
-      display: inline-flex; align-items: center; gap: .6rem;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .hero-img { border-radius: 28px; overflow: hidden; background: var(--forest-deep); border: 1px solid var(--line); }
-    .dot { width: 14px; height: 14px; border-radius: 9999px; }
-
-    .stat-box { 
-      background: linear-gradient(150deg, var(--forest-deep) 0%, #0B1224 100%); 
-      border-radius: 28px;
-      box-shadow: 0 12px 40px rgba(11, 18, 36, 0.15);
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .faq-item { border-bottom: 1px solid var(--line); transition: all 0.2s ease; }
-    .faq-item:hover { border-color: var(--forest-base); }
-    .faq-item summary { cursor: pointer; list-style: none; }
-    .faq-item summary::-webkit-details-marker { display: none; }
-    .faq-plus { transition: transform .25s ease; color: var(--accent-gold); }
-    details[open] .faq-plus { transform: rotate(45deg); color: var(--forest-base); }
-
-    .card-surface { 
-      background: var(--card); 
-      border: 1px solid var(--line); 
-      backdrop-filter: blur(28px);
-      box-shadow: 0 4px 20px rgba(11, 18, 36, 0.05);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .card-surface:hover {
-      transform: translateY(-6px);
-      border-color: var(--accent-gold);
-      box-shadow: 0 12px 30px rgba(11, 18, 36, 0.1);
-    }
-
-    .bg-grid-pattern { 
-      background-image: linear-gradient(rgba(30, 58, 138, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(30, 58, 138, 0.03) 1px, transparent 1px); 
-      background-size: 40px 40px; 
-    }
-
-    ::selection { background: var(--forest-base); color: #fff; }
-    :focus-visible { outline: 2px solid var(--forest-base); outline-offset: 3px; }
-  </style>
+        /* Card Modern */
+        .features { padding: 80px 10%; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
+        .card { 
+            background: white; padding: 40px; border-radius: 20px;
+            border: 1px solid var(--line); transition: 0.3s;
+        }
+        .card:hover { border-color: var(--accent-gold); transform: translateY(-10px); }
+        .card h3 { margin-bottom: 15px; color: var(--forest-deep); }
+    </style>
 </head>
-<body class="antialiased min-h-screen bg-grid-pattern relative">
+<body>
 
-  <div class="orb-decor fixed -top-24 -left-20 w-96 h-96 rounded-full pointer-events-none z-0" style="background:rgba(30, 58, 138, 0.05); filter:blur(80px);"></div>
-  <div class="orb-decor-reverse fixed -bottom-16 right-3 w-80 h-80 rounded-full pointer-events-none z-0" style="background:rgba(245, 158, 11, 0.05); filter:blur(80px);"></div>
+    <header class="hero">
+        <h1>Transformasi Pertanian Indonesia <br> <span>Bersama Panenusa</span></h1>
+        <p style="font-size: 1.2rem; color: #cbd5e1; max-width: 600px;">Kami mendigitalisasi setiap jengkal lahan, memastikan hasil panen yang optimal dan masa depan petani yang sejahtera.</p>
+        <a href="#" class="btn">Mulai Transformasi Anda</a>
+    </header>
 
-  <div class="topbar text-[11px] font-medium tracking-wide relative z-10 border-b border-white/5">
-    <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
-      <span class="opacity-75 flex items-center gap-1">⏱️ Senin – Sabtu, 07.00 – 16.00</span>
-      <div class="flex gap-6 opacity-75">
-        <span class="hover:text-white transition-colors">📞 0812-5282-4675</span>
-        <span class="hover:text-white transition-colors">✉️ halo@panenusa.id</span>
-      </div>
-    </div>
-  </div>
+    <section class="features">
+        <h2 style="text-align: center; font-size: 2.5rem;">Solusi Terintegrasi</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Analisis Tanah Pintar</h3>
+                <p>Data presisi untuk menentukan nutrisi tanah agar tanaman tumbuh lebih sehat dan cepat.</p>
+            </div>
+            <div class="card">
+                <h3>Rantai Pasok Digital</h3>
+                <p>Jual hasil panen langsung ke pasar utama dengan harga terbaik tanpa perantara.</p>
+            </div>
+            <div class="card">
+                <h3>Monitoring Real-time</h3>
+                <p>Pantau kondisi lahan Anda kapan saja dan di mana saja melalui dashboard intuitif.</p>
+            </div>
+        </div>
+    </section>
 
-  <nav class="max-w-6xl mx-auto px-6 py-6 flex justify-between items-center relative z-10">
-    <div class="flex items-center gap-3 group">
-      <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-[#0B1224] to-[#111C35] border border-white/10 shadow-md">
-        <svg width="22" height="22" viewBox="0 0 44 44" fill="none">
-          <path d="M22 7C22 7 13 18 13 24C13 29.52 17.03 34 22 34C26.97 34 31 29.52 31 24C31 18 22 7 22 7Z" fill="#10B981"/>
-        </svg>
-      </div>
-      <span class="font-extrabold text-2xl tracking-tight text-[#0B1224]">Panenusa</span>
-    </div>
-    <div class="hidden md:flex items-center gap-8 text-[13px] font-bold tracking-wider uppercase text-[#475569]">
-      <a href="#" class="text-[#0B1224] transition-colors">Beranda</a>
-      <a href="#tentang" class="hover:text-[#111C35] transition-colors">Tentang</a>
-      <a href="#layanan" class="hover:text-[#111C35] transition-colors">Fitur</a>
-      <a href="#faq" class="hover:text-[#111C35] transition-colors">FAQ</a>
-    </div>
-    <div class="flex items-center gap-3">
-      <a href="api/login.php" class="pill text-white hover:-translate-y-0.5 shadow-sm hover:shadow-md" style="background:linear-gradient(135deg, var(--forest-deep) 0%, var(--forest-base) 100%);">
-        Masuk
-      </a>
-    </div>
-  </nav>
-
-  <!-- Hero Section, Tentang, Layanan, FAQ, dll. tetap sama strukturnya, cukup ubah teks/warna referensi sesuai kebutuhan -->
-  <!-- (Struktur konten Anda tetap dipertahankan seperti semula) -->
-  
 </body>
 </html>
