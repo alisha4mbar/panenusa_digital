@@ -1,107 +1,194 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panenusa | Platform Pertanian Presisi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Panenusa | Sinergi Ekosistem Digital Pertanian Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        bgn: {
+                            freshGreen: '#34d399', /* Emerald-400 */
+                            deepGreen: '#10b981',  /* Emerald-500 */
+                            darkBg: '#0f172a',     /* Slate-900 */
+                            darkCard: '#1e293b',   /* Slate-800 */
+                            pureWhite: '#ffffff',
+                            lightGray: '#f1f5f9'   /* Slate-100 */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --bg: #F8FAFC;
-            --ink: #0F172A;
-            --accent-gold: #F59E0B;
-            --forest-deep: #0B1224;
-            --forest-base: #111C35;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background: var(--bg); color: var(--ink); line-height: 1.6; }
-
-        /* --- NAVIGASI BARU --- */
-        .navbar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 8%; background: rgba(255,255,255,0.9);
-            position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        .logo { font-size: 24px; font-weight: 800; color: var(--forest-deep); }
-        .nav-btns a { text-decoration: none; font-weight: 600; margin-left: 20px; transition: 0.3s; }
-        .btn-login { color: var(--forest-deep); }
-        .btn-join { background: var(--forest-deep); color: white; padding: 10px 25px; border-radius: 12px; }
-
-        /* --- HERO SECTION RE-DESIGN --- */
-        .hero {
-            padding: 100px 8%; display: flex; align-items: center; 
-            background: linear-gradient(135deg, var(--forest-deep) 0%, var(--forest-base) 100%);
-            color: white; border-radius: 0 0 60px 60px;
-        }
-        .hero-text { flex: 1; }
-        .hero-text h1 { font-size: 4rem; margin-bottom: 20px; line-height: 1.1; }
-        .hero-text span { color: var(--accent-gold); }
-        .hero-img { flex: 1; text-align: right; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         
-        /* --- FITUR BENTO GRID --- */
-        .section-features { padding: 100px 8%; }
-        .bento-grid { 
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; 
-            grid-auto-rows: 300px;
-        }
-        .card { background: white; padding: 30px; border-radius: 30px; border: 1px solid #E2E8F0; transition: 0.4s; }
-        .card:hover { border-color: var(--accent-gold); transform: scale(1.02); }
-
-        /* --- CTA SECTION --- */
-        .cta-box {
-            background: var(--accent-gold); margin: 0 8% 100px; padding: 80px;
-            border-radius: 40px; text-align: center; color: var(--forest-deep);
-        }
+        .bgn-nav { backdrop-filter: blur(14px); background: rgba(255, 255, 255, 0.75); }
+        .dark .bgn-nav { background: rgba(30, 41, 59, 0.75); border-color: rgba(51, 65, 85, 0.5); }
+        
+        .btn-bgn-trans-green { background: #10b981; transition: all 0.2s ease-in-out; }
+        .btn-bgn-trans-green:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.3); }
+        
+        .btn-bgn-outline-hero { border: 2px solid rgba(255, 255, 255, 0.7); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(4px); color: #ffffff; transition: all 0.2s ease; }
+        .btn-bgn-outline-hero:hover { background-color: rgba(255, 255, 255, 1); color: #0f172a; border-color: rgba(255, 255, 255, 1); transform: translateY(-1px); }
+        
+        .hero-photo-container { position: relative; width: 100%; height: 88vh; background-image: url('https://images.unsplash.com/photo-1516253593875-bd7ba052fbc5?auto=format&fit=crop&q=80&w=1600'); background-size: cover; background-position: center; }
     </style>
 </head>
-<body>
+<body class="bg-bgn-pureWhite dark:bg-bgn-darkBg text-slate-900 dark:text-slate-100 transition-colors duration-500">
 
-    <nav class="navbar">
-        <div class="logo">PANENUSA</div>
-        <div class="nav-btns">
-            <a href="#" class="btn-login">Masuk</a>
-            <a href="#" class="btn-join">Daftar Sekarang</a>
+    <nav class="fixed w-full z-50 bgn-nav border-b border-slate-200/30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-bgn-deepGreen dark:bg-bgn-freshGreen rounded-lg flex items-center justify-center border border-emerald-500/20 shadow-sm">
+                    <i class="fas fa-leaf text-white text-sm"></i>
+                </div>
+                <span class="text-xl font-extrabold tracking-tight text-bgn-deepGreen dark:text-bgn-freshGreen">PANENUSA</span>
+            </div>
+            <div class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-700 dark:text-slate-200">
+                <a href="#fitur" class="hover:text-bgn-freshGreen transition-colors">Fitur Utama</a>
+                <a href="#statistik" class="hover:text-bgn-freshGreen transition-colors">Data Ekosistem</a>
+                <a href="#tentang" class="hover:text-bgn-freshGreen transition-colors">Tentang</a>
+                <button id="theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-bgn-darkBg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-bgn-freshGreen transition-all">
+                    <i id="theme-toggle-dark-icon" class="hidden fas fa-moon"></i>
+                    <i id="theme-toggle-light-icon" class="hidden fas fa-sun"></i>
+                </button>
+                <span class="h-5 w-[1px] bg-slate-300 dark:bg-slate-700"></span>
+                <a href="login.php?bypass=true" class="font-semibold text-bgn-deepGreen dark:text-bgn-freshGreen hover:text-bgn-freshGreen transition-colors">Masuk</a>
+                <a href="register.php?bypass=true" class="btn-bgn-trans-green text-white px-5 py-2.5 rounded-lg font-semibold text-xs shadow-sm">Daftar Akun</a>
+            </div>
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="hero-text">
-            <h1>Pertanian Masa Depan <span>Dimulai Dari Sini.</span></h1>
-            <p style="font-size: 1.2rem; color: #94A3B8; margin-bottom: 30px;">Panenusa mentransformasi cara petani bekerja dengan teknologi data presisi dan akses pasar langsung.</p>
-            <div style="display: flex; gap: 15px;">
-                <button class="btn-join" style="padding: 15px 40px; border:none; cursor:pointer;">Demo Produk</button>
-                <button style="padding: 15px 40px; border:1px solid white; background:transparent; color:white; border-radius:12px; cursor:pointer;">Pelajari Lebih Lanjut</button>
-            </div>
-        </div>
-    </header>
-
-    <section class="section-features">
-        <div class="bento-grid">
-            <div class="card" style="grid-column: span 2;">
-                <h2>Teknologi IoT Terpadu</h2>
-                <p>Sensor tanah tingkat lanjut untuk efisiensi air dan nutrisi maksimal.</p>
-            </div>
-            <div class="card">
-                <h2>Akses Pasar</h2>
-                <p>Harga adil langsung ke pembeli.</p>
-            </div>
-            <div class="card">
-                <h2>Analitik AI</h2>
-                <p>Prediksi panen berbasis data.</p>
-            </div>
-            <div class="card" style="grid-column: span 2;">
-                <h2>Ekosistem Petani</h2>
-                <p>Komunitas dan pendampingan ahli berkelanjutan.</p>
+    <section class="hero-photo-container">
+        <div class="absolute inset-0 bg-black/45 dark:bg-black/65 z-10"></div>
+        <div class="absolute inset-0 z-20 flex items-center justify-center text-center px-6">
+            <div class="max-w-3xl space-y-6 pt-24 md:pt-32" data-aos="zoom-in">
+                <div class="inline-flex items-center gap-2 text-bgn-freshGreen text-xs font-bold tracking-widest uppercase bg-slate-900/60 backdrop-blur-md px-5 py-2.5 rounded-full border border-slate-700/50 shadow-md">
+                    <span class="w-2 h-2 rounded-full bg-bgn-freshGreen animate-pulse"></span> Portal Ekosistem Digital Pertanian
+                </div>
+                <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight uppercase">
+                    Maksimalkan <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-bgn-freshGreen to-emerald-300">Panen Anda.</span>
+                </h1>
+                <p class="text-slate-100 text-sm sm:text-base max-w-xl mx-auto font-medium">
+                    Ekosistem digital pertanian Panenusa hadir untuk mendampingi mobilitas pengelolaan lahan terpadu, penyediaan akses satu data statistik pertanian, serta membangun ruang kolaborasi inklusif demi stabilitas pangan nasional.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+                    <a href="register.php?bypass=true" class="btn-bgn-trans-green w-full sm:w-auto px-8 py-3.5 text-white rounded-lg font-bold text-sm text-center shadow-md">
+                        Mulai Sekarang
+                    </a>
+                    <a href="login.php?bypass=true" class="btn-bgn-outline-hero w-full sm:w-auto px-8 py-3.5 rounded-lg font-bold text-sm text-center">
+                        Masuk Dashboard
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="cta-box">
-        <h2 style="font-size: 3rem; margin-bottom: 20px;">Siap Meningkatkan Hasil Panen Anda?</h2>
-        <p style="margin-bottom: 30px;">Bergabung dengan 10.000+ petani yang telah mendigitalisasi lahannya.</p>
-        <button style="padding: 20px 50px; border:none; background:var(--forest-deep); color:white; border-radius:15px; font-weight:800; cursor:pointer;">Mulai Perjalanan Anda</button>
+    <section id="statistik" class="py-12 bg-bgn-lightGray dark:bg-bgn-darkCard/50 border-b border-slate-200 dark:border-slate-800/50">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
+                <div class="space-y-1 border-r border-slate-200 dark:border-slate-800/50 last:border-none">
+                    <p class="text-3xl font-bold text-bgn-deepGreen dark:text-bgn-freshGreen">4,800+</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide uppercase">Petani Terintegrasi</p>
+                </div>
+                <div class="space-y-1 border-r border-slate-200 dark:border-slate-800/50 last:border-none">
+                    <p class="text-3xl font-bold text-bgn-deepGreen dark:text-bgn-freshGreen">38.4%</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide uppercase">Efisiensi Lahan</p>
+                </div>
+                <div class="space-y-1 border-r border-slate-200 dark:border-slate-800/50 last:border-none">
+                    <p class="text-3xl font-bold text-bgn-deepGreen dark:text-bgn-freshGreen">24/7</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide uppercase">Pemantauan Lahan</p>
+                </div>
+                <div class="space-y-1 last:border-none">
+                    <p class="text-3xl font-bold text-bgn-deepGreen dark:text-bgn-freshGreen">Satu Data</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-bold tracking-wide uppercase">Sinkronisasi BPS RI</p>
+                </div>
+            </div>
+        </div>
     </section>
 
+    <section id="fitur" class="py-24 bg-bgn-pureWhite dark:bg-bgn-darkBg">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
+                <div class="lg:col-span-6 space-y-4">
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Transparansi Layanan Publik Digital Pertanian</h2>
+                    <div class="h-[3px] w-12 bg-bgn-freshGreen rounded-full"></div>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed pt-2">
+                        Kami menyajikan kemudahan pemantauan statistik bagi seluruh elemen ekosistem tani secara transparan dan berorientasi pada kesejahteraan humanis masyarakat produsen pangan Indonesia.
+                    </p>
+                </div>
+                <div class="lg:col-span-6" data-aos="fade-left">
+                    <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800/50 shadow-sm bg-slate-50 p-2 dark:bg-bgn-darkCard">
+                        <img src="https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&q=80&w=700" alt="Komunitas Tani" class="w-full h-[240px] object-cover rounded-lg">
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-6 bg-bgn-lightGray dark:bg-bgn-darkCard rounded-xl border border-slate-200 dark:border-slate-800/50 shadow-sm transition-all hover:shadow-lg hover:border-emerald-500/20">
+                    <div class="text-bgn-deepGreen dark:text-bgn-freshGreen mb-4 text-lg"><i class="fas fa-chart-area"></i></div>
+                    <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">Manajemen Lahan</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Pencatatan luas lahan kustomisasi wilayah regional petak pertanian untuk optimalisasi kalkulasi kapasitas panen raya.</p>
+                </div>
+                <div class="p-6 bg-bgn-lightGray dark:bg-bgn-darkCard rounded-xl border border-slate-200 dark:border-slate-800/50 shadow-sm transition-all hover:shadow-lg hover:border-emerald-500/20">
+                    <div class="text-bgn-deepGreen dark:text-bgn-freshGreen mb-4 text-lg"><i class="fas fa-server"></i></div>
+                    <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">Sinkronisasi BPS</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Penyajian grafik statistik inflasi, harga pangan eceran, serta pola permintaan komoditas pasar secara transparan.</p>
+                </div>
+                <div class="p-6 bg-bgn-lightGray dark:bg-bgn-darkCard rounded-xl border border-slate-200 dark:border-slate-800/50 shadow-sm transition-all hover:shadow-lg hover:border-emerald-500/20">
+                    <div class="text-bgn-deepGreen dark:text-bgn-freshGreen mb-4 text-lg"><i class="fas fa-bullhorn"></i></div>
+                    <h3 class="text-lg font-bold text-slate-950 dark:text-white mb-2">Konsultasi Sejawat</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">Ruang interaksi inklusif antar praktisi tani guna mendiskusikan penanganan kendala hama secara terpadu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="tentang" class="py-10 border-t border-slate-200 dark:border-slate-800/50 bg-bgn-lightGray dark:bg-bgn-darkCard">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-bgn-deepGreen dark:text-bgn-freshGreen tracking-tight">PANENUSA DIGITAL</span>
+                <span>•</span>
+                <span>Sistem Kendali Ketahanan Pangan Indonesia</span>
+            </div>
+            <p>© 2026 Panenusa. Dikembangkan untuk Mendukung Kesejahteraan Komunitas Tani.</p>
+        </div>
+    </footer>
+
+    <script>
+        AOS.init({ duration: 800, once: true });
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+
+        themeToggleBtn.addEventListener('click', function() {
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        });
+    </script>
 </body>
 </html>
